@@ -6,7 +6,7 @@ using System.Threading.Tasks;
 
 namespace NewsAggregator.DAL.Core.Entities
 {
-    public class Users
+    public class User
     {
         public Guid Id { get; set; }
         public string Login { get; set; }
@@ -14,6 +14,7 @@ namespace NewsAggregator.DAL.Core.Entities
         public string HashPass { get; set; }
 
         public Guid RoleId { get; set; } //Create FK
-        public Guid CommentId { get; set; }
+        public virtual Role Role { get; set; }
+        public virtual ICollection<Comment> Comments { get; set; }
     }
 }

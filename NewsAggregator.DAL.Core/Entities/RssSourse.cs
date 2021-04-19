@@ -6,9 +6,13 @@ using System.Threading.Tasks;
 
 namespace NewsAggregator.DAL.Core.Entities
 {
-    public class Roles
+    public class RssSourse
     {
         public Guid Id { get; set; }
-        public int RoleNumber { get; set; }
+        public string Name { get; set; }
+        public string Url { get; set; }
+
+        public ICollection<News> NewsCollection { get; set; }
+
     }
 }

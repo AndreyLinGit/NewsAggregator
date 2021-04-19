@@ -4,6 +4,9 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 VisualStudioVersion = 16.0.31205.134
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NewsAggregator", "NewsAggregator.csproj", "{57A96BA6-D382-482F-99AC-29A028C96B67}"
+	ProjectSection(ProjectDependencies) = postProject
+		{4D589420-4E31-4753-91C8-EF25A155FE0E} = {4D589420-4E31-4753-91C8-EF25A155FE0E}
+	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NewsAggregator.DAL", "NewsAggregator.DAL", "{77A82A70-23B0-4536-BE27-3EB211719694}"
 EndProject

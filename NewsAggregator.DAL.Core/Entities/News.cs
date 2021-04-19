@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace NewsAggregator.DAL.Core.Entities
 {
@@ -10,11 +11,12 @@ namespace NewsAggregator.DAL.Core.Entities
         public string Body { get; set; }
         public DateTime PublishTime { get; set; }
         public float Rating { get; set; }
-
         public string Url { get; set; }
 
-        public Guid RssSourseId { get; set; }//Create FK
-        public Guid CommentsId { get; set; }
-        public Guid TagsId { get; set; }
+        public Guid RssSourseId { get; set; }
+        public virtual RssSourse RssSourse { get; set; }
+
+        public virtual ICollection<Comment> Comments { get; set; }
+        public virtual ICollection<NewsWithTags> NewsWithTagsCollection { get; set; }
     }
 }

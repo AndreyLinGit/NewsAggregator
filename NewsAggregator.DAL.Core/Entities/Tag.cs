@@ -6,10 +6,12 @@ using System.Threading.Tasks;
 
 namespace NewsAggregator.DAL.Core.Entities
 {
-    public class Tags
+    public class Tag
     {
         public Guid Id { get; set; }
 
         public string Text { get; set; }
+
+        public virtual ICollection<NewsWithTags> NewsWithTagsCollection { get; set; }
     }
 }
