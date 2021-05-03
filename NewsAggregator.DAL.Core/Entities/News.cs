@@ -1,9 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
+using NewsAggregator.DAL.Core.Entities.Abstract;
 
 namespace NewsAggregator.DAL.Core.Entities
 {
-    public class News
+    public class News : IBaseEntity
     {
         public Guid Id { get; set; }
 

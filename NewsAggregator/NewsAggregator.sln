@@ -3,14 +3,18 @@ Microsoft Visual Studio Solution File, Format Version 12.00
 # Visual Studio Version 16
 VisualStudioVersion = 16.0.31205.134
 MinimumVisualStudioVersion = 10.0.40219.1
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NewsAggregator", "NewsAggregator.csproj", "{57A96BA6-D382-482F-99AC-29A028C96B67}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NewsAggregator", "NewsAggregator.csproj", "{57A96BA6-D382-482F-99AC-29A028C96B67}"
 	ProjectSection(ProjectDependencies) = postProject
 		{4D589420-4E31-4753-91C8-EF25A155FE0E} = {4D589420-4E31-4753-91C8-EF25A155FE0E}
 	EndProjectSection
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NewsAggregator.DAL", "NewsAggregator.DAL", "{77A82A70-23B0-4536-BE27-3EB211719694}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NewsAggregator.DAL.Core", "..\NewsAggregator.DAL.Core\NewsAggregator.DAL.Core.csproj", "{4D589420-4E31-4753-91C8-EF25A155FE0E}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NewsAggregator.DAL.Core", "..\NewsAggregator.DAL.Core\NewsAggregator.DAL.Core.csproj", "{4D589420-4E31-4753-91C8-EF25A155FE0E}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NewsAggregator.DAL.Repositories.Interfaces", "..\NewsAggregator.DAL.Repositories.Interfaces\NewsAggregator.DAL.Repositories.Interfaces.csproj", "{25325F57-A0A1-4BDD-A0AA-28F25DA8E265}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NewsAggregator.DAL.Repositories.Implementation", "..\NewsAggregator.DAL.Repositories.Implementation\NewsAggregator.DAL.Repositories.Implementation.csproj", "{745A152D-3983-491E-845E-021E01AD3DDB}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -26,12 +30,22 @@ Global
 		{4D589420-4E31-4753-91C8-EF25A155FE0E}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{4D589420-4E31-4753-91C8-EF25A155FE0E}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{4D589420-4E31-4753-91C8-EF25A155FE0E}.Release|Any CPU.Build.0 = Release|Any CPU
+		{25325F57-A0A1-4BDD-A0AA-28F25DA8E265}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{25325F57-A0A1-4BDD-A0AA-28F25DA8E265}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{25325F57-A0A1-4BDD-A0AA-28F25DA8E265}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{25325F57-A0A1-4BDD-A0AA-28F25DA8E265}.Release|Any CPU.Build.0 = Release|Any CPU
+		{745A152D-3983-491E-845E-021E01AD3DDB}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{745A152D-3983-491E-845E-021E01AD3DDB}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{745A152D-3983-491E-845E-021E01AD3DDB}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{745A152D-3983-491E-845E-021E01AD3DDB}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
 	EndGlobalSection
 	GlobalSection(NestedProjects) = preSolution
 		{4D589420-4E31-4753-91C8-EF25A155FE0E} = {77A82A70-23B0-4536-BE27-3EB211719694}
+		{25325F57-A0A1-4BDD-A0AA-28F25DA8E265} = {77A82A70-23B0-4536-BE27-3EB211719694}
+		{745A152D-3983-491E-845E-021E01AD3DDB} = {77A82A70-23B0-4536-BE27-3EB211719694}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8EA3F64B-4360-45CB-B4B2-522BE1DC99AE}
