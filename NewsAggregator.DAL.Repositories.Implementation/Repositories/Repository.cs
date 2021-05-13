@@ -2,14 +2,13 @@
 using System.Collections.Generic;
 using System.Linq;
 using System.Linq.Expressions;
-using System.Text;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using NewsAggregator.DAL.Core;
 using NewsAggregator.DAL.Core.Entities.Abstract;
 using NewsAggregator.DAL.Repositories.Interfaces;
 
-namespace NewsAggregator.DAL.Repositories.Implementation
+namespace NewsAggregator.DAL.Repositories.Implementation.Repositories
 {
     public abstract class Repository<T> : IRepository<T> where T : class, IBaseEntity
     {

@@ -12,6 +12,7 @@ using NewsAggregator.DAL.Core;
 using Microsoft.EntityFrameworkCore;
 using NewsAggregator.DAL.Core.Entities;
 using NewsAggregator.DAL.Repositories.Implementation;
+using NewsAggregator.DAL.Repositories.Implementation.Repositories;
 using NewsAggregator.DAL.Repositories.Interfaces;
 
 namespace NewsAggregator
@@ -28,16 +29,16 @@ namespace NewsAggregator
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<NewsAggregatorContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString(""))); //Добавь строку подключения
+            services.AddDbContext<NewsAggregatorContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("DefoultConnection"))); //Добавь строку подключения
 
-            
-            services.AddTransient<IRepository<News>, Repository<News>>();
-            services.AddTransient<IRepository<Comment>, Repository<Comment>>();
-            services.AddTransient<IRepository<NewsWithTags>, Repository<NewsWithTags>>();
-            services.AddTransient<IRepository<Role>, Repository<Role>>();
-            services.AddTransient<IRepository<RssSourse>, Repository<RssSourse>>();
-            services.AddTransient<IRepository<Tag>, Repository<Tag>>();
-            services.AddTransient<IRepository<User>, Repository<User>>();
+
+            services.AddTransient<IRepository<News>, NewsRepository>();
+            services.AddTransient<IRepository<Comment>, CommentRepository>();
+            services.AddTransient<IRepository<NewsWithTags>, NewsWithTagsRepository>();
+            services.AddTransient<IRepository<Role>, RoleRepository>();
+            services.AddTransient<IRepository<RssSourse>, RssSourseRepository>();
+            services.AddTransient<IRepository<Tag>, TagRepository>();
+            services.AddTransient<IRepository<User>, UserRepository>();
             services.AddTransient<IUnitOfWork, UnitOfWork>();
 
             services.AddControllersWithViews();
