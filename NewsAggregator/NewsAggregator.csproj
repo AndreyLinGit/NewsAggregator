@@ -23,6 +23,7 @@
   <ItemGroup>
     <ProjectReference Include="..\NewsAggregator.DAL.Core\NewsAggregator.DAL.Core.csproj" />
     <ProjectReference Include="..\NewsAggregator.DAL.Repositories.Implementation\NewsAggregator.DAL.Repositories.Implementation.csproj" />
+    <ProjectReference Include="..\NewsAggregator.DAL.Servises\NewsAggregator.DAL.Servises.csproj" />
   </ItemGroup>
 
 </Project>

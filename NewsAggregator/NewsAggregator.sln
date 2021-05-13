@@ -12,9 +12,11 @@ Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "NewsAggregator.DAL", "NewsA
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NewsAggregator.DAL.Core", "..\NewsAggregator.DAL.Core\NewsAggregator.DAL.Core.csproj", "{4D589420-4E31-4753-91C8-EF25A155FE0E}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NewsAggregator.DAL.Repositories.Interfaces", "..\NewsAggregator.DAL.Repositories.Interfaces\NewsAggregator.DAL.Repositories.Interfaces.csproj", "{25325F57-A0A1-4BDD-A0AA-28F25DA8E265}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NewsAggregator.DAL.Repositories.Interfaces", "..\NewsAggregator.DAL.Repositories.Interfaces\NewsAggregator.DAL.Repositories.Interfaces.csproj", "{25325F57-A0A1-4BDD-A0AA-28F25DA8E265}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NewsAggregator.DAL.Repositories.Implementation", "..\NewsAggregator.DAL.Repositories.Implementation\NewsAggregator.DAL.Repositories.Implementation.csproj", "{745A152D-3983-491E-845E-021E01AD3DDB}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NewsAggregator.DAL.Repositories.Implementation", "..\NewsAggregator.DAL.Repositories.Implementation\NewsAggregator.DAL.Repositories.Implementation.csproj", "{745A152D-3983-491E-845E-021E01AD3DDB}"
+EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NewsAggregator.DAL.Servises", "..\NewsAggregator.DAL.Servises\NewsAggregator.DAL.Servises.csproj", "{FFC31C06-3A14-4F40-B2DF-9FEC0FFD3C93}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
@@ -38,6 +40,10 @@ Global
 		{745A152D-3983-491E-845E-021E01AD3DDB}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{745A152D-3983-491E-845E-021E01AD3DDB}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{745A152D-3983-491E-845E-021E01AD3DDB}.Release|Any CPU.Build.0 = Release|Any CPU
+		{FFC31C06-3A14-4F40-B2DF-9FEC0FFD3C93}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{FFC31C06-3A14-4F40-B2DF-9FEC0FFD3C93}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{FFC31C06-3A14-4F40-B2DF-9FEC0FFD3C93}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{FFC31C06-3A14-4F40-B2DF-9FEC0FFD3C93}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
@@ -46,6 +52,7 @@ Global
 		{4D589420-4E31-4753-91C8-EF25A155FE0E} = {77A82A70-23B0-4536-BE27-3EB211719694}
 		{25325F57-A0A1-4BDD-A0AA-28F25DA8E265} = {77A82A70-23B0-4536-BE27-3EB211719694}
 		{745A152D-3983-491E-845E-021E01AD3DDB} = {77A82A70-23B0-4536-BE27-3EB211719694}
+		{FFC31C06-3A14-4F40-B2DF-9FEC0FFD3C93} = {77A82A70-23B0-4536-BE27-3EB211719694}
 	EndGlobalSection
 	GlobalSection(ExtensibilityGlobals) = postSolution
 		SolutionGuid = {8EA3F64B-4360-45CB-B4B2-522BE1DC99AE}

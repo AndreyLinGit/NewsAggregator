@@ -9,6 +9,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using NewsAggregator.DAL.Core;
+using NewsAggregator.DAL.Servises.Implementation;
+using NewsAggregator.DAL.Servises.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using NewsAggregator.DAL.Core.Entities;
 using NewsAggregator.DAL.Repositories.Implementation;
@@ -29,8 +31,7 @@ namespace NewsAggregator
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<NewsAggregatorContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("DefoultConnection"))); //Добавь строку подключения
-
+            services.AddDbContext<NewsAggregatorContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("DefoultConnection")));
 
             services.AddTransient<IRepository<News>, NewsRepository>();
             services.AddTransient<IRepository<Comment>, CommentRepository>();
@@ -39,10 +40,12 @@ namespace NewsAggregator
             services.AddTransient<IRepository<RssSourse>, RssSourseRepository>();
             services.AddTransient<IRepository<Tag>, TagRepository>();
             services.AddTransient<IRepository<User>, UserRepository>();
-            services.AddTransient<IUnitOfWork, UnitOfWork>();
-
-            services.AddControllersWithViews();
             
+            services.AddScoped<IUnitOfWork, UnitOfWork>();
+            services.AddScoped<INewsServise, NewsServise>();
+            services.AddScoped<IRssSourseServise, RssSourseServise>();
+
+            services.AddControllersWithViews();  
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
