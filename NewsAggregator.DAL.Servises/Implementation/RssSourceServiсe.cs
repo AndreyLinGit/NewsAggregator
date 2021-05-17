@@ -1,23 +1,24 @@
-﻿using NewsAggregator.DAL.Repositories.Interfaces;
-using NewsAggregator.DAL.Servises.Interfaces;
-using System;
+﻿using System;
 using System.Collections.Generic;
-using System.Linq;
-using System.Text;
+using System.ServiceModel.Syndication;
 using System.Threading.Tasks;
 using System.Xml;
 using NewsAggregator.DAL.Core.DTOs;
-using System.ServiceModel.Syndication;
+using NewsAggregator.DAL.Repositories.Interfaces;
+using NewsAggregator.DAL.Servises.Interfaces;
+using NewsAggregator.DAL.Serviсes.Interfaces;
 
-namespace NewsAggregator.DAL.Servises.Implementation
+namespace NewsAggregator.DAL.Serviсes.Implementation
 {
-    public class RssSourseServise : IRssSourseServise
+    public class RssSourceServiсe : IRssSourceService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IWebParser _tutbyParser;
 
-        public RssSourseServise(IUnitOfWork unitOfWork)
+        public RssSourceServiсe(IUnitOfWork unitOfWork, IWebParser tutbyParser)
         {
             _unitOfWork = unitOfWork;
+            _tutbyParser = tutbyParser;
         }
 
         public async Task<List<NewsDto>> GetNewsFromSourse()
@@ -37,7 +38,8 @@ namespace NewsAggregator.DAL.Servises.Implementation
                         var news = new NewsDto()
                         {
                             Article = syndicationItem.Title.Text,
-                            Body = syndicationItem.Summary.Text,
+                            Body = await _tutbyParser.Parse(syndicationItem.Id),
+                            //UrlSrc = Regex.Match(syndicationItem.Summary.Text, @"<img\s+src='(.+)'\s+border='0'\s+/>").Groups[1].Value,
                             Id = Guid.NewGuid(),
                             PublishTime = DateTime.Now,
                             Rating = 0,

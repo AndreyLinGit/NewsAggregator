@@ -16,7 +16,7 @@ namespace NewsAggregator.DAL.Repositories.Implementation
         private readonly IRepository<Comment> _commentRepository;
         private readonly IRepository<NewsWithTags> _newsWithTagsRepository;
         private readonly IRepository<Role> _roleRepository;
-        private readonly IRepository<RssSourse> _rssSourseRepository;
+        private readonly IRepository<RssSource> _rssSourseRepository;
         private readonly IRepository<Tag> _tagRepository;
         private readonly IRepository<User> _userRepository;
 
@@ -26,7 +26,7 @@ namespace NewsAggregator.DAL.Repositories.Implementation
             IRepository<Comment> commentRepository,
             IRepository<NewsWithTags> newsWithTagsRepository,
             IRepository<Role> roleRepository,
-            IRepository<RssSourse> rssSourseRepository,
+            IRepository<RssSource> rssSourseRepository,
             IRepository<Tag> tagRepository,
             IRepository<User> userRepository)
         {
@@ -48,7 +48,7 @@ namespace NewsAggregator.DAL.Repositories.Implementation
 
         public IRepository<Role> Role => _roleRepository;
 
-        public IRepository<RssSourse> RssSourse => _rssSourseRepository;
+        public IRepository<RssSource> RssSourse => _rssSourseRepository;
 
         public IRepository<Tag> Tag => _tagRepository;
 

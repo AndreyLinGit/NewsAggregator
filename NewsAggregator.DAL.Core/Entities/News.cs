@@ -14,8 +14,8 @@ namespace NewsAggregator.DAL.Core.Entities
         public float Rating { get; set; }
         public string Url { get; set; }
 
-        public Guid RssSourseId { get; set; }
-        public virtual RssSourse RssSourse { get; set; }
+        public Guid RssSourceId { get; set; }
+        public virtual RssSource RssSource { get; set; }
 
         public virtual ICollection<Comment> Comments { get; set; }
         public virtual ICollection<NewsWithTags> NewsWithTagsCollection { get; set; }

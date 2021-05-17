@@ -13,9 +13,9 @@ namespace NewsAggregator.Controllers
 {
     public class NewsController : Controller
     {
-        private readonly IRssSourseServise _rssSourseServise;
+        private readonly IRssSourceService _rssSourseServise;
 
-        public NewsController(IRssSourseServise rssSourseServise)
+        public NewsController(IRssSourceService rssSourseServise)
         {
             _rssSourseServise = rssSourseServise;
         }

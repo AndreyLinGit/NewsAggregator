@@ -9,7 +9,7 @@ using NewsAggregator.DAL.Repositories.Implementation.Repositories;
 
 namespace NewsAggregator.DAL.Repositories.Implementation
 {
-    public class RssSourseRepository : Repository<RssSourse>
+    public class RssSourseRepository : Repository<RssSource>
     {
         public RssSourseRepository(NewsAggregatorContext context)
             : base(context)

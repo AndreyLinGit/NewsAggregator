@@ -15,5 +15,6 @@ namespace NewsAggregator.DAL.Core.DTOs
         public DateTime PublishTime { get; set; }
         public float Rating { get; set; }
         public string Url { get; set; }
+        //public string UrlSrc { get; set; }
     }
 }

@@ -14,7 +14,7 @@ namespace NewsAggregator.DAL.Core
         public DbSet<News> News { get; set; }
         public DbSet<NewsWithTags> NewsWithTags { get; set; }
         public DbSet<Role> Roles { get; set; }
-        public DbSet<RssSourse> RssSourses { get; set; }
+        public DbSet<RssSource> RssSources { get; set; }
         public DbSet<Tag> Tags { get; set; }
         public DbSet<User> Users { get; set; }
 

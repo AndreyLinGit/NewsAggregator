@@ -13,7 +13,7 @@ namespace NewsAggregator.DAL.Repositories.Interfaces
         public IRepository<News> News { get; }
         public IRepository<NewsWithTags> NewsWithTags { get; }
         public IRepository<Role> Role { get; }
-        public IRepository<RssSourse> RssSourse { get; }
+        public IRepository<RssSource> RssSourse { get; }
         public IRepository<Tag> Tag { get; }
         public IRepository<User> User { get; }
         Task<int> SaveChangeAsync();

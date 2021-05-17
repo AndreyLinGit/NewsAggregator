@@ -7,7 +7,7 @@ using NewsAggregator.DAL.Core.Entities.Abstract;
 
 namespace NewsAggregator.DAL.Core.Entities
 {
-    public class RssSourse : IBaseEntity
+    public class RssSource : IBaseEntity
     {
         public Guid Id { get; set; }
         public string Name { get; set; }

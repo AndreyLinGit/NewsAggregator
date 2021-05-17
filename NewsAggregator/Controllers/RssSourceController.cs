@@ -7,13 +7,13 @@ using NewsAggregator.DAL.Servises.Interfaces;
 
 namespace NewsAggregator.Controllers
 {
-    public class RssSourseController : Controller
+    public class RssSourceController : Controller
     {
-        private readonly IRssSourseServise _rssSourseServise;
+        private readonly IRssSourceService _rssSourceService;
 
-        public RssSourseController(IRssSourseServise rssSourseServise)
+        public RssSourceController(IRssSourceService rssSourceService)
         {
-            _rssSourseServise = rssSourseServise;
+            _rssSourceService = rssSourceService;
         }
 
         public IActionResult Index()
@@ -26,9 +26,9 @@ namespace NewsAggregator.Controllers
             return View();
         }
 
-        public IActionResult AggregateNewsFromRssSourses()
+        public IActionResult AggregateNewsFromRssSources()
         {
-            _rssSourseServise.GetNewsFromSourse();
+            _rssSourceService.GetNewsFromSourse();
             return Redirect("/News/Index");
         }
     }

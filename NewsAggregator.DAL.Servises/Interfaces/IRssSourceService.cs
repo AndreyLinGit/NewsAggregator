@@ -8,7 +8,7 @@ using NewsAggregator.DAL.Core.DTOs;
 
 namespace NewsAggregator.DAL.Servises.Interfaces
 {
-    public interface IRssSourseServise
+    public interface IRssSourceService
     {
         Task<List<NewsDto>> GetNewsFromSourse();
     }

@@ -16,6 +16,8 @@ using NewsAggregator.DAL.Core.Entities;
 using NewsAggregator.DAL.Repositories.Implementation;
 using NewsAggregator.DAL.Repositories.Implementation.Repositories;
 using NewsAggregator.DAL.Repositories.Interfaces;
+using NewsAggregator.DAL.Serviñes.Implementation;
+using NewsAggregator.DAL.Serviñes.Interfaces;
 
 namespace NewsAggregator
 {
@@ -37,13 +39,15 @@ namespace NewsAggregator
             services.AddTransient<IRepository<Comment>, CommentRepository>();
             services.AddTransient<IRepository<NewsWithTags>, NewsWithTagsRepository>();
             services.AddTransient<IRepository<Role>, RoleRepository>();
-            services.AddTransient<IRepository<RssSourse>, RssSourseRepository>();
+            services.AddTransient<IRepository<RssSource>, RssSourseRepository>();
             services.AddTransient<IRepository<Tag>, TagRepository>();
             services.AddTransient<IRepository<User>, UserRepository>();
             
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<INewsServise, NewsServise>();
-            services.AddScoped<IRssSourseServise, RssSourseServise>();
+            services.AddScoped<IRssSourceService, RssSourceServiñe>();
+
+            services.AddTransient<IWebParser, TutbyParser>();
 
             services.AddControllersWithViews();  
         }
