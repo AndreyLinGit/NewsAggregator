@@ -17,5 +17,6 @@ namespace NewsAggregator.DAL.Repositories.Interfaces
         public IRepository<Tag> Tag { get; }
         public IRepository<User> User { get; }
         Task<int> SaveChangeAsync();
+        void SaveChange();
     }
 }

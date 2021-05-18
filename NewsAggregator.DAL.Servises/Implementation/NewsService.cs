@@ -24,6 +24,7 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
         public async Task AddRangeOfNews(IEnumerable<News> rangeOfNews)
         {
             await _unitOfWork.News.AddRange(rangeOfNews);
+            await _unitOfWork.SaveChangeAsync();
         }
     }
 }

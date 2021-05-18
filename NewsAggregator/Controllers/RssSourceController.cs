@@ -23,15 +23,15 @@ namespace NewsAggregator.Controllers
 
         public async Task<IActionResult> Index()
         {
-            //var model = await _rssSourceService.GetAllSources();
-            var model = new List<RssSource>();
-            model.Add(new RssSource()
-                {
-                    Id = Guid.NewGuid(),
-                    Name = "Onliner",
-                    NewsCollection = null,
-                    Url = "https://www.onliner.by/"
-                });
+            var model = await _rssSourceService.GetAllSources();
+            //var model = new List<RssSource>();
+            //model.Add(new RssSource()
+            //    {
+            //        Id = Guid.NewGuid(),
+            //        Name = "Onliner",
+            //        NewsCollection = null,
+            //        Url = "https://www.onliner.by/"
+            //    });
             return View(model);
         }
 

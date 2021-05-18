@@ -93,6 +93,8 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
                 Name = source.Name,
                 Url = source.Url
             });
+            var result = _unitOfWork.SaveChangeAsync();
+            //_unitOfWork.SaveChange();
         }
 
         public async Task<IEnumerable<RssSource>> GetAllSources()
