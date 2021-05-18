@@ -41,7 +41,7 @@ namespace NewsAggregator.Controllers
         }
 
         [HttpPost]
-        public IActionResult Create(string name, string url)
+        public async Task<IActionResult> Create(string name, string url)
         {
             var dto = new RssSourceDto
             {
@@ -49,8 +49,8 @@ namespace NewsAggregator.Controllers
                 Name = name,
                 Url = url
             };
-            _rssSourceService.AddSource(dto);
-            return Redirect("/RssSource/Index");
+            await _rssSourceService.AddSource(dto);
+            return  Redirect("/RssSource/Index");
         }
 
         public async Task<IActionResult> AggregateNewsFromRssSources()
