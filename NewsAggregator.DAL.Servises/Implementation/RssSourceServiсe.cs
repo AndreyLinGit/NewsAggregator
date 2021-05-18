@@ -82,6 +82,7 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
                     }
                 }
             }
+            //_unitOfWork.News.AddRange(result);
             return result;
         }
 
@@ -93,8 +94,8 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
                 Name = source.Name,
                 Url = source.Url
             });
-            var result = _unitOfWork.SaveChangeAsync();
-            //_unitOfWork.SaveChange();
+            //var result = _unitOfWork.SaveChangeAsync();
+            _unitOfWork.SaveChange();
         }
 
         public async Task<IEnumerable<RssSource>> GetAllSources()

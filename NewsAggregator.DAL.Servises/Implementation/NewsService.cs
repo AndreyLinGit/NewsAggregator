@@ -25,6 +25,7 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
         {
             await _unitOfWork.News.AddRange(rangeOfNews);
             await _unitOfWork.SaveChangeAsync();
+            //_unitOfWork.SaveChange();
         }
     }
 }

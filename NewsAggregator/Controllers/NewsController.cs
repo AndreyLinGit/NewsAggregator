@@ -41,7 +41,6 @@ namespace NewsAggregator.Controllers
                  
             }
             var newsList = await _newsService.GetAllNews(); //Think about "Get()"
-            await _newsService.AddRangeOfNews(newsList);
             var modelsList = new List<NewsViewModel>();
             foreach (var news in newsList)
             {
