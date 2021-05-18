@@ -3,39 +3,56 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using NewsAggregator.DAL.Core.DTOs;
 using NewsAggregator.DAL.Core.Entities;
 using NewsAggregator.DAL.Repositories.Implementation;
 using NewsAggregator.DAL.Repositories.Interfaces;
 using NewsAggregator.DAL.Servises.Interfaces;
+using NewsAggregator.DAL.Serviсes.Interfaces;
 using NewsAggregator.Models;
 
 namespace NewsAggregator.Controllers
 {
     public class NewsController : Controller
     {
-        private readonly IRssSourceService _rssSourseServise;
+        //For work without database
+        private readonly IRssSourceService _rssSourceService;
+        private bool isCostil = true;
+        //DELETE IF AFTER!
 
-        public NewsController(IRssSourceService rssSourseServise)
+        private readonly INewsService _newsService;
+
+        public NewsController(INewsService newsService, IRssSourceService rssSourceService)
         {
-            _rssSourseServise = rssSourseServise;
+            _newsService = newsService;
+            _rssSourceService = rssSourceService;
         }
+
+
         public async Task<IActionResult> Index()
         {
-            var modelsList = new List<NewsViewModel>();
-            var news = await _rssSourseServise.GetNewsFromSourse();
-            foreach (var newsDto in news)
+            var newsList = new List<NewsDto>();
+            if (isCostil)
             {
-                var model = new NewsViewModel()
+                newsList = await _rssSourceService.GetNewsFromSource(isCostil);
+            }
+            else
+            {
+                //newsList = await _newsService.GetAllNews(); //Think about "Get()"    
+            }
+            var modelsList = new List<NewsViewModel>();
+            foreach (var news in newsList)
+            {
+                var model = new NewsViewModel
                 {
-                    Article = newsDto.Article,
-                    Body = newsDto.Body,
-                    Id = newsDto.Id,
-                    PublishTime = newsDto.PublishTime,
-                    Rating = newsDto.Rating
+                    Id = news.Id,
+                    Article = news.Article,
+                    Body = news.Body,
+                    PublishTime = news.PublishTime,
+                    Rating = news.Rating
                 };
                 modelsList.Add(model);
             }
-            
             return View(modelsList);
         }
 

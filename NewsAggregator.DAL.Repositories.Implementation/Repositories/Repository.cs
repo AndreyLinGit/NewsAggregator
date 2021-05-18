@@ -26,19 +26,24 @@ namespace NewsAggregator.DAL.Repositories.Implementation.Repositories
             GC.SuppressFinalize(this);
         }
 
-        public Task Add(T entity)
+        public async Task Add(T entity)
         {
-            throw new NotImplementedException();
+            await Table.AddAsync(entity);
         }
 
-        public Task AddRange(IEnumerable<T> range)
+        public async Task AddRange(IEnumerable<T> range)
         {
-            throw new NotImplementedException();
+            await Table.AddRangeAsync(range);
         }
 
         public Task GetById(Guid id)
         {
             throw new NotImplementedException();
+        }
+
+        public DbSet<T> Get()
+        {
+            return Table;
         }
 
         public IQueryable<T> FindBy(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includes)
@@ -53,6 +58,8 @@ namespace NewsAggregator.DAL.Repositories.Implementation.Repositories
 
             return result;
         }
+
+
 
 
         public void Update(T entity)

@@ -9,7 +9,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using NewsAggregator.DAL.Core;
-using NewsAggregator.DAL.Servises.Implementation;
 using NewsAggregator.DAL.Servises.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using NewsAggregator.DAL.Core.Entities;
@@ -44,7 +43,7 @@ namespace NewsAggregator
             services.AddTransient<IRepository<User>, UserRepository>();
             
             services.AddScoped<IUnitOfWork, UnitOfWork>();
-            services.AddScoped<INewsServise, NewsServise>();
+            services.AddScoped<INewsService, NewsService>();
             services.AddScoped<IRssSourceService, RssSourceServiñe>();
 
             services.AddTransient<IWebParser, TutbyParser>();

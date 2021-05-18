@@ -1,9 +1,39 @@
-﻿@model NewsAggregator.DAL.Core.Entities.RssSource
+﻿@model IEnumerable<NewsAggregator.DAL.Core.Entities.RssSource>
 
 @{
 }
 <h1>View</h1>
-<h4>RssSourse</h4>
-<hr />
 
-<a asp-controller="RssSourse" asp-action="Create">Create new sourse</a>
+<p>
+    <a asp-action="Create" method="post">Create New</a>
+</p>
+<table class="table">
+    <thead>
+    <tr>
+        <th>
+            @Html.DisplayNameFor(model => model.Name)
+        </th>
+        <th>
+            @Html.DisplayNameFor(model => model.Url)
+        </th>
+        <th></th>
+    </tr>
+    </thead>
+    <tbody>
+    @foreach (var item in Model)
+    {
+        <tr>
+            <td>
+                @item.Name
+            </td>
+            <td>
+                @item.Url
+            </td>
+            <td>
+                @*<a asp-action="Create" asp-route-id="@item.Id">Details</a> |*@
+            </td>
+        </tr>
+    }
+    </tbody>
+</table>
+<a asp-action="AggregateNewsFromRssSources" class="btn btn-secondary btn-lg active" role="button" aria-pressed="true">Aggregate news!</a>
