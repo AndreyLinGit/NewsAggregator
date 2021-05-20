@@ -8,15 +8,16 @@ using NewsAggregator.DAL.Serviсes.Interfaces;
 
 namespace NewsAggregator.DAL.Serviсes.Implementation
 {
-    public class TutbyParser : IWebParser
+    public class IgromanijaParser: IWebParser
     {
-        public async Task<string> Parse(string url)
+        public string Parse(string url)
         {
             HtmlWeb web = new HtmlWeb();
             var htmlDoc = web.Load(url);
 
-            var node = htmlDoc.DocumentNode.SelectSingleNode("//head/title");
-            return "";
+
+            var node = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='universal_content clearfix']");
+            return node != null ? node.InnerText : string.Empty;
         }
     }
 }

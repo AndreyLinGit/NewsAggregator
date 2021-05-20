@@ -17,7 +17,7 @@ namespace NewsAggregator.Controllers
     {
         //For work without database
         private readonly IRssSourceService _rssSourceService;
-        private bool isCostil = false;
+        private bool isCostil = true;
         //DELETE IF AFTER!
 
         private readonly INewsService _newsService;
@@ -31,16 +31,8 @@ namespace NewsAggregator.Controllers
 
         public async Task<IActionResult> Index()
         {
-            //var newsList;
-            if (isCostil)
-            {
-                //newsList = await _rssSourceService.GetNewsFromSource(isCostil);
-            }
-            else
-            {
-                 
-            }
-            var newsList = await _newsService.GetAllNews(); //Think about "Get()"
+            var newsList = await _rssSourceService.GetNewsFromSource(isCostil); // (It's for work from work!)
+            //var newsList = await _newsService.GetAllNews(); //Think about "Get()" (It's for work from home!)
             var modelsList = new List<NewsViewModel>();
             foreach (var news in newsList)
             {

@@ -20,6 +20,7 @@ using NewsAggregator.DAL.Serviñes.Interfaces;
 
 namespace NewsAggregator
 {
+
     public class Startup
     {
         public Startup(IConfiguration configuration)
@@ -46,7 +47,29 @@ namespace NewsAggregator
             services.AddScoped<INewsService, NewsService>();
             services.AddScoped<IRssSourceService, RssSourceServiñe>();
 
-            services.AddTransient<IWebParser, TutbyParser>();
+            services.AddTransient<OnlinerParser>();
+            services.AddTransient<ShazooParser>();
+            services.AddTransient<FourPdaParser>();
+            services.AddTransient<WylsaParser>();
+            services.AddTransient<IgromanijaParser>();
+            services.AddTransient<WebParserResolver>(serviceProvider => key =>
+            {
+                switch (key)
+                {
+                    case "Onliner":
+                        return serviceProvider.GetService<OnlinerParser>();
+                    case "Shazoo":
+                        return serviceProvider.GetService<ShazooParser>();
+                    case "4pda":
+                        return serviceProvider.GetService<FourPdaParser>();
+                    case "Wylsa":
+                        return serviceProvider.GetService<WylsaParser>();
+                    case "Igromanija":
+                        return serviceProvider.GetService<IgromanijaParser>();
+                    default:
+                        throw new KeyNotFoundException(); // or maybe return null, up to you
+                }
+            });
 
             services.AddControllersWithViews();  
         }

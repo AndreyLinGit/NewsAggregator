@@ -6,9 +6,5 @@ using System.Threading.Tasks;
 
 namespace NewsAggregator.DAL.Serviсes.Interfaces
 {
-    public delegate IWebParser WebParserResolver(string key);
-    public interface IWebParser
-    {
-        string Parse(string url);
-    }
+    //public delegate IWebParser WebParserResolver(string key);
 }
