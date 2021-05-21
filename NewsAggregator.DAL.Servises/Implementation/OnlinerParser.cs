@@ -16,7 +16,7 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
             var htmlDoc = web.Load(url);
 
             var node = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='news-text']");
-            return node.InnerText;
+            return node != null ? node.InnerText : string.Empty;
         }
     }
 }

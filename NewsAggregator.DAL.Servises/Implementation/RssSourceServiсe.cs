@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Diagnostics;
 using System.Linq;
 using System.ServiceModel.Syndication;
 using System.Text;
@@ -43,16 +44,33 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
             sources.Add("https://wylsa.com/feed/");
             sources.Add("https://www.igromania.ru/rss/all.rss");
 
+            var stopwatch = new Stopwatch();
+            stopwatch.Start();
             var result = new List<NewsDto>();
-            foreach (var source in sources)
+
+            Task[] tasks1 = new Task[5]
             {
-                using (var reader = XmlReader.Create(source))
+                new Task(() =>
                 {
-                    SyndicationFeed feed = SyndicationFeed.Load(reader);
-                    reader.Close();
-                    if (source.Equals(sources[0])) //Id from RssSource
+                    using (var reader = XmlReader.Create("https://www.onliner.by/feed"))
                     {
-                        foreach (var syndicationItem in feed.Items)
+                        SyndicationFeed feed = SyndicationFeed.Load(reader);
+                        reader.Close();
+                        //foreach (var syndicationItem in feed.Items)
+                        //{
+                        //    var news = new NewsDto()
+                        //    {
+                        //        Article = syndicationItem.Title.Text,
+                        //        Body = _onlinerParser.Parse(syndicationItem.Id),
+                        //        Id = Guid.NewGuid(),
+                        //        PublishTime = DateTime.Now,
+                        //        Rating = 0,
+                        //        Url = syndicationItem.Id
+                        //    };
+                        //    result.Add(news);
+                        //}
+
+                        Parallel.ForEach(feed.Items, (syndicationItem) =>
                         {
                             var news = new NewsDto()
                             {
@@ -64,11 +82,29 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
                                 Url = syndicationItem.Id
                             };
                             result.Add(news);
-                        }
+                        });
                     }
-                    if (source.Equals(sources[1])) //Id from RssSource
+                }),
+                new Task(() =>
+                {
+                    using (var reader = XmlReader.Create("https://shazoo.ru/feed/rss"))
                     {
-                        foreach (var syndicationItem in feed.Items)
+                        SyndicationFeed feed = SyndicationFeed.Load(reader);
+                        reader.Close();
+                        //foreach (var syndicationItem in feed.Items)
+                        //{
+                        //    var news = new NewsDto()
+                        //    {
+                        //        Article = syndicationItem.Title.Text,
+                        //        Body = _shazooParser.Parse(syndicationItem.Id),
+                        //        Id = Guid.NewGuid(),
+                        //        PublishTime = DateTime.Now,
+                        //        Rating = 0,
+                        //        Url = syndicationItem.Id
+                        //    };
+                        //    result.Add(news);
+                        //}
+                        Parallel.ForEach(feed.Items, (syndicationItem) =>
                         {
                             var news = new NewsDto()
                             {
@@ -80,11 +116,29 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
                                 Url = syndicationItem.Id
                             };
                             result.Add(news);
-                        }
+                        });
                     }
-                    if (source.Equals(sources[2])) //Id from RssSource
+                }),
+                new Task(() =>
+                {
+                    using (var reader = XmlReader.Create("https://4pda.to/feed/"))
                     {
-                        foreach (var syndicationItem in feed.Items)
+                        SyndicationFeed feed = SyndicationFeed.Load(reader);
+                        reader.Close();
+                        //foreach (var syndicationItem in feed.Items)
+                        //{
+                        //    var news = new NewsDto()
+                        //    {
+                        //        Article = syndicationItem.Title.Text,
+                        //        Body = _4pdaParser.Parse(syndicationItem.Id),
+                        //        Id = Guid.NewGuid(),
+                        //        PublishTime = DateTime.Now,
+                        //        Rating = 0,
+                        //        Url = syndicationItem.Id
+                        //    };
+                        //    result.Add(news);
+                        //}
+                        Parallel.ForEach(feed.Items, (syndicationItem) =>
                         {
                             var news = new NewsDto()
                             {
@@ -96,11 +150,29 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
                                 Url = syndicationItem.Id
                             };
                             result.Add(news);
-                        }
+                        });
                     }
-                    if (source.Equals(sources[3])) //Id from RssSource
+                }),
+                new Task(() =>
+                {
+                    using (var reader = XmlReader.Create("https://wylsa.com/feed/"))
                     {
-                        foreach (var syndicationItem in feed.Items)
+                        SyndicationFeed feed = SyndicationFeed.Load(reader);
+                        reader.Close();
+                        //foreach (var syndicationItem in feed.Items)
+                        //{
+                        //    var news = new NewsDto()
+                        //    {
+                        //        Article = syndicationItem.Title.Text,
+                        //        Body = _wylsaParser.Parse(syndicationItem.Id),
+                        //        Id = Guid.NewGuid(),
+                        //        PublishTime = DateTime.Now,
+                        //        Rating = 0,
+                        //        Url = syndicationItem.Id
+                        //    };
+                        //    result.Add(news);
+                        //}
+                        Parallel.ForEach(feed.Items, (syndicationItem) =>
                         {
                             var news = new NewsDto()
                             {
@@ -112,11 +184,29 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
                                 Url = syndicationItem.Id
                             };
                             result.Add(news);
-                        }
+                        });
                     }
-                    if (source.Equals(sources[4])) //Id from RssSource
+                }),
+                new Task(() =>
+                {
+                    using (var reader = XmlReader.Create("https://www.igromania.ru/rss/all.rss"))
                     {
-                        foreach (var syndicationItem in feed.Items)
+                        SyndicationFeed feed = SyndicationFeed.Load(reader);
+                        reader.Close();
+                        //foreach (var syndicationItem in feed.Items)
+                        //{
+                        //    var news = new NewsDto()
+                        //    {
+                        //        Article = syndicationItem.Title.Text,
+                        //        Body = _igromanijaParser.Parse(syndicationItem.Id),
+                        //        Id = Guid.NewGuid(),
+                        //        PublishTime = DateTime.Now,
+                        //        Rating = 0,
+                        //        Url = syndicationItem.Id
+                        //    };
+                        //    result.Add(news);
+                        //}
+                        Parallel.ForEach(feed.Items, (syndicationItem) =>
                         {
                             var news = new NewsDto()
                             {
@@ -128,11 +218,107 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
                                 Url = syndicationItem.Id
                             };
                             result.Add(news);
-                        }
+                        });
                     }
+                })
+            };
+            foreach (var t in tasks1)
+                t.Start();
 
-                }
-            }
+
+            //foreach (var source in sources)
+            //{
+            //    using (var reader = XmlReader.Create(source))
+            //    {
+            //        SyndicationFeed feed = SyndicationFeed.Load(reader);
+            //        reader.Close();
+            //        if (source.Equals(sources[0])) //Id from RssSource
+            //        {
+            //            foreach (var syndicationItem in feed.Items)
+            //            {
+            //                var news = new NewsDto()
+            //                {
+            //                    Article = syndicationItem.Title.Text,
+            //                    Body = _onlinerParser.Parse(syndicationItem.Id),
+            //                    Id = Guid.NewGuid(),
+            //                    PublishTime = DateTime.Now,
+            //                    Rating = 0,
+            //                    Url = syndicationItem.Id
+            //                };
+            //                result.Add(news);
+            //            }
+            //        }
+            //        if (source.Equals(sources[1])) //Id from RssSource
+            //        {
+            //            foreach (var syndicationItem in feed.Items)
+            //            {
+            //                var news = new NewsDto()
+            //                {
+            //                    Article = syndicationItem.Title.Text,
+            //                    Body = _shazooParser.Parse(syndicationItem.Id),
+            //                    Id = Guid.NewGuid(),
+            //                    PublishTime = DateTime.Now,
+            //                    Rating = 0,
+            //                    Url = syndicationItem.Id
+            //                };
+            //                result.Add(news);
+            //            }
+            //        }
+            //        if (source.Equals(sources[2])) //Id from RssSource
+            //        {
+            //            foreach (var syndicationItem in feed.Items)
+            //            {
+            //                var news = new NewsDto()
+            //                {
+            //                    Article = syndicationItem.Title.Text,
+            //                    Body = _4pdaParser.Parse(syndicationItem.Id),
+            //                    Id = Guid.NewGuid(),
+            //                    PublishTime = DateTime.Now,
+            //                    Rating = 0,
+            //                    Url = syndicationItem.Id
+            //                };
+            //                result.Add(news);
+            //            }
+            //        }
+            //        if (source.Equals(sources[3])) //Id from RssSource
+            //        {
+            //            foreach (var syndicationItem in feed.Items)
+            //            {
+            //                var news = new NewsDto()
+            //                {
+            //                    Article = syndicationItem.Title.Text,
+            //                    Body = _wylsaParser.Parse(syndicationItem.Id),
+            //                    Id = Guid.NewGuid(),
+            //                    PublishTime = DateTime.Now,
+            //                    Rating = 0,
+            //                    Url = syndicationItem.Id
+            //                };
+            //                result.Add(news);
+            //            }
+            //        }
+            //        if (source.Equals(sources[4])) //Id from RssSource
+            //        {
+            //            foreach (var syndicationItem in feed.Items)
+            //            {
+            //                var news = new NewsDto()
+            //                {
+            //                    Article = syndicationItem.Title.Text,
+            //                    Body = _igromanijaParser.Parse(syndicationItem.Id),
+            //                    Id = Guid.NewGuid(),
+            //                    PublishTime = DateTime.Now,
+            //                    Rating = 0,
+            //                    Url = syndicationItem.Id
+            //                };
+            //                result.Add(news);
+            //            }
+            //        }
+
+            //    }
+            //}
+            Task.WaitAll(tasks1);
+
+            stopwatch.Stop();
+            var time = stopwatch.Elapsed.Seconds;
             //
             return result;
         }
