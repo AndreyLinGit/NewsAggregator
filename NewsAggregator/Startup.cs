@@ -17,6 +17,8 @@ using NewsAggregator.DAL.Repositories.Implementation.Repositories;
 using NewsAggregator.DAL.Repositories.Interfaces;
 using NewsAggregator.DAL.Serviñes.Implementation;
 using NewsAggregator.DAL.Serviñes.Interfaces;
+using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Http;
 
 namespace NewsAggregator
 {
@@ -46,6 +48,8 @@ namespace NewsAggregator
             services.AddScoped<IUnitOfWork, UnitOfWork>();
             services.AddScoped<INewsService, NewsService>();
             services.AddScoped<IRssSourceService, RssSourceServiñe>();
+            services.AddScoped<IUserService, UserService>();
+            services.AddScoped<IRoleService, RoleService>();
 
             services.AddTransient<OnlinerParser>();
             services.AddTransient<ShazooParser>();
@@ -71,7 +75,14 @@ namespace NewsAggregator
                 }
             });
 
-            services.AddControllersWithViews();  
+            services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
+                .AddCookie(opt =>
+                {
+                    opt.LoginPath = new PathString("/Account/Login");
+                    opt.AccessDeniedPath = new PathString("/Account/Login");
+                });
+
+            services.AddControllersWithViews();  //Add filters
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
@@ -92,6 +103,7 @@ namespace NewsAggregator
 
             app.UseRouting();
 
+            app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseEndpoints(endpoints =>

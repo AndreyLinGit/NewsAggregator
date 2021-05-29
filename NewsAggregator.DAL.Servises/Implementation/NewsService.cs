@@ -1,6 +1,7 @@
 ﻿using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using NewsAggregator.DAL.Core.DTOs;
 using NewsAggregator.DAL.Core.Entities;
 using NewsAggregator.DAL.Repositories.Interfaces;
 using NewsAggregator.DAL.Servises.Interfaces;
@@ -21,11 +22,24 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
             return await _unitOfWork.News.Get().ToListAsync();
         }
 
-        public async Task AddRangeOfNews(IEnumerable<News> rangeOfNews)
+        public async Task AddRangeOfNews(IEnumerable<NewsDto> rangeOfNewsDtos)
         {
-            await _unitOfWork.News.AddRange(rangeOfNews);
+            var newsRange = new List<News>();
+            foreach (var newsDto in rangeOfNewsDtos)
+            {
+                var news = new News
+                {
+                    Id = newsDto.Id,
+                    Article = newsDto.Article,
+                    Body = newsDto.Body,
+                    PublishTime = newsDto.PublishTime,
+                    RssSourceId = newsDto.RssSourceId,
+                    Url = newsDto.Url
+                };
+                newsRange.Add(news);
+            }
+            await _unitOfWork.News.AddRange(newsRange);
             await _unitOfWork.SaveChangeAsync();
-            //_unitOfWork.SaveChange();
         }
     }
 }

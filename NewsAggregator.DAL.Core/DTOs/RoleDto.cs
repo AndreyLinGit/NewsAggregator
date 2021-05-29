@@ -3,15 +3,12 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
-using NewsAggregator.DAL.Core.Entities.Abstract;
 
-namespace NewsAggregator.DAL.Core.Entities
+namespace NewsAggregator.DAL.Core.DTOs
 {
-    public class Role : IBaseEntity
+    public class RoleDto
     {
         public Guid Id { get; set; }
         public string Name { get; set; }
-
-        public virtual ICollection<User> Users { get; set; }
     }
 }

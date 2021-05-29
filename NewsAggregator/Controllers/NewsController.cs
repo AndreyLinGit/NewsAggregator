@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using NewsAggregator.DAL.Core.DTOs;
 using NewsAggregator.DAL.Core.Entities;
 using NewsAggregator.DAL.Repositories.Implementation;
@@ -28,11 +29,11 @@ namespace NewsAggregator.Controllers
             _rssSourceService = rssSourceService;
         }
 
-
+        [Authorize(Roles = "User")]
         public async Task<IActionResult> Index()
         {
-            var newsList = await _rssSourceService.GetNewsFromSource(isCostil); // (It's for work from work!)
-            //var newsList = await _newsService.GetAllNews(); //Think about "Get()" (It's for work from home!)
+            //var newsList = await _rssSourceService.GetNewsFromSource(isCostil); // (It's for work from work!)
+            var newsList = await _newsService.GetAllNews(); //Think about "Get()" (It's for work from home!)
             var modelsList = new List<NewsViewModel>();
             foreach (var news in newsList)
             {

@@ -36,9 +36,9 @@ namespace NewsAggregator.DAL.Repositories.Implementation.Repositories
             await Table.AddRangeAsync(range);
         }
 
-        public Task GetById(Guid id)
+        public async Task<T> GetById(Guid id)
         {
-            throw new NotImplementedException();
+            return await Table.FirstOrDefaultAsync(item => item.Id.Equals(id));
         }
 
         public DbSet<T> Get()
@@ -51,16 +51,13 @@ namespace NewsAggregator.DAL.Repositories.Implementation.Repositories
             var result = Table.Where(predicate);
             if (includes.Any())
             {
-                includes.Aggregate(result,
+                result = includes.Aggregate(result,
                     (current, include) 
                         => current.Include(include));
             }
 
             return result;
         }
-
-
-
 
         public void Update(T entity)
         {

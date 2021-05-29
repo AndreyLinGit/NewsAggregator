@@ -9,7 +9,7 @@ namespace NewsAggregator.DAL.Serviсes.Interfaces
     {
         Task AddSource(RssSourceDto source);
         Task<IEnumerable<RssSource>> GetAllSources();
-        Task<List<NewsDto>> GetNewsFromSource();
+        Task GetNewsFromSources();
         Task<List<NewsDto>> GetNewsFromSource(bool costil);
     }
 }

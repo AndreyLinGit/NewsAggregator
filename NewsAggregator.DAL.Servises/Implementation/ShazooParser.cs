@@ -10,13 +10,13 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
 {
     public class ShazooParser : IWebParser
     {
-        public string Parse(string url)
+        public async Task<string> Parse(string url)
         {
             HtmlWeb web = new HtmlWeb();
             var htmlDoc = web.Load(url);
 
             var node = htmlDoc.DocumentNode.SelectSingleNode("//div[@id='content']");
-            return node.InnerText;
+            return node != null ? node.InnerText : string.Empty;
         }
     }
 }

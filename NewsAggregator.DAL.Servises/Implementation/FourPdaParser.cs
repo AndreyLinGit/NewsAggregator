@@ -10,7 +10,7 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
 {
     public class FourPdaParser : IWebParser
     {
-        public string Parse(string url)
+        public async Task<string> Parse(string url)
         {
             HtmlWeb web = new HtmlWeb();
             var htmlDoc = web.Load(url);

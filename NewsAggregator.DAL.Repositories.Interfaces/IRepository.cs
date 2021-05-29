@@ -13,7 +13,7 @@ namespace NewsAggregator.DAL.Repositories.Interfaces
     {
         Task Add(T entity);
         Task AddRange(IEnumerable<T> range);
-        Task GetById(Guid id);
+        Task<T> GetById(Guid id);
         DbSet<T> Get();
         IQueryable<T> FindBy(Expression<Func<T, bool>> predicate, params Expression<Func<T, object>>[] includes);
         void Update(T entity);

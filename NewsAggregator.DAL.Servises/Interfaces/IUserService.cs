@@ -5,12 +5,14 @@ using System.Collections.Generic;
 using System.Text;
 using System.Threading.Tasks;
 using NewsAggregator.DAL.Core.DTOs;
+using UserDto = NewsAggregator.DAL.Core.DTOs.UserDto;
 
 namespace NewsAggregator.DAL.Servises.Interfaces
 {
-    public interface INewsService
+    public interface IUserService
     {
-        Task<IEnumerable<News>> GetAllNews();
-        Task AddRangeOfNews(IEnumerable<NewsDto> rangeOfNews);
+        string GetPasswordHash(string modelPassword);
+        Task<bool> RegisterUser(UserDto model);
+        Task<UserDto> GetUserByEmail(string email);
     }
 }

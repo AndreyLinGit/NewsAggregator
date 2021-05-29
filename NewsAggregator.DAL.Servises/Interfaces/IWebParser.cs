@@ -9,6 +9,6 @@ namespace NewsAggregator.DAL.Serviсes.Interfaces
     public delegate IWebParser WebParserResolver(string key);
     public interface IWebParser
     {
-        string Parse(string url);
+        Task<string> Parse(string url);
     }
 }

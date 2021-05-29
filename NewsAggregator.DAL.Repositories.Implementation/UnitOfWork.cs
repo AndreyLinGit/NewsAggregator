@@ -60,14 +60,9 @@ namespace NewsAggregator.DAL.Repositories.Implementation
             GC.SuppressFinalize(this);
         }
 
-        public void SaveChange()
+        public async Task<int> SaveChangeAsync() 
         {
-            Db.SaveChanges();
-        }
-
-        public Task<int> SaveChangeAsync() //?????????????????
-        {
-            return Db.SaveChangesAsync();
+            return await Db.SaveChangesAsync();
         }
     }
 

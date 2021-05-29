@@ -13,28 +13,19 @@ namespace NewsAggregator.Controllers
     public class RssSourceController : Controller
     {
         private readonly IRssSourceService _rssSourceService;
-        private readonly INewsService _newsService;
 
-        public RssSourceController(IRssSourceService rssSourceService, INewsService newsService)
+        public RssSourceController(IRssSourceService rssSourceService)
         {
             _rssSourceService = rssSourceService;
-            _newsService = newsService;
         }
 
         public async Task<IActionResult> Index()
         {
             var model = await _rssSourceService.GetAllSources();
-            //var model = new List<RssSource>();
-            //model.Add(new RssSource()
-            //    {
-            //        Id = Guid.NewGuid(),
-            //        Name = "Onliner",
-            //        NewsCollection = null,
-            //        Url = "https://www.onliner.by/"
-            //    });
             return View(model);
         }
 
+        [HttpGet]
         public IActionResult Create()
         {
             return View();
@@ -50,27 +41,12 @@ namespace NewsAggregator.Controllers
                 Url = url
             };
             await _rssSourceService.AddSource(dto);
-            return  Redirect("/RssSource/Index");
+            return Redirect("/RssSource/Index");
         }
 
         public async Task<IActionResult> AggregateNewsFromRssSources()
         {
-            var news = await _rssSourceService.GetNewsFromSource();
-            var newsRange = new List<News>();
-            foreach (var singleNews in news)
-            {
-                var newsEntity = new News
-                {
-                    Id = singleNews.Id,
-                    Article = singleNews.Article,
-                    Body = singleNews.Body,
-                    PublishTime = singleNews.PublishTime,
-                    Rating = singleNews.Rating, 
-                    RssSourceId = singleNews.RssSourceId
-                };
-                newsRange.Add(newsEntity);
-            }
-            await _newsService.AddRangeOfNews(newsRange);
+            await _rssSourceService.GetNewsFromSources();
             return Redirect("/News/Index");
         }
     }
