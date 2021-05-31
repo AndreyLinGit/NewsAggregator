@@ -119,5 +119,45 @@ namespace NewsAggregator.Controllers
             //Claim & ClaimsIdentity & ClaimsPrinciple
 
         }
+
+        public IActionResult Login2()
+        {
+            return View();
+        }
+
+        [HttpPost]
+        [ValidateAntiForgeryToken]
+        public async Task<IActionResult> Login2(LoginViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                var passwordHash = _userService.GetPasswordHash(model.Password);
+                var user = await _userService.GetUserByEmail(model.Email);
+                if (user != null)
+                {
+                    if (passwordHash.Equals(user.HashPass))
+                    {
+                        await Authenticate(user);
+                        return RedirectToAction("Index", "News");
+                    }
+                }
+            }
+            return View(model);
+        }
+        [HttpGet]
+        public async Task<IActionResult> ForgotPass() //?
+        {
+            return View();
+        }
+        [HttpPost]
+        public async Task<IActionResult> ForgotPass(LoginViewModel model) //?
+        {
+            return View();
+        }
+        [HttpGet]
+        public async Task<IActionResult> UserPage() //?
+        {
+            return View();
+        }
     }
 }

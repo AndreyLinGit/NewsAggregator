@@ -37,143 +37,143 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
             _igromanijaParser = servserviceAccessor("Igromanija");
         }
 
-        public async Task<List<NewsDto>> GetNewsFromSource(bool costil)
-        {
-            return null;
-        }
-
-        #region MyRegion
         //public async Task<List<NewsDto>> GetNewsFromSource(bool costil)
         //{
-        //    Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-        //    var sources = new List<string>();
-        //    sources.Add("https://www.onliner.by/feed");
-        //    sources.Add("https://shazoo.ru/feed/rss");
-        //    sources.Add("https://4pda.to/feed/");
-        //    sources.Add("https://wylsa.com/feed/");
-        //    sources.Add("https://www.igromania.ru/rss/all.rss");
-
-        //    var stopwatch = new Stopwatch();
-        //    stopwatch.Start();
-        //    var result = new List<NewsDto>();
-
-        //    Task[] tasks1 = new Task[5]
-        //    {
-        //        new Task(() =>
-        //        {
-        //            using (var reader = XmlReader.Create("https://www.onliner.by/feed"))
-        //            {
-        //                SyndicationFeed feed = SyndicationFeed.Load(reader);
-        //                reader.Close();
-        //                Parallel.ForEach(feed.Items, (syndicationItem) =>
-        //                {
-        //                    var news = new NewsDto()
-        //                    {
-        //                        Article = syndicationItem.Title.Text,
-        //                        Body = _onlinerParser.Parse(syndicationItem.Id),
-        //                        Id = Guid.NewGuid(),
-        //                        PublishTime = DateTime.Now,
-        //                        Rating = 0,
-        //                        Url = syndicationItem.Id
-        //                    };
-        //                    result.Add(news);
-        //                });
-        //            }
-        //        }),
-        //        new Task(() =>
-        //        {
-        //            using (var reader = XmlReader.Create("https://shazoo.ru/feed/rss"))
-        //            {
-        //                SyndicationFeed feed = SyndicationFeed.Load(reader);
-        //                reader.Close();
-        //                Parallel.ForEach(feed.Items, (syndicationItem) =>
-        //                {
-        //                    var news = new NewsDto()
-        //                    {
-        //                        Article = syndicationItem.Title.Text,
-        //                        Body = _shazooParser.Parse(syndicationItem.Id),
-        //                        Id = Guid.NewGuid(),
-        //                        PublishTime = DateTime.Now,
-        //                        Rating = 0,
-        //                        Url = syndicationItem.Id
-        //                    };
-        //                    result.Add(news);
-        //                });
-        //            }
-        //        }),
-        //        new Task(() =>
-        //        {
-        //            using (var reader = XmlReader.Create("https://4pda.to/feed/"))
-        //            {
-        //                SyndicationFeed feed = SyndicationFeed.Load(reader);
-        //                reader.Close();
-        //                Parallel.ForEach(feed.Items, (syndicationItem) =>
-        //                {
-        //                    var news = new NewsDto()
-        //                    {
-        //                        Article = syndicationItem.Title.Text,
-        //                        Body = _4pdaParser.Parse(syndicationItem.Id),
-        //                        Id = Guid.NewGuid(),
-        //                        PublishTime = DateTime.Now,
-        //                        Rating = 0,
-        //                        Url = syndicationItem.Id
-        //                    };
-        //                    result.Add(news);
-        //                });
-        //            }
-        //        }),
-        //        new Task(() =>
-        //        {
-        //            using (var reader = XmlReader.Create("https://wylsa.com/feed/"))
-        //            {
-        //                SyndicationFeed feed = SyndicationFeed.Load(reader);
-        //                reader.Close();
-        //                Parallel.ForEach(feed.Items, (syndicationItem) =>
-        //                {
-        //                    var news = new NewsDto()
-        //                    {
-        //                        Article = syndicationItem.Title.Text,
-        //                        Body = _wylsaParser.Parse(syndicationItem.Id),
-        //                        Id = Guid.NewGuid(),
-        //                        PublishTime = DateTime.Now,
-        //                        Rating = 0,
-        //                        Url = syndicationItem.Id
-        //                    };
-        //                    result.Add(news);
-        //                });
-        //            }
-        //        }),
-        //        new Task(() =>
-        //        {
-        //            using (var reader = XmlReader.Create("https://www.igromania.ru/rss/all.rss"))
-        //            {
-        //                SyndicationFeed feed = SyndicationFeed.Load(reader);
-        //                reader.Close();
-        //                Parallel.ForEach(feed.Items, (syndicationItem) =>
-        //                {
-        //                    var news = new NewsDto()
-        //                    {
-        //                        Article = syndicationItem.Title.Text,
-        //                        Body = _igromanijaParser.Parse(syndicationItem.Id),
-        //                        Id = Guid.NewGuid(),
-        //                        PublishTime = DateTime.Now,
-        //                        Rating = 0,
-        //                        Url = syndicationItem.Id
-        //                    };
-        //                    result.Add(news);
-        //                });
-        //            }
-        //        })
-        //    };
-        //    foreach (var t in tasks1)
-        //        t.Start();
-        //    Task.WaitAll(tasks1);
-
-        //    stopwatch.Stop();
-        //    var time = stopwatch.Elapsed.Seconds;
-        //    //
-        //    return result;
+        //    return null;
         //}
+
+        #region MyRegion
+        public async Task<List<NewsDto>> GetNewsFromSource(bool costil)
+        {
+            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
+            var sources = new List<string>();
+            sources.Add("https://www.onliner.by/feed");
+            sources.Add("https://shazoo.ru/feed/rss");
+            sources.Add("https://4pda.to/feed/");
+            sources.Add("https://wylsa.com/feed/");
+            sources.Add("https://www.igromania.ru/rss/all.rss");
+
+            var stopwatch = new Stopwatch();
+            stopwatch.Start();
+            var result = new List<NewsDto>();
+
+            Task[] tasks1 = new Task[5]
+            {
+                new Task(() =>
+                {
+                    using (var reader = XmlReader.Create("https://www.onliner.by/feed"))
+                    {
+                        SyndicationFeed feed = SyndicationFeed.Load(reader);
+                        reader.Close();
+                        Parallel.ForEach(feed.Items, async (syndicationItem) =>
+                        {
+                            var news = new NewsDto()
+                            {
+                                Article = syndicationItem.Title.Text,
+                                Body = await _onlinerParser.Parse(syndicationItem.Id),
+                                Id = Guid.NewGuid(),
+                                PublishTime = DateTime.Now,
+                                Rating = 0,
+                                Url = syndicationItem.Id
+                            };
+                            result.Add(news);
+                        });
+                    }
+                }),
+                new Task(() =>
+                {
+                    using (var reader = XmlReader.Create("https://shazoo.ru/feed/rss"))
+                    {
+                        SyndicationFeed feed = SyndicationFeed.Load(reader);
+                        reader.Close();
+                        Parallel.ForEach(feed.Items, async (syndicationItem) =>
+                        {
+                            var news = new NewsDto()
+                            {
+                                Article = syndicationItem.Title.Text,
+                                Body = await _shazooParser.Parse(syndicationItem.Id),
+                                Id = Guid.NewGuid(),
+                                PublishTime = DateTime.Now,
+                                Rating = 0,
+                                Url = syndicationItem.Id
+                            };
+                            result.Add(news);
+                        });
+                    }
+                }),
+                new Task(() =>
+                {
+                    using (var reader = XmlReader.Create("https://4pda.to/feed/"))
+                    {
+                        SyndicationFeed feed = SyndicationFeed.Load(reader);
+                        reader.Close();
+                        Parallel.ForEach(feed.Items, async (syndicationItem) =>
+                        {
+                            var news = new NewsDto()
+                            {
+                                Article = syndicationItem.Title.Text,
+                                Body = await _4pdaParser.Parse(syndicationItem.Id),
+                                Id = Guid.NewGuid(),
+                                PublishTime = DateTime.Now,
+                                Rating = 0,
+                                Url = syndicationItem.Id
+                            };
+                            result.Add(news);
+                        });
+                    }
+                }),
+                new Task(() =>
+                {
+                    using (var reader = XmlReader.Create("https://wylsa.com/feed/"))
+                    {
+                        SyndicationFeed feed = SyndicationFeed.Load(reader);
+                        reader.Close();
+                        Parallel.ForEach(feed.Items, async (syndicationItem) =>
+                        {
+                            var news = new NewsDto()
+                            {
+                                Article = syndicationItem.Title.Text,
+                                Body = await _wylsaParser.Parse(syndicationItem.Id),
+                                Id = Guid.NewGuid(),
+                                PublishTime = DateTime.Now,
+                                Rating = 0,
+                                Url = syndicationItem.Id
+                            };
+                            result.Add(news);
+                        });
+                    }
+                }),
+                new Task(() =>
+                {
+                    using (var reader = XmlReader.Create("https://www.igromania.ru/rss/all.rss"))
+                    {
+                        SyndicationFeed feed = SyndicationFeed.Load(reader);
+                        reader.Close();
+                        Parallel.ForEach(feed.Items, async (syndicationItem) =>
+                        {
+                            var news = new NewsDto()
+                            {
+                                Article = syndicationItem.Title.Text,
+                                Body = await _igromanijaParser.Parse(syndicationItem.Id),
+                                Id = Guid.NewGuid(),
+                                PublishTime = DateTime.Now,
+                                Rating = 0,
+                                Url = syndicationItem.Id
+                            };
+                            result.Add(news);
+                        });
+                    }
+                })
+            };
+            foreach (var t in tasks1)
+                t.Start();
+            Task.WaitAll(tasks1);
+
+            stopwatch.Stop();
+            var time = stopwatch.Elapsed.Seconds;
+            //
+            return result;
+        }
         #endregion
 
 

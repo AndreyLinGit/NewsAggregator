@@ -18,6 +18,8 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NewsAggregator.DAL.Reposito
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NewsAggregator.DAL.Serviсes", "..\NewsAggregator.DAL.Servises\NewsAggregator.DAL.Serviсes.csproj", "{FFC31C06-3A14-4F40-B2DF-9FEC0FFD3C93}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NA.IdentityExample", "..\NA.IdentityExample\NA.IdentityExample.csproj", "{991083AD-C626-4EE0-939D-C9BC57FDD695}"
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -44,6 +46,10 @@ Global
 		{FFC31C06-3A14-4F40-B2DF-9FEC0FFD3C93}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{FFC31C06-3A14-4F40-B2DF-9FEC0FFD3C93}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{FFC31C06-3A14-4F40-B2DF-9FEC0FFD3C93}.Release|Any CPU.Build.0 = Release|Any CPU
+		{991083AD-C626-4EE0-939D-C9BC57FDD695}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{991083AD-C626-4EE0-939D-C9BC57FDD695}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{991083AD-C626-4EE0-939D-C9BC57FDD695}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{991083AD-C626-4EE0-939D-C9BC57FDD695}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE
