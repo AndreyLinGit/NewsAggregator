@@ -10,7 +10,7 @@ namespace NewsAggregator.Models.Account
     {
         [Required(ErrorMessage = "Please write your email")]
         [DataType(DataType.EmailAddress)]
-        public string Email { get; set; }
+        public string EmailOrLogin { get; set; }
         [Required(ErrorMessage = "Please write your password")]
         [DataType(DataType.Password)]
         public string Password { get; set; }

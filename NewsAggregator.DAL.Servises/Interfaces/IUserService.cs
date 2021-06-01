@@ -14,5 +14,7 @@ namespace NewsAggregator.DAL.Servises.Interfaces
         string GetPasswordHash(string modelPassword);
         Task<bool> RegisterUser(UserDto model);
         Task<UserDto> GetUserByEmail(string email);
+        Task<UserDto> GetUserByLogin(string email);
+        Task Confirm(UserDto model);
     }
 }

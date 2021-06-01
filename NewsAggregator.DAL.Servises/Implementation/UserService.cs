@@ -41,7 +41,8 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
                     Email = model.Email,
                     Login = "Mabel",
                     HashPass = model.HashPass,
-                    RoleId = (await _unitOfWork.Role.FindBy(role => role.Name.Equals("User")).FirstOrDefaultAsync()).Id
+                    RoleId = (await _unitOfWork.Role.FindBy(role => role.Name.Equals("User")).FirstOrDefaultAsync()).Id,
+                    IsConfirmed = model.IsConfirmed
                 });
                 await _unitOfWork.SaveChangeAsync();
                 return true;
@@ -63,11 +64,41 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
                     Id = user.Id,
                     Email = user.Email,
                     HashPass = user.HashPass,
-                    Login = user.Login
+                    Login = user.Login,
+                    IsConfirmed = user.IsConfirmed
                 };
             }
 
             return null;
+        }
+
+        public async Task<UserDto> GetUserByLogin(string login)
+        {
+            var user = await _unitOfWork.User.FindBy(user => user.Login.Equals(login)).FirstOrDefaultAsync();
+            if (user != null)
+            {
+                return new UserDto
+                {
+                    Id = user.Id,
+                    Email = user.Email,
+                    HashPass = user.HashPass,
+                    Login = user.Login,
+                    IsConfirmed = user.IsConfirmed
+                };
+            }
+
+            return null;
+        }
+
+        public Task Confirm(UserDto model) // ADD MIGRATION!
+        {
+            if (_unitOfWork.User.GetById(roleDto.Id) != null)
+            {
+                var user = await _unitOfWork.User.FindBy(user => user.Email.Equals(userName)).FirstOrDefaultAsync();
+                user.RoleId = roleDto.Id;
+                _unitOfWork.User.Update(user);
+                await _unitOfWork.SaveChangeAsync();
+            }
         }
     }
 }

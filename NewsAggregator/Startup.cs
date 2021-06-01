@@ -50,6 +50,7 @@ namespace NewsAggregator
             services.AddScoped<IRssSourceService, RssSourceServiñe>();
             services.AddScoped<IUserService, UserService>();
             services.AddScoped<IRoleService, RoleService>();
+            services.AddScoped<IMailService, MailService>();
 
             services.AddTransient<OnlinerParser>();
             services.AddTransient<ShazooParser>();

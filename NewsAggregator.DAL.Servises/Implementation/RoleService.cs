@@ -37,7 +37,7 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
             {
                 var user = await _unitOfWork.User.FindBy(user => user.Email.Equals(userName)).FirstOrDefaultAsync();
                 user.RoleId = roleDto.Id;
-                await _unitOfWork.User.Add(user);
+                _unitOfWork.User.Update(user);
                 await _unitOfWork.SaveChangeAsync();
             }
         }

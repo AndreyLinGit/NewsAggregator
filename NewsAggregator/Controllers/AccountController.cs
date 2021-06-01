@@ -17,12 +17,14 @@ namespace NewsAggregator.Controllers
     {
         private readonly IUserService _userService;
         private readonly IRoleService _roleService;
+        private readonly IMailService _mailService;
 
 
-        public AccountController(IUserService userService, IRoleService roleService)
+        public AccountController(IUserService userService, IRoleService roleService, IMailService mailService)
         {
             _userService = userService;
             _roleService = roleService;
+            _mailService = mailService;
         }
 
         [HttpGet]
@@ -33,7 +35,7 @@ namespace NewsAggregator.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Register(RegisterViewModel model)
+        public async Task<IActionResult> Register(RegisterViewModel model) //???? About mail's
         {
             if (await _userService.GetUserByEmail(model.Email) != null)
             {
@@ -48,7 +50,8 @@ namespace NewsAggregator.Controllers
                     Id = Guid.NewGuid(),
                     Email = model.Email,
                     HashPass = passwordHash,
-                    Login = "Mabel"
+                    Login = model.Login,
+                    IsConfirmed = false
                 });
                 if (result)
                 {
@@ -68,12 +71,15 @@ namespace NewsAggregator.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login(LoginViewModel model)
+        public async Task<IActionResult> Login(LoginViewModel model)// Think about 
         {
             if (ModelState.IsValid)
             {
                 var passwordHash = _userService.GetPasswordHash(model.Password);
-                var user = await _userService.GetUserByEmail(model.Email);
+                var user = await _userService.GetUserByEmail(model.EmailOrLogin) != null
+                    ? await _userService.GetUserByEmail(model.EmailOrLogin)
+                    : await _userService.GetUserByLogin(model.EmailOrLogin);
+
                 if (user != null)
                 {
                     if (passwordHash.Equals(user.HashPass))
@@ -99,7 +105,7 @@ namespace NewsAggregator.Controllers
                 const string authType = "ApplicationCookie";
                 var claims = new List<Claim>
                 {
-                    new Claim(ClaimsIdentity.DefaultNameClaimType, dto.Email),
+                    new Claim(ClaimsIdentity.DefaultNameClaimType, dto.Login),
                     new Claim(ClaimsIdentity.DefaultRoleClaimType, (await _roleService.GetUserRole(dto.Email)).Name)
                 };
 
@@ -118,31 +124,6 @@ namespace NewsAggregator.Controllers
             }
             //Claim & ClaimsIdentity & ClaimsPrinciple
 
-        }
-
-        public IActionResult Login2()
-        {
-            return View();
-        }
-
-        [HttpPost]
-        [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login2(LoginViewModel model)
-        {
-            if (ModelState.IsValid)
-            {
-                var passwordHash = _userService.GetPasswordHash(model.Password);
-                var user = await _userService.GetUserByEmail(model.Email);
-                if (user != null)
-                {
-                    if (passwordHash.Equals(user.HashPass))
-                    {
-                        await Authenticate(user);
-                        return RedirectToAction("Index", "News");
-                    }
-                }
-            }
-            return View(model);
         }
         [HttpGet]
         public async Task<IActionResult> ForgotPass() //?

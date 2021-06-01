@@ -11,6 +11,7 @@ namespace NewsAggregator.Models.Account
         [Required(ErrorMessage = "Please write correct email")]
         [DataType(DataType.EmailAddress)]
         public string Email { get; set; }
+        public string Login { get; set; }
         [Required(ErrorMessage = "Please write correct password")]
         [DataType(DataType.Password)]
         public string Password { get; set; }
