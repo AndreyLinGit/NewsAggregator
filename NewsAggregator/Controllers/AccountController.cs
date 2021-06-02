@@ -44,10 +44,10 @@ namespace NewsAggregator.Controllers
             if (ModelState.IsValid)
             {
                 //var passwordHash = _userService.GetPasswordHash(model.Password);
-
+                var newUserId = Guid.NewGuid();
                 //var result = await _userService.RegisterUser(new UserDto
                 //{
-                //    Id = Guid.NewGuid(),
+                //    Id = newUserId,
                 //    Email = model.Email,
                 //    HashPass = passwordHash,
                 //    Login = model.Login,
@@ -57,7 +57,7 @@ namespace NewsAggregator.Controllers
                 {
                     var request = new MailRequest
                     {
-                        Link = @"",
+                        Link = @"https://localhost:44393/Account/UserPage/" + newUserId,
                         Subject = "Administration from NewsAggregator",
                         ToEmail = model.Email
                     };
@@ -143,9 +143,14 @@ namespace NewsAggregator.Controllers
             return View();
         }
         [HttpGet]
-        public async Task<IActionResult> UserPage() //?
+        public async Task<IActionResult> UserPage(Guid id) //? Clear trash tomorrow 
         {
-            return View();
+            //var user = await _userService.GetUserById(id);
+            var userModel = new UserModel
+            {
+                Id = id
+            };
+            return View(userModel);
         }
     }
 }

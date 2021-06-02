@@ -15,6 +15,7 @@ namespace NewsAggregator.DAL.Servises.Interfaces
         Task<bool> RegisterUser(UserDto model);
         Task<UserDto> GetUserByEmail(string email);
         Task<UserDto> GetUserByLogin(string email);
+        Task<UserDto> GetUserById(Guid userId);
         Task Confirm(UserDto model);
     }
 }

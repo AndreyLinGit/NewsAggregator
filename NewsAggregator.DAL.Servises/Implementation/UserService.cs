@@ -90,6 +90,20 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
             return null;
         }
 
+        public async Task<UserDto> GetUserById(Guid userId)
+        {
+            var user = await _unitOfWork.User.GetById(userId);
+            return new UserDto
+            {
+                Email = user.Email,
+                HashPass = user.HashPass,
+                Id = user.Id,
+                IsConfirmed = user.IsConfirmed,
+                Login = user.Login,
+                RoleId = user.RoleId
+            };
+        }
+
         public async Task Confirm(UserDto model) // ADD MIGRATION!
         {
             var unconfirmUser = await _unitOfWork.User.GetById(model.Id);
