@@ -90,13 +90,13 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
             return null;
         }
 
-        public Task Confirm(UserDto model) // ADD MIGRATION!
+        public async Task Confirm(UserDto model) // ADD MIGRATION!
         {
-            if (_unitOfWork.User.GetById(roleDto.Id) != null)
+            var unconfirmUser = await _unitOfWork.User.GetById(model.Id);
+            if (unconfirmUser != null)
             {
-                var user = await _unitOfWork.User.FindBy(user => user.Email.Equals(userName)).FirstOrDefaultAsync();
-                user.RoleId = roleDto.Id;
-                _unitOfWork.User.Update(user);
+                unconfirmUser.IsConfirmed = true;
+                _unitOfWork.User.Update(unconfirmUser);
                 await _unitOfWork.SaveChangeAsync();
             }
         }

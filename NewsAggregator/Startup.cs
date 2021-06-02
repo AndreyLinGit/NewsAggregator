@@ -19,6 +19,7 @@ using NewsAggregator.DAL.Serviñes.Implementation;
 using NewsAggregator.DAL.Serviñes.Interfaces;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
+using NewsAggregator.DAL.Core.DTOs;
 
 namespace NewsAggregator
 {
@@ -36,6 +37,8 @@ namespace NewsAggregator
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddDbContext<NewsAggregatorContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("DefoultConnection")));
+
+            services.Configure<MailSettings>(Configuration.GetSection("MailSettings"));
 
             services.AddTransient<IRepository<News>, NewsRepository>();
             services.AddTransient<IRepository<Comment>, CommentRepository>();

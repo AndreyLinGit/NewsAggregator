@@ -37,25 +37,32 @@ namespace NewsAggregator.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterViewModel model) //???? About mail's
         {
-            if (await _userService.GetUserByEmail(model.Email) != null)
-            {
-                ModelState.AddModelError("Email","User with that email is already exist");
-            }
+            //if (await _userService.GetUserByEmail(model.Email) != null)
+            //{
+            //    ModelState.AddModelError("Email","User with that email is already exist");
+            //}
             if (ModelState.IsValid)
             {
-                var passwordHash = _userService.GetPasswordHash(model.Password);
+                //var passwordHash = _userService.GetPasswordHash(model.Password);
 
-                var result = await _userService.RegisterUser(new UserDto
+                //var result = await _userService.RegisterUser(new UserDto
+                //{
+                //    Id = Guid.NewGuid(),
+                //    Email = model.Email,
+                //    HashPass = passwordHash,
+                //    Login = model.Login,
+                //    IsConfirmed = false
+                //});
+                if (true)
                 {
-                    Id = Guid.NewGuid(),
-                    Email = model.Email,
-                    HashPass = passwordHash,
-                    Login = model.Login,
-                    IsConfirmed = false
-                });
-                if (result)
-                {
-                    return RedirectToAction("Index", "News");
+                    var request = new MailRequest
+                    {
+                        Link = @"",
+                        Subject = "Administration from NewsAggregator",
+                        ToEmail = model.Email
+                    };
+                    await _mailService.SendEmailAsync(request);
+                    return View("WaitingConfirmation");
                 }
 
                 return BadRequest(model);
