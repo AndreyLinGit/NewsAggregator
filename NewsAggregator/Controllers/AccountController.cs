@@ -64,7 +64,6 @@ namespace NewsAggregator.Controllers
                     await _mailService.SendEmailAsync(request);
                     return View("WaitingConfirmation");
                 }
-
                 return BadRequest(model);
             }
 
@@ -143,7 +142,7 @@ namespace NewsAggregator.Controllers
             return View();
         }
         [HttpGet]
-        public async Task<IActionResult> UserPage(Guid id) //? Clear trash tomorrow 
+        public async Task<IActionResult> UserPage(Guid id) //? Clear trash at home 
         {
             //var user = await _userService.GetUserById(id);
             var userModel = new UserModel

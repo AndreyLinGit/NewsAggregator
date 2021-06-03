@@ -39,6 +39,10 @@ namespace NewsAggregator
             services.AddDbContext<NewsAggregatorContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("DefoultConnection")));
 
             services.Configure<MailSettings>(Configuration.GetSection("MailSettings"));
+            //TODO mapping and check working with database, rework Dtos
+            //TODO roles, letters and other pages about accounting 
+            //TODO pagination
+            //TODO logging 
 
             services.AddTransient<IRepository<News>, NewsRepository>();
             services.AddTransient<IRepository<Comment>, CommentRepository>();
