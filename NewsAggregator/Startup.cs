@@ -43,6 +43,7 @@ namespace NewsAggregator
             //TODO roles, letters and other pages about accounting 
             //TODO pagination
             //TODO logging 
+            //TODO FluentValidation
 
             services.AddTransient<IRepository<News>, NewsRepository>();
             services.AddTransient<IRepository<Comment>, CommentRepository>();

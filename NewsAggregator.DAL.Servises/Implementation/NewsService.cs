@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using NewsAggregator.DAL.Core.DTOs;
@@ -40,6 +41,21 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
             }
             await _unitOfWork.News.AddRange(newsRange);
             await _unitOfWork.SaveChangeAsync();
+        }
+
+        public async Task<NewsDto> GetNewsById(Guid id)
+        {
+            var news = await _unitOfWork.News.GetById(id);
+            return new NewsDto
+            {
+                Article = news.Article,
+                Body = news.Body,
+                Id = news.Id,
+                PublishTime = news.PublishTime,
+                Rating = news.Rating,
+                RssSourceId = news.RssSourceId,
+                Url = news.Url
+            };
         }
     }
 }

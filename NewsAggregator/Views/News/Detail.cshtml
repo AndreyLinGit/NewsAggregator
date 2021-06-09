@@ -1,5 +1,171 @@
-﻿@*
-    For more information on enabling MVC for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
-*@
-@{
-}
+﻿@model NewsAggregator.Models.NewsDetailModel
+<div class="card col-lg-12">
+    <div class="card-body">
+        <h5 class="card-title">@Model.Article</h5>
+        @*<h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>*@
+        <p class="card-text">@Model.Body</p>
+        <a class="card-link" asp-action="Index" asp-route-id="@Model.Id">Back to full news list</a>
+    </div>
+</div>
+<div>
+    <section class="comments comments_show" data-story-id="8265694" data-story-author-id="3442320" data-story-username="pikagoose" data-ignore-type="0" data-slice-mode="" data-user-in-comments="false" data-total="true" data-has-client-mentions="" data-order-mode="3" data-type="all">
+        <div class="comments__container_main" data-story-id="8265694">
+
+            <div class="comment" id="comment_202923395" data-id="202923395" data-meta="id=202923395,pid=0,aid=1836690,d=2021-06-09T19:47:03+03:00,de=0,ic=0,r=0,av=0:0,hc" data-indent="0">
+
+                <div class="comment__body ">
+                    <div class="comment__header"><div class="comment__rating-count hint" aria-label="0 плюсов, 0 минусов">0</div><div class="comment__rating-up" title="Поставить плюсик"><svg xmlns="http://www.w3.org/2000/svg" class="icon icon--ui__rating-up icon--ui__rating-up_comments"><use xlink:href="#icon--ui__rating-up"></use></svg></div><div class="comment__rating-down" title="Поставить минус"><svg xmlns="http://www.w3.org/2000/svg" class="icon icon--ui__rating-down icon--ui__rating-down_comments"><use xlink:href="#icon--ui__rating-down"></use></svg></div><div class="comment__user" data-profile="true" data-name="depotato"><a class="user" href=""><span class="avatar avatar_small avatar_note image-lazy"><span class="avatar__inner"><img data-src="https://cs13.pikabu.ru/avatars/1836/l1836690-541787748.png" alt="Аватар пользователя depotato" src="https://cs13.pikabu.ru/avatars/1836/l1836690-541787748.png" class="image-loaded"></span></span></a><a href=""><span class="user__nick">depotato</span></a></div><span class="user__label hint" data-type="invitro" aria-label="Участник проекта «Кешбэк от Инвитро»"><svg xmlns="http://www.w3.org/2000/svg" class="icon icon--ui__invitro-cross"><use xlink:href="#icon--ui__invitro-cross"></use></svg></span><time class="comment__datetime hint" datetime="2021-06-09T19:47:03+03:00">1 час назад</time><!--noindex--><div class="comment__tools"><a class="comment__tool hint" data-role="link" aria-label="Ссылка на комментарий" href="https://pikabu.ru/story/kogda_tyi_sam_protivopokazanie_8265694?cid=202923395"><svg xmlns="http://www.w3.org/2000/svg" class="icon icon--ui__link icon--ui__link_comments"><use xlink:href="#icon--ui__link"></use></svg></a><div class="comment__tool hint" data-role="save" aria-label="Сохранить"><svg xmlns="http://www.w3.org/2000/svg" class="icon icon--ui__save icon--ui__save_comments"><use xlink:href="#icon--ui__save"></use></svg></div><div class="comment__tool hint" data-role="share" aria-label="Поделиться" data-url="https%3A%2F%2Fpikabu.ru%2Fstory%2Fkogda_tyi_sam_protivopokazanie_8265694%3Fcid%3D202923395"><svg xmlns="http://www.w3.org/2000/svg" class="icon icon--ui__share icon--ui__share_comments"><use xlink:href="#icon--ui__share"></use></svg></div><div class="comment__tool hint" data-role="to-parent" aria-label="Показать родительский комментарий" style="display: none"><svg xmlns="http://www.w3.org/2000/svg" class="icon icon--ui__to-up icon--ui__to-up_comments"><use xlink:href="#icon--ui__to-up"></use></svg></div><div class="comment__tool hint" data-role="from-parent" aria-label="Вернуться обратно" style="display: none"><svg xmlns="http://www.w3.org/2000/svg" class="icon icon--ui__to-down icon--ui__to-down_comments"><use xlink:href="#icon--ui__to-down"></use></svg></div><div class="comment__tool hint" data-role="branch" aria-label="Показать/скрыть ветку комментариев" style="display: none"><svg xmlns="http://www.w3.org/2000/svg" class="icon icon--ui__branch icon--ui__branch_comments"><use xlink:href="#icon--ui__branch"></use></svg></div></div><!--/noindex--></div>
+                    <div class="comment__content">
+
+                        <p class="">Что блять?</p>
+
+                    </div>
+                    <!--noindex-->
+
+                    <div class="comment__controls">
+                        <span style="">
+                            <button class="button_link comment__control" data-type="create"></button>
+                            <button class="button_link comment__control" data-type="cancel" style="display:none"></button>
+
+                            <button class="button_link comment__control" data-type="unpin" style="display: none"></button>
+                            <button class="button_link comment__control" data-type="remove" style="display: none"></button>
+                        </span>
+
+                    </div>
+                    <!--/noindex-->
+                </div>
+
+                <div class="comment-toggle-children ">
+                    <div class="comment-toggle-children__icon"><svg xmlns="http://www.w3.org/2000/svg" class="icon icon--comments__toggle"><use xlink:href="#icon--comments__toggle"></use></svg></div>
+                    <div class="comment-toggle-children__label"><span class="comment-toggle-children__text">раскрыть ветку</span> <span class="comment-toggle-children__count">2</span> <svg xmlns="http://www.w3.org/2000/svg" class="icon icon--ui__comments"><use xlink:href="#icon--ui__comments"></use></svg></div>
+                </div>
+                <div class="comment__children" style="display: block">
+
+                    <div class="comment" id="comment_202928831" data-id="202928831" data-meta="id=202928831,pid=202923395,aid=3442320,d=2021-06-09T20:57:17+03:00,de=1,ic=0,hc" data-indent="1">
+
+                        <div class="comment__body ">
+                            <div class="comment__header"><div class="comment__rating-count hint" aria-label="Рейтинг скрыт в течение 45 минут после добавления комментария"><svg xmlns="http://www.w3.org/2000/svg" class="icon icon--ui__time icon--ui__time_comments"><use xlink:href="#icon--ui__time"></use></svg></div><div class="comment__rating-up" title="Поставить плюсик"><svg xmlns="http://www.w3.org/2000/svg" class="icon icon--ui__rating-up icon--ui__rating-up_comments"><use xlink:href="#icon--ui__rating-up"></use></svg></div><div class="comment__rating-down" title="Поставить минус"><svg xmlns="http://www.w3.org/2000/svg" class="icon icon--ui__rating-down icon--ui__rating-down_comments"><use xlink:href="#icon--ui__rating-down"></use></svg></div><div class="comment__user" data-profile="true" data-name="pikagoose" data-own-story="true"><a class="user" href=""><span class="avatar avatar_small avatar_note image-lazy"><span class="avatar__inner"><span class="avatar__default"></span></span></span></a><a href=""><span class="user__nick">pikagoose</span></a></div><time class="comment__datetime hint" datetime="2021-06-09T20:57:17+03:00">14 минут назад</time><!--noindex--><div class="comment__tools"><a class="comment__tool hint" data-role="link" aria-label="Ссылка на комментарий" href="https://pikabu.ru/story/kogda_tyi_sam_protivopokazanie_8265694?cid=202928831"><svg xmlns="http://www.w3.org/2000/svg" class="icon icon--ui__link icon--ui__link_comments"><use xlink:href="#icon--ui__link"></use></svg></a><div class="comment__tool hint" data-role="save" aria-label="Сохранить"><svg xmlns="http://www.w3.org/2000/svg" class="icon icon--ui__save icon--ui__save_comments"><use xlink:href="#icon--ui__save"></use></svg></div><div class="comment__tool hint" data-role="share" aria-label="Поделиться" data-url="https%3A%2F%2Fpikabu.ru%2Fstory%2Fkogda_tyi_sam_protivopokazanie_8265694%3Fcid%3D202928831"><svg xmlns="http://www.w3.org/2000/svg" class="icon icon--ui__share icon--ui__share_comments"><use xlink:href="#icon--ui__share"></use></svg></div><div class="comment__tool hint" data-role="to-parent" aria-label="Показать родительский комментарий"><svg xmlns="http://www.w3.org/2000/svg" class="icon icon--ui__to-up icon--ui__to-up_comments"><use xlink:href="#icon--ui__to-up"></use></svg></div><div class="comment__tool hint" data-role="from-parent" aria-label="Вернуться обратно" style="display: none"><svg xmlns="http://www.w3.org/2000/svg" class="icon icon--ui__to-down icon--ui__to-down_comments"><use xlink:href="#icon--ui__to-down"></use></svg></div><div class="comment__tool hint" data-role="branch" aria-label="Показать/скрыть ветку комментариев"><svg xmlns="http://www.w3.org/2000/svg" class="icon icon--ui__branch icon--ui__branch_comments"><use xlink:href="#icon--ui__branch"></use></svg></div></div><!--/noindex--></div>
+                            <div class="comment__content">
+
+                                <p class="">Всё просто. Данный препарат противопоказан для негроидной расы. Картинка не моя.</p>
+
+                            </div>
+                            <!--noindex-->
+
+                            <div class="comment__controls">
+                                <span style="">
+                                    <button class="button_link comment__control" data-type="create"></button>
+                                    <button class="button_link comment__control" data-type="cancel" style="display:none"></button>
+
+                                    <button class="button_link comment__control" data-type="unpin" style="display: none"></button>
+                                    <button class="button_link comment__control" data-type="remove" style="display: none"></button>
+                                </span>
+
+                            </div>
+                            <!--/noindex-->
+                        </div>
+
+                        <div class="comment-toggle-children ">
+                            <div class="comment-toggle-children__icon"><svg xmlns="http://www.w3.org/2000/svg" class="icon icon--comments__toggle"><use xlink:href="#icon--comments__toggle"></use></svg></div>
+                            <div class="comment-toggle-children__label"><span class="comment-toggle-children__text">раскрыть ветку</span> <span class="comment-toggle-children__count">1</span> <svg xmlns="http://www.w3.org/2000/svg" class="icon icon--ui__comments"><use xlink:href="#icon--ui__comments"></use></svg></div>
+                        </div>
+                        <div class="comment__children" style="display: block">
+
+                            <div class="comment" id="comment_202929577" data-id="202929577" data-meta="id=202929577,pid=202928831,aid=1836690,d=2021-06-09T21:07:30+03:00,de=2,ic=0" data-indent="2">
+
+                                <div class="comment__body ">
+                                    <div class="comment__header"><div class="comment__rating-count hint" aria-label="Рейтинг скрыт в течение 45 минут после добавления комментария"><svg xmlns="http://www.w3.org/2000/svg" class="icon icon--ui__time icon--ui__time_comments"><use xlink:href="#icon--ui__time"></use></svg></div><div class="comment__rating-up" title="Поставить плюсик"><svg xmlns="http://www.w3.org/2000/svg" class="icon icon--ui__rating-up icon--ui__rating-up_comments"><use xlink:href="#icon--ui__rating-up"></use></svg></div><div class="comment__rating-down" title="Поставить минус"><svg xmlns="http://www.w3.org/2000/svg" class="icon icon--ui__rating-down icon--ui__rating-down_comments"><use xlink:href="#icon--ui__rating-down"></use></svg></div><div class="comment__user" data-profile="true" data-name="depotato"><a class="user" href=""><span class="avatar avatar_small avatar_note image-lazy"><span class="avatar__inner"><img data-src="https://cs13.pikabu.ru/avatars/1836/l1836690-541787748.png" alt="Аватар пользователя depotato" src="https://cs13.pikabu.ru/avatars/1836/l1836690-541787748.png" class="image-loaded"></span></span></a><a href=""><span class="user__nick">depotato</span></a></div><span class="user__label hint" data-type="invitro" aria-label="Участник проекта «Кешбэк от Инвитро»"><svg xmlns="http://www.w3.org/2000/svg" class="icon icon--ui__invitro-cross"><use xlink:href="#icon--ui__invitro-cross"></use></svg></span><time class="comment__datetime hint" datetime="2021-06-09T21:07:30+03:00">4 минуты назад</time><!--noindex--><div class="comment__tools"><a class="comment__tool hint" data-role="link" aria-label="Ссылка на комментарий" href="https://pikabu.ru/story/kogda_tyi_sam_protivopokazanie_8265694?cid=202929577"><svg xmlns="http://www.w3.org/2000/svg" class="icon icon--ui__link icon--ui__link_comments"><use xlink:href="#icon--ui__link"></use></svg></a><div class="comment__tool hint" data-role="save" aria-label="Сохранить"><svg xmlns="http://www.w3.org/2000/svg" class="icon icon--ui__save icon--ui__save_comments"><use xlink:href="#icon--ui__save"></use></svg></div><div class="comment__tool hint" data-role="share" aria-label="Поделиться" data-url="https%3A%2F%2Fpikabu.ru%2Fstory%2Fkogda_tyi_sam_protivopokazanie_8265694%3Fcid%3D202929577"><svg xmlns="http://www.w3.org/2000/svg" class="icon icon--ui__share icon--ui__share_comments"><use xlink:href="#icon--ui__share"></use></svg></div><div class="comment__tool hint" data-role="to-parent" aria-label="Показать родительский комментарий"><svg xmlns="http://www.w3.org/2000/svg" class="icon icon--ui__to-up icon--ui__to-up_comments"><use xlink:href="#icon--ui__to-up"></use></svg></div><div class="comment__tool hint" data-role="from-parent" aria-label="Вернуться обратно" style="display: none"><svg xmlns="http://www.w3.org/2000/svg" class="icon icon--ui__to-down icon--ui__to-down_comments"><use xlink:href="#icon--ui__to-down"></use></svg></div><div class="comment__tool hint" data-role="branch" aria-label="Показать/скрыть ветку комментариев"><svg xmlns="http://www.w3.org/2000/svg" class="icon icon--ui__branch icon--ui__branch_comments"><use xlink:href="#icon--ui__branch"></use></svg></div></div><!--/noindex--></div>
+                                    <div class="comment__content">
+
+                                        <p class="">Как раз сложно. То, что это противопоказания - непонятно</p>
+
+                                    </div>
+                                    <!--noindex-->
+
+                                    <div class="comment__controls">
+                                        <span style="">
+                                            <button class="button_link comment__control" data-type="create"></button>
+                                            <button class="button_link comment__control" data-type="cancel" style="display:none"></button>
+
+                                            <button class="button_link comment__control" data-type="unpin" style="display: none"></button>
+                                            <button class="button_link comment__control" data-type="remove" style="display: none"></button>
+                                        </span>
+
+                                    </div>
+                                    <!--/noindex-->
+                                </div>
+
+                            </div>
+
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+            <div class="comment" id="comment_202910585" data-id="202910585" data-meta="id=202910585,pid=0,aid=1423817,d=2021-06-09T17:18:27+03:00,de=0,ic=0,r=0,av=0:0,hc" data-indent="0">
+
+                <div class="comment__body ">
+                    <div class="comment__header"><div class="comment__rating-count hint" aria-label="0 плюсов, 0 минусов">0</div><div class="comment__rating-up" title="Поставить плюсик"><svg xmlns="http://www.w3.org/2000/svg" class="icon icon--ui__rating-up icon--ui__rating-up_comments"><use xlink:href="#icon--ui__rating-up"></use></svg></div><div class="comment__rating-down" title="Поставить минус"><svg xmlns="http://www.w3.org/2000/svg" class="icon icon--ui__rating-down icon--ui__rating-down_comments"><use xlink:href="#icon--ui__rating-down"></use></svg></div><div class="comment__user" data-profile="true" data-name="PandemicColumbi"><a class="user" href=""><span class="avatar avatar_small avatar_note image-lazy"><span class="avatar__inner"><img data-src="https://cs13.pikabu.ru/avatars/1423/l1423817-2030683915.png" alt="Аватар пользователя PandemicColumbi" src="https://cs13.pikabu.ru/avatars/1423/l1423817-2030683915.png" class="image-loaded"></span></span></a><a href=""><span class="user__nick">PandemicColumbi</span></a></div><time class="comment__datetime hint" datetime="2021-06-09T17:18:27+03:00">3 часа назад</time><!--noindex--><div class="comment__tools"><a class="comment__tool hint" data-role="link" aria-label="Ссылка на комментарий" href="https://pikabu.ru/story/kogda_tyi_sam_protivopokazanie_8265694?cid=202910585"><svg xmlns="http://www.w3.org/2000/svg" class="icon icon--ui__link icon--ui__link_comments"><use xlink:href="#icon--ui__link"></use></svg></a><div class="comment__tool hint" data-role="save" aria-label="Сохранить"><svg xmlns="http://www.w3.org/2000/svg" class="icon icon--ui__save icon--ui__save_comments"><use xlink:href="#icon--ui__save"></use></svg></div><div class="comment__tool hint" data-role="share" aria-label="Поделиться" data-url="https%3A%2F%2Fpikabu.ru%2Fstory%2Fkogda_tyi_sam_protivopokazanie_8265694%3Fcid%3D202910585"><svg xmlns="http://www.w3.org/2000/svg" class="icon icon--ui__share icon--ui__share_comments"><use xlink:href="#icon--ui__share"></use></svg></div><div class="comment__tool hint" data-role="to-parent" aria-label="Показать родительский комментарий" style="display: none"><svg xmlns="http://www.w3.org/2000/svg" class="icon icon--ui__to-up icon--ui__to-up_comments"><use xlink:href="#icon--ui__to-up"></use></svg></div><div class="comment__tool hint" data-role="from-parent" aria-label="Вернуться обратно" style="display: none"><svg xmlns="http://www.w3.org/2000/svg" class="icon icon--ui__to-down icon--ui__to-down_comments"><use xlink:href="#icon--ui__to-down"></use></svg></div><div class="comment__tool hint" data-role="branch" aria-label="Показать/скрыть ветку комментариев" style="display: none"><svg xmlns="http://www.w3.org/2000/svg" class="icon icon--ui__branch icon--ui__branch_comments"><use xlink:href="#icon--ui__branch"></use></svg></div></div><!--/noindex--></div>
+                    <div class="comment__content">
+
+                        <p class="">Причем тут теги BLM и Юмор?</p>
+
+                    </div>
+                    <!--noindex-->
+
+                    <div class="comment__controls">
+                        <span style="">
+                            <button class="button_link comment__control" data-type="create"></button>
+                            <button class="button_link comment__control" data-type="cancel" style="display:none"></button>
+
+                            <button class="button_link comment__control" data-type="unpin" style="display: none"></button>
+                            <button class="button_link comment__control" data-type="remove" style="display: none"></button>
+                        </span>
+
+                    </div>
+                    <!--/noindex-->
+                </div>
+
+                <div class="comment-toggle-children ">
+                    <div class="comment-toggle-children__icon"><svg xmlns="http://www.w3.org/2000/svg" class="icon icon--comments__toggle"><use xlink:href="#icon--comments__toggle"></use></svg></div>
+                    <div class="comment-toggle-children__label"><span class="comment-toggle-children__text">раскрыть ветку</span> <span class="comment-toggle-children__count">1</span> <svg xmlns="http://www.w3.org/2000/svg" class="icon icon--ui__comments"><use xlink:href="#icon--ui__comments"></use></svg></div>
+                </div>
+                <div class="comment__children" style="display: block">
+
+                    <div class="comment" id="comment_202913567" data-id="202913567" data-meta="id=202913567,pid=202910585,aid=1423817,d=2021-06-09T17:51:54+03:00,de=1,ic=0,r=0,av=0:0" data-indent="1">
+
+                        <div class="comment__body ">
+                            <div class="comment__header"><div class="comment__rating-count hint" aria-label="0 плюсов, 0 минусов">0</div><div class="comment__rating-up" title="Поставить плюсик"><svg xmlns="http://www.w3.org/2000/svg" class="icon icon--ui__rating-up icon--ui__rating-up_comments"><use xlink:href="#icon--ui__rating-up"></use></svg></div><div class="comment__rating-down" title="Поставить минус"><svg xmlns="http://www.w3.org/2000/svg" class="icon icon--ui__rating-down icon--ui__rating-down_comments"><use xlink:href="#icon--ui__rating-down"></use></svg></div><div class="comment__user" data-profile="true" data-name="PandemicColumbi"><a class="user" href=""><span class="avatar avatar_small avatar_note image-lazy"><span class="avatar__inner"><img data-src="https://cs13.pikabu.ru/avatars/1423/l1423817-2030683915.png" alt="Аватар пользователя PandemicColumbi" src="https://cs13.pikabu.ru/avatars/1423/l1423817-2030683915.png" class="image-loaded"></span></span></a><a href=""><span class="user__nick">PandemicColumbi</span></a></div><time class="comment__datetime hint" datetime="2021-06-09T17:51:54+03:00">3 часа назад</time><!--noindex--><div class="comment__tools"><a class="comment__tool hint" data-role="link" aria-label="Ссылка на комментарий" href="https://pikabu.ru/story/kogda_tyi_sam_protivopokazanie_8265694?cid=202913567"><svg xmlns="http://www.w3.org/2000/svg" class="icon icon--ui__link icon--ui__link_comments"><use xlink:href="#icon--ui__link"></use></svg></a><div class="comment__tool hint" data-role="save" aria-label="Сохранить"><svg xmlns="http://www.w3.org/2000/svg" class="icon icon--ui__save icon--ui__save_comments"><use xlink:href="#icon--ui__save"></use></svg></div><div class="comment__tool hint" data-role="share" aria-label="Поделиться" data-url="https%3A%2F%2Fpikabu.ru%2Fstory%2Fkogda_tyi_sam_protivopokazanie_8265694%3Fcid%3D202913567"><svg xmlns="http://www.w3.org/2000/svg" class="icon icon--ui__share icon--ui__share_comments"><use xlink:href="#icon--ui__share"></use></svg></div><div class="comment__tool hint" data-role="to-parent" aria-label="Показать родительский комментарий"><svg xmlns="http://www.w3.org/2000/svg" class="icon icon--ui__to-up icon--ui__to-up_comments"><use xlink:href="#icon--ui__to-up"></use></svg></div><div class="comment__tool hint" data-role="from-parent" aria-label="Вернуться обратно" style="display: none"><svg xmlns="http://www.w3.org/2000/svg" class="icon icon--ui__to-down icon--ui__to-down_comments"><use xlink:href="#icon--ui__to-down"></use></svg></div><div class="comment__tool hint" data-role="branch" aria-label="Показать/скрыть ветку комментариев"><svg xmlns="http://www.w3.org/2000/svg" class="icon icon--ui__branch icon--ui__branch_comments"><use xlink:href="#icon--ui__branch"></use></svg></div></div><!--/noindex--></div>
+                            <div class="comment__content">
+
+                                <p class="">UPD: Причем тут тег расизм?</p>
+
+                            </div>
+                            <!--noindex-->
+
+                            <div class="comment__controls">
+                                <span style="">
+                                    <button class="button_link comment__control" data-type="create"></button>
+                                    <button class="button_link comment__control" data-type="cancel" style="display:none"></button>
+
+                                    <button class="button_link comment__control" data-type="unpin" style="display: none"></button>
+                                    <button class="button_link comment__control" data-type="remove" style="display: none"></button>
+                                </span>
+
+                            </div>
+                            <!--/noindex-->
+                        </div>
+
+                    </div>
+
+                </div>
+
+            </div>
+
+        </div>
+
+    </section>
+</div>

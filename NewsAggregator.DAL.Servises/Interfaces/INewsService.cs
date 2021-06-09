@@ -12,5 +12,6 @@ namespace NewsAggregator.DAL.Servises.Interfaces
     {
         Task<IEnumerable<News>> GetAllNews();
         Task AddRangeOfNews(IEnumerable<NewsDto> rangeOfNews);
+        Task<NewsDto> GetNewsById(Guid id);
     }
 }
