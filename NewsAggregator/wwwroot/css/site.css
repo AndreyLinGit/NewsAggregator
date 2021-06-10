@@ -74,3 +74,14 @@ body {
     border: 1px solid #5CBA30;
     width: 400px;
 }
+.comments-block {
+    margin-top: 20px;
+}
+
+.write-comment-btn {
+    margin-top: 10px;
+}
+
+.comment-card {
+    margin-top: 5px;
+}

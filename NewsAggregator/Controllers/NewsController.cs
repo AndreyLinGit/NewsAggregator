@@ -22,11 +22,13 @@ namespace NewsAggregator.Controllers
         //DELETE IF AFTER!
 
         private readonly INewsService _newsService;
+        private readonly ICommentService _commentService;
 
-        public NewsController(INewsService newsService, IRssSourceService rssSourceService)
+        public NewsController(INewsService newsService, IRssSourceService rssSourceService, ICommentService commentService)
         {
             _newsService = newsService;
             _rssSourceService = rssSourceService;
+            _commentService = commentService;
         }
 
         //[Authorize(Roles = "User")]
@@ -54,13 +56,15 @@ namespace NewsAggregator.Controllers
         public async Task<IActionResult> Detail(Guid id)
         {
             var news = await _newsService.GetNewsById(id);
+            var comments = await _commentService.GetCommentsByNewsId(id);
             var model = new NewsDetailModel
             {
                 Article = news.Article,
                 Body = news.Body,
                 Id = news.Id,
                 PublishTime = news.PublishTime,
-                Rating = news.Rating
+                Rating = news.Rating,
+                Comments = comments
             };
             return View(model);
         }
