@@ -34,8 +34,8 @@ namespace NewsAggregator.Controllers
         //[Authorize(Roles = "User")]
         public async Task<IActionResult> Index()
         {
-            //var newsList = await _rssSourceService.GetNewsFromSource(isCostil); // (It's for work from work!)
-            var newsList = await _newsService.GetAllNews(); //Think about "Get()" (It's for work from home!)
+            var newsList = await _rssSourceService.GetNewsFromSource(isCostil); // (It's for work from work!)
+            //var newsList = await _newsService.GetAllNews(); //Think about "Get()" (It's for work from home!)
             var modelsList = new List<NewsViewModel>();
             foreach (var news in newsList)
             {
@@ -55,16 +55,16 @@ namespace NewsAggregator.Controllers
         [HttpGet]
         public async Task<IActionResult> Detail(Guid id)
         {
-            var news = await _newsService.GetNewsById(id);
-            var comments = await _commentService.GetCommentsByNewsId(id);
+            //var news = await _newsService.GetNewsById(id);
+            //var comments = await _commentService.GetCommentsByNewsId(id);
             var model = new NewsDetailModel
             {
-                Article = news.Article,
-                Body = news.Body,
-                Id = news.Id,
-                PublishTime = news.PublishTime,
-                Rating = news.Rating,
-                Comments = comments
+                //Article = news.Article,
+                //Body = news.Body,
+                //Id = news.Id,
+                //PublishTime = news.PublishTime,
+                //Rating = news.Rating,
+                //Comments = comments
             };
             return View(model);
         }

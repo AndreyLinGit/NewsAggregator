@@ -12,52 +12,66 @@ using NewsAggregator.Models.Comment;
 
 namespace NewsAggregator.Controllers
 {
-    public class CommentController : Controller
+    public class CommentsController : Controller
     {
-        public class CommentsController : Controller
+        private readonly ICommentService _commentService;
+        private readonly IUserService _userService;
+
+        public CommentsController(ICommentService commentService,
+            IUserService userService)
         {
-            private readonly ICommentService _commentService;
-            private readonly IUserService _userService;
+            _commentService = commentService;
+            _userService = userService;
+        }
 
-            public CommentsController(ICommentService commentService,
-                IUserService userService)
+        [HttpGet]
+        public async Task<IActionResult> List(Guid newsId)
+        {
+            //var comments = await _commentService.GetCommentsByNewsId(newsId);
+
+            //return View(new CommentsListViewModel
+            //{
+            //    NewsId = newsId,
+            //    Comments = comments
+            //});
+            return View(new CommentsListViewModel
             {
-                _commentService = commentService;
-                _userService = userService;
-            }
-
-            public async Task<IActionResult> List(Guid newsId)
-            {
-                var comments = await _commentService.GetCommentsByNewsId(newsId);
-
-                return View(new CommentsListViewModel
+                NewsId = Guid.NewGuid(),
+                Comments = new List<CommentDto>
                 {
-                    NewsId = newsId,
-                    Comments = comments
-                });
-            }
+                    new CommentDto()
+                    {
+                        Created = DateTime.Now,
+                        Id = Guid.NewGuid(),
+                        NewsId = Guid.NewGuid(),
+                        Text = "TEST",
+                        UserId = new Guid()
+                    }
+                }
+            });
+        }
 
-            //[Authorize]
-            [HttpPost]
-            public async Task<IActionResult> Create([FromBody] CreateCommentViewModel model)
+        //[Authorize]
+        [HttpPost]
+        public async Task<IActionResult> Create([FromBody] CreateCommentViewModel model)
+        {
+            var user = HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals(ClaimsIdentity.DefaultNameClaimType));
+            var userEmail = user?.Value; //CHANGE IT INTO SEARCHING BY LOGIN!
+            var userId = (await _userService.GetUserByEmail(userEmail)).Id; //CHANGE IT INTO SEARCHING BY LOGIN!
+
+            var commentDto = new CommentDto()
             {
-                var user = HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals(ClaimsIdentity.DefaultNameClaimType));
-                var userEmail = user?.Value;
-                var userId = (await _userService.GetUserByEmail(userEmail)).Id;
+                Id = Guid.NewGuid(),
+                NewsId = model.NewsId,
+                Text = model.CommentText,
+                Created = DateTime.Now,
+                UserId = userId
+            };
+            await _commentService.AddComment(commentDto);
 
-                var commentDto = new CommentDto()
-                {
-                    Id = Guid.NewGuid(),
-                    NewsId = model.NewsId,
-                    Text = model.CommentText,
-                    Created = DateTime.Now,
-                    UserId = userId
-                };
-                await _commentService.AddComment(commentDto);
-
-                return Ok();
-            }
+            return Ok();
         }
     }
+
 }
 
