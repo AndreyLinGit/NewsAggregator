@@ -13,8 +13,7 @@ namespace NewsAggregator.DAL.Core.DTOs
         public string Login { get; set; }
         public string Email { get; set; }
         public string HashPass { get; set; }
-        public bool IsConfirmed { get; set; } 
-        public Guid RoleId { get; set; }
+        public Guid? RoleId { get; set; }
 
     }
 }

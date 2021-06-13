@@ -44,6 +44,7 @@ namespace NewsAggregator
             //TODO pagination
             //TODO logging 
             //TODO FluentValidation
+            //TODO Checking authorization in comments 
 
             services.AddTransient<IRepository<News>, NewsRepository>();
             services.AddTransient<IRepository<Comment>, CommentRepository>();

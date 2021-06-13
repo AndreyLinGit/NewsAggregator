@@ -1,2 +1,6 @@
-﻿@model NewsAggregator.Models.Account.UserModel
-<h1>My user is @Model.Id</h1>
+﻿@model NewsAggregator.Models.Account.UserViewModel
+<h1>Hello @Model.Login! </h1>
+<h2>Short info. Your email is @Model.Email</h2>
+<div>
+    <img src="@Model.ImagePath" alt="Sample Image" width="300px" />
+</div>

@@ -27,37 +27,28 @@ namespace NewsAggregator.Controllers
         [HttpGet]
         public async Task<IActionResult> List(Guid newsId)
         {
-            //var comments = await _commentService.GetCommentsByNewsId(newsId);
+            var comments = await _commentService.GetCommentsByNewsId(newsId);
 
-            //return View(new CommentsListViewModel
-            //{
-            //    NewsId = newsId,
-            //    Comments = comments
-            //});
             return View(new CommentsListViewModel
             {
-                NewsId = Guid.NewGuid(),
-                Comments = new List<CommentDto>
-                {
-                    new CommentDto()
-                    {
-                        Created = DateTime.Now,
-                        Id = Guid.NewGuid(),
-                        NewsId = Guid.NewGuid(),
-                        Text = "TEST",
-                        UserId = new Guid()
-                    }
-                }
+                NewsId = newsId,
+                Comments = comments
             });
         }
 
-        //[Authorize]
+        [HttpGet]
+        public async Task<IActionResult> CreateCommentPartial()
+        {
+            return View();
+        }
+
+        [Authorize(Roles = "User")]
         [HttpPost]
         public async Task<IActionResult> Create([FromBody] CreateCommentViewModel model)
         {
-            var user = HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals(ClaimsIdentity.DefaultNameClaimType));
-            var userEmail = user?.Value; //CHANGE IT INTO SEARCHING BY LOGIN!
-            var userId = (await _userService.GetUserByEmail(userEmail)).Id; //CHANGE IT INTO SEARCHING BY LOGIN!
+            var userClaim = HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals(ClaimsIdentity.DefaultNameClaimType));
+            var userLogin = userClaim?.Value; //CHANGE IT INTO SEARCHING BY LOGIN!
+            var user = await _userService.GetUserByLogin(userLogin); //CHANGE IT INTO SEARCHING BY LOGIN!
 
             var commentDto = new CommentDto()
             {
@@ -65,7 +56,8 @@ namespace NewsAggregator.Controllers
                 NewsId = model.NewsId,
                 Text = model.CommentText,
                 Created = DateTime.Now,
-                UserId = userId
+                UserId = user.Id,
+                UserLogin = user.Login
             };
             await _commentService.AddComment(commentDto);
 

@@ -12,12 +12,13 @@
     <button id="comments-display-switcher" class="btn btn-primary col-sm-12" onclick="toggleComments('@Model.Id')">Display comments</button>
     <div class="container">
         <div id="comments-container" class="row">
-            @*@foreach (var comment in Model.Comments)
-                {
-                    @await Html.PartialAsync("CommentPartial", comment)
-                }*@
+            
+        </div>
+        <div id="comments-create-area" class="row">
+            
         </div>
     </div>
+    
 </div>
 
 @section Scripts

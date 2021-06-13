@@ -1,0 +1,10 @@
+﻿@model NewsAggregator.Models.Account.ConfirmationViewModel
+
+
+<h1>Nice to meet you, @Model.Login!</h1>
+<div class="row">
+    <div class="col-md-12">
+        <h2>Your email address @Model.Email was confirmed! Have a fun and relax!</h2>
+        <a asp-controller="News" asp-action="Index">Let's start!</a>
+    </div>
+</div>

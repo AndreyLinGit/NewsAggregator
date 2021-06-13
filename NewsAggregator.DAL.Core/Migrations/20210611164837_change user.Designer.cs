@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NewsAggregator.DAL.Core;
 
 namespace NewsAggregator.DAL.Core.Migrations
 {
     [DbContext(typeof(NewsAggregatorContext))]
-    partial class NewsAggregatorContextModelSnapshot : ModelSnapshot
+    [Migration("20210611164837_change user")]
+    partial class changeuser
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder
@@ -162,12 +164,6 @@ namespace NewsAggregator.DAL.Core.Migrations
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("HashPass")
-                        .HasColumnType("nvarchar(max)");
-
-                    b.Property<byte[]>("ImageData")
-                        .HasColumnType("varbinary(max)");
-
-                    b.Property<string>("ImageMimeType")
                         .HasColumnType("nvarchar(max)");
 
                     b.Property<string>("Login")

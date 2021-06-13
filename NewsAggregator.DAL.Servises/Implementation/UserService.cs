@@ -31,7 +31,7 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
             return hashedPassword;
         }
 
-        public async Task<bool> RegisterUser(UserDto model)
+        public async Task<bool> RegisterUserWhitoutConfirmation(UserDto model)
         {
             try
             {
@@ -39,10 +39,8 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
                 {
                     Id = model.Id,
                     Email = model.Email,
-                    Login = "Mabel",
+                    Login = model.Login,
                     HashPass = model.HashPass,
-                    RoleId = (await _unitOfWork.Role.FindBy(role => role.Name.Equals("User")).FirstOrDefaultAsync()).Id,
-                    IsConfirmed = model.IsConfirmed
                 });
                 await _unitOfWork.SaveChangeAsync();
                 return true;
@@ -65,10 +63,8 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
                     Email = user.Email,
                     HashPass = user.HashPass,
                     Login = user.Login,
-                    IsConfirmed = user.IsConfirmed
                 };
             }
-
             return null;
         }
 
@@ -82,8 +78,7 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
                     Id = user.Id,
                     Email = user.Email,
                     HashPass = user.HashPass,
-                    Login = user.Login,
-                    IsConfirmed = user.IsConfirmed
+                    Login = user.Login
                 };
             }
 
@@ -98,21 +93,11 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
                 Email = user.Email,
                 HashPass = user.HashPass,
                 Id = user.Id,
-                IsConfirmed = user.IsConfirmed,
                 Login = user.Login,
                 RoleId = user.RoleId
             };
         }
 
-        public async Task Confirm(UserDto model) // ADD MIGRATION!
-        {
-            var unconfirmUser = await _unitOfWork.User.GetById(model.Id);
-            if (unconfirmUser != null)
-            {
-                unconfirmUser.IsConfirmed = true;
-                _unitOfWork.User.Update(unconfirmUser);
-                await _unitOfWork.SaveChangeAsync();
-            }
-        }
+        
     }
 }

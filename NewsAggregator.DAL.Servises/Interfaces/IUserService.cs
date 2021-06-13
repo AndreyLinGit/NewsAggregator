@@ -12,10 +12,9 @@ namespace NewsAggregator.DAL.Servises.Interfaces
     public interface IUserService
     {
         string GetPasswordHash(string modelPassword);
-        Task<bool> RegisterUser(UserDto model);
+        Task<bool> RegisterUserWhitoutConfirmation(UserDto model);
         Task<UserDto> GetUserByEmail(string email);
         Task<UserDto> GetUserByLogin(string email);
         Task<UserDto> GetUserById(Guid userId);
-        Task Confirm(UserDto model);
     }
 }

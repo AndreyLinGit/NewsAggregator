@@ -26,10 +26,16 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
             var commentsDto = new List<CommentDto>();
             foreach (var comment in comments)
             {
+                var user = await _unitOfWork.User.GetById(comment.UserId);
                 var commentDto = new CommentDto()
                 {
                     Id = comment.Id,
-                    Text = comment.Text
+                    Text = comment.Text,
+                    Created = comment.PublishTime,
+                    NewsId = comment.NewsId,
+                    UserId = comment.UserId,
+                    UserLogin = user.Login,
+                    CommentRating = comment.Rating
                 };
                 commentsDto.Add(commentDto);
             }
@@ -41,8 +47,10 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
             var commentEntity = new Comment
             {
                 Id = comment.Id,
-                Text = comment.Text
-
+                NewsId = comment.NewsId,
+                PublishTime = comment.Created,
+                Text = comment.Text,
+                UserId = comment.UserId
             };
             await _unitOfWork.Comment.Add(commentEntity);
             await _unitOfWork.SaveChangeAsync();

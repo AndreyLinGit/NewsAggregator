@@ -10,7 +10,7 @@ namespace NewsAggregator.DAL.Serviсes.Interfaces
     public interface IRoleService
     {
         Task<RoleDto> GetUserRole(string userName);
-        Task AddRoleToUser(string userName, RoleDto roleDto);
+        Task<UserDto> AddRoleToUser(Guid id);
         Task<IEnumerable<RoleDto>> GetRoles();
 
     }

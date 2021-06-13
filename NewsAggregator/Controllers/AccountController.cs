@@ -9,6 +9,7 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using NewsAggregator.DAL.Core.DTOs;
 using NewsAggregator.DAL.Servises.Interfaces;
 using NewsAggregator.DAL.Serviсes.Interfaces;
+using NewsAggregator.Models;
 using NewsAggregator.Models.Account;
 
 namespace NewsAggregator.Controllers
@@ -37,34 +38,32 @@ namespace NewsAggregator.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterViewModel model) //???? About mail's
         {
-            //if (await _userService.GetUserByEmail(model.Email) != null)
-            //{
-            //    ModelState.AddModelError("Email","User with that email is already exist");
-            //}
+            if (await _userService.GetUserByEmail(model.Email) != null)
+            {
+                ModelState.AddModelError("Email", "User with that email is already exist");
+            }
             if (ModelState.IsValid)
             {
-                //var passwordHash = _userService.GetPasswordHash(model.Password);
+                var passwordHash = _userService.GetPasswordHash(model.Password);
                 var newUserId = Guid.NewGuid();
-                //var result = await _userService.RegisterUser(new UserDto
-                //{
-                //    Id = newUserId,
-                //    Email = model.Email,
-                //    HashPass = passwordHash,
-                //    Login = model.Login,
-                //    IsConfirmed = false
-                //});
-                if (true)
+                var result = await _userService.RegisterUserWhitoutConfirmation(new UserDto
+                {
+                    Id = newUserId,
+                    Email = model.Email,
+                    HashPass = passwordHash,
+                    Login = model.Login,
+                });
+                if (result)
                 {
                     var request = new MailRequest
                     {
-                        Link = @"https://localhost:44393/Account/UserPage/" + newUserId,
+                        Link = @"https://localhost:44393/Account/Confirmation/" + newUserId,
                         Subject = "Administration from NewsAggregator",
                         ToEmail = model.Email
                     };
                     await _mailService.SendEmailAsync(request);
                     return View("WaitingConfirmation");
                 }
-                return BadRequest(model);
             }
 
             return View(model);
@@ -99,10 +98,10 @@ namespace NewsAggregator.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> LogOut()
+        public async Task<IActionResult> Logout()
         {
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
-            return RedirectToAction("Login", "Account");
+            return RedirectToAction("Index", "News");
         }
         private async Task Authenticate(UserDto dto)
         {
@@ -142,14 +141,39 @@ namespace NewsAggregator.Controllers
             return View();
         }
         [HttpGet]
-        public async Task<IActionResult> UserPage(Guid id) //? Clear trash at home 
+        public async Task<IActionResult> UserPage() //? Clear trash at home 
         {
-            //var user = await _userService.GetUserById(id);
-            var userModel = new UserModel
+            var userClaim = HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals(ClaimsIdentity.DefaultNameClaimType));
+            var userLogin = userClaim?.Value; //CHANGE IT INTO SEARCHING BY LOGIN!
+            var user = await _userService.GetUserByLogin(userLogin); //CHANGE IT INTO SEARCHING BY LOGIN!
+            var model = new UserViewModel
             {
-                Id = id
+                Email = user.Email,
+                Id = user.Id,
+                Login = user.Login
             };
-            return View(userModel);
+            return View(model);
         }
+        public async Task<IActionResult> Confirmation(Guid id) //? Clear trash at home 
+        {
+            var user = await _roleService.AddRoleToUser(id);
+            await Authenticate(user);
+            var model = new ConfirmationViewModel
+            {
+                Email = user.Email,
+                Login = user.Login
+            };
+            return View(model);
+        }
+
+        public async Task<IActionResult> TestImage()
+        {
+            var model = new TestImageModel
+            {
+                ImagePath = ""
+            };
+            return View(model);
+        }
+
     }
 }

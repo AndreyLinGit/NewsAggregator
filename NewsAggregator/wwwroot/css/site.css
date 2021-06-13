@@ -96,3 +96,6 @@ div::selection {
 .comment-card {
     margin-top: 5px;
 }
+.comments-textarea {
+    margin-top: 20px;
+}
