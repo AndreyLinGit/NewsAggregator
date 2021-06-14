@@ -1,10 +1,13 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using Microsoft.EntityFrameworkCore;
+using Microsoft.Extensions.Options;
 using NewsAggregator.DAL.Core.DTOs;
 using NewsAggregator.DAL.Core.Entities;
 using NewsAggregator.DAL.Repositories.Interfaces;
@@ -16,10 +19,12 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
     public class UserService : IUserService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly ImageStorage _imageStorage;
 
-        public UserService(IUnitOfWork unitOfWork)
+        public UserService(IUnitOfWork unitOfWork, IOptions<ImageStorage> imageStorage)
         {
             _unitOfWork = unitOfWork;
+            _imageStorage = imageStorage.Value;
         }
 
         public string GetPasswordHash(string modelPassword)
@@ -40,7 +45,7 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
                     Id = model.Id,
                     Email = model.Email,
                     Login = model.Login,
-                    HashPass = model.HashPass,
+                    HashPass = model.HashPass
                 });
                 await _unitOfWork.SaveChangeAsync();
                 return true;
@@ -63,8 +68,10 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
                     Email = user.Email,
                     HashPass = user.HashPass,
                     Login = user.Login,
+                    ImagePath = user.ImagePath
                 };
             }
+
             return null;
         }
 
@@ -78,7 +85,9 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
                     Id = user.Id,
                     Email = user.Email,
                     HashPass = user.HashPass,
-                    Login = user.Login
+                    Login = user.Login,
+                    RoleId = user.RoleId,
+                    ImagePath = user.ImagePath
                 };
             }
 
@@ -94,10 +103,34 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
                 HashPass = user.HashPass,
                 Id = user.Id,
                 Login = user.Login,
-                RoleId = user.RoleId
+                RoleId = user.RoleId,
+                ImagePath = user.ImagePath
             };
         }
 
-        
+        public async Task SaveUserImage(ImageDto image)
+        {
+            if (!Directory.Exists(_imageStorage.Path))
+            {
+                Directory.CreateDirectory(_imageStorage.Path);
+            }
+
+            var path = Path.Combine(_imageStorage.Path
+                                       + "/" 
+                                       + Path.GetFileNameWithoutExtension(image.ImageFile.FileName) 
+                                       + DateTime.Now.ToString("yymmssfff") 
+                                       + Path.GetExtension(image.ImageFile.FileName));
+            using (var fileStream = new FileStream(path, FileMode.Create))
+            {
+                await image.ImageFile.CopyToAsync(fileStream);
+            }
+
+            string x = path;
+        }
+
+        public async Task<ImageDto> GetUserImage(string path)
+        {
+            return null;
+        }
     }
 }

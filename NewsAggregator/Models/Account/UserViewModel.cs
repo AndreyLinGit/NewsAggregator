@@ -1,4 +1,5 @@
 ﻿using System;
+using Microsoft.AspNetCore.Http;
 
 namespace NewsAggregator.Models.Account
 {
@@ -7,8 +8,7 @@ namespace NewsAggregator.Models.Account
         public Guid Id { get; set; }
         public string Login { get; set; }
         public string Email { get; set; }
-        public float Rating { get; set; }
         public string ImagePath { get; set; }
-        public Guid? RoleId { get; set; }
+        public IFormFile ImageFile { get; set; }
     }
 }

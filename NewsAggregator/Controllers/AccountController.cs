@@ -1,11 +1,15 @@
 ﻿using Microsoft.AspNetCore.Mvc;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net.Http;
 using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authentication;
 using Microsoft.AspNetCore.Authentication.Cookies;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.Extensions.Options;
 using NewsAggregator.DAL.Core.DTOs;
 using NewsAggregator.DAL.Servises.Interfaces;
 using NewsAggregator.DAL.Serviсes.Interfaces;
@@ -42,6 +46,7 @@ namespace NewsAggregator.Controllers
             {
                 ModelState.AddModelError("Email", "User with that email is already exist");
             }
+
             if (ModelState.IsValid)
             {
                 var passwordHash = _userService.GetPasswordHash(model.Password);
@@ -68,6 +73,7 @@ namespace NewsAggregator.Controllers
 
             return View(model);
         }
+
         [HttpGet]
         public IActionResult Login()
         {
@@ -76,7 +82,7 @@ namespace NewsAggregator.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login(LoginViewModel model)// Think about 
+        public async Task<IActionResult> Login(LoginViewModel model) // Think about 
         {
             if (ModelState.IsValid)
             {
@@ -94,6 +100,7 @@ namespace NewsAggregator.Controllers
                     }
                 }
             }
+
             return View(model);
         }
 
@@ -103,6 +110,7 @@ namespace NewsAggregator.Controllers
             await HttpContext.SignOutAsync(CookieAuthenticationDefaults.AuthenticationScheme);
             return RedirectToAction("Index", "News");
         }
+
         private async Task Authenticate(UserDto dto)
         {
             try
@@ -130,30 +138,53 @@ namespace NewsAggregator.Controllers
             //Claim & ClaimsIdentity & ClaimsPrinciple
 
         }
+
         [HttpGet]
         public async Task<IActionResult> ForgotPass() //?
         {
             return View();
         }
+
         [HttpPost]
         public async Task<IActionResult> ForgotPass(LoginViewModel model) //?
         {
             return View();
         }
+
         [HttpGet]
         public async Task<IActionResult> UserPage() //? Clear trash at home 
         {
-            var userClaim = HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals(ClaimsIdentity.DefaultNameClaimType));
-            var userLogin = userClaim?.Value; //CHANGE IT INTO SEARCHING BY LOGIN!
-            var user = await _userService.GetUserByLogin(userLogin); //CHANGE IT INTO SEARCHING BY LOGIN!
+            //var userClaim =
+            //    HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals(ClaimsIdentity.DefaultNameClaimType));
+            //var userLogin = userClaim?.Value; //CHANGE IT INTO SEARCHING BY LOGIN!
+            //var user = await _userService.GetUserByLogin(userLogin); //CHANGE IT INTO SEARCHING BY LOGIN!
+            //var model = new UserViewModel
+            //{
+            //    Email = user.Email,
+            //    Id = user.Id,
+            //    Login = user.Login,
+            //    ImagePath = user.ImagePath
+            //};
             var model = new UserViewModel
             {
-                Email = user.Email,
-                Id = user.Id,
-                Login = user.Login
+                Email = "test@gmail.com",
+                Id = Guid.NewGuid(),
+                ImagePath = @"D:\ImageStorage\square_320_c09ebae17387b7d6eeb9fa0d42afe5ee210556543.jpg",
+                Login = "Mabel"
             };
+
             return View(model);
         }
+        [HttpGet]
+        public async Task<IActionResult> Get()
+        {
+            string path = @"D:\ImageStorage\square_320_c09ebae17387b7d6eeb9fa0d42afe5ee210556543.jpg";
+            FileStream fs = new FileStream(path, FileMode.Open);
+            fs.CopyToAsync(fs);
+            var x = fs;
+            return File(fs, "application / octet - stream", "square_320_c09ebae17387b7d6eeb9fa0d42afe5ee210556543.jpg");
+        }
+
         public async Task<IActionResult> Confirmation(Guid id) //? Clear trash at home 
         {
             var user = await _roleService.AddRoleToUser(id);
@@ -166,14 +197,42 @@ namespace NewsAggregator.Controllers
             return View(model);
         }
 
-        public async Task<IActionResult> TestImage()
+        [HttpGet]
+        public async Task<IActionResult> TestImageCreate()
         {
-            var model = new TestImageModel
-            {
-                ImagePath = ""
-            };
-            return View(model);
+            return View();
         }
 
+        [HttpPost]
+        public async Task<IActionResult> TestImageCreate(UserViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                await _userService.SaveUserImage(new ImageDto
+                {
+                    ImageFile = model.ImageFile,
+                    ImagePath = model.ImagePath
+                });
+                
+            }
+
+            return View();
+        }
+
+        public async Task<IActionResult> GetFile(UserViewModel model)
+        {
+            if (ModelState.IsValid)
+            {
+                await _userService.SaveUserImage(new ImageDto
+                {
+                    ImageFile = model.ImageFile,
+                    ImagePath = model.ImagePath
+                });
+
+            }
+
+            return Ok();
+        }
     }
+
 }

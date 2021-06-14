@@ -14,8 +14,7 @@ namespace NewsAggregator.DAL.Core.Entities
         public string Login { get; set; }
         public string Email { get; set; }
         public string HashPass { get; set; }
-        public byte[] ImageData { get; set; }
-        public string ImageMimeType { get; set; } //??
+        public string ImagePath { get; set; }
         public Guid? RoleId { get; set; } //Create FK
         public Role Role { get; set; }
         public virtual ICollection<Comment> Comments { get; set; }

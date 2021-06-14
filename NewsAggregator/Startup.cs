@@ -39,6 +39,7 @@ namespace NewsAggregator
             services.AddDbContext<NewsAggregatorContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("DefoultConnection")));
 
             services.Configure<MailSettings>(Configuration.GetSection("MailSettings"));
+            services.Configure<ImageStorage>(Configuration.GetSection("ImageStorage"));
             //TODO mapping and check working with database, rework Dtos
             //TODO roles, letters and other pages about accounting 
             //TODO pagination

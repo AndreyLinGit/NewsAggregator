@@ -16,5 +16,7 @@ namespace NewsAggregator.DAL.Servises.Interfaces
         Task<UserDto> GetUserByEmail(string email);
         Task<UserDto> GetUserByLogin(string email);
         Task<UserDto> GetUserById(Guid userId);
+        Task SaveUserImage(ImageDto image);
+        Task<ImageDto> GetUserImage(string path);
     }
 }
