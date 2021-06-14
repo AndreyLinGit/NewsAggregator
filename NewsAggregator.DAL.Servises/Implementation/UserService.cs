@@ -2,6 +2,7 @@
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
+using System.Net.Mime;
 using System.Security.Cryptography;
 using System.Text;
 using System.Threading.Tasks;
@@ -12,6 +13,7 @@ using NewsAggregator.DAL.Core.DTOs;
 using NewsAggregator.DAL.Core.Entities;
 using NewsAggregator.DAL.Repositories.Interfaces;
 using NewsAggregator.DAL.Servises.Interfaces;
+using System.Net.Mime;
 
 
 namespace NewsAggregator.DAL.Serviсes.Implementation
@@ -108,7 +110,7 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
             };
         }
 
-        public async Task SaveUserImage(ImageDto image)
+        public async Task SaveUserImage(ImageDto image, Guid userId)
         {
             if (!Directory.Exists(_imageStorage.Path))
             {
@@ -125,12 +127,32 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
                 await image.ImageFile.CopyToAsync(fileStream);
             }
 
-            string x = path;
+            var user = await _unitOfWork.User.GetById(userId);
+            if (user != null)
+            {
+                user.ImagePath = path;
+                _unitOfWork.User.Update(user);
+                await _unitOfWork.SaveChangeAsync();
+            }
         }
 
-        public async Task<ImageDto> GetUserImage(string path)
+        public async Task<string> GetUserImage(string path)
         {
-            return null;
+            if (File.Exists(path))
+            {
+                using (var fileStream = File.OpenRead(path))
+                {
+                    var image = new byte[fileStream.Length];
+                    fileStream.Read(image, 0, image.Length);
+                    return Convert.ToBase64String(image);
+                }
+            }
+            else
+            {
+                var defaultImage = "";
+                return defaultImage;
+            }
+            
         }
     }
 }

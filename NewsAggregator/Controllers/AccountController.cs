@@ -154,24 +154,59 @@ namespace NewsAggregator.Controllers
         [HttpGet]
         public async Task<IActionResult> UserPage() //? Clear trash at home 
         {
-            //var userClaim =
-            //    HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals(ClaimsIdentity.DefaultNameClaimType));
-            //var userLogin = userClaim?.Value; //CHANGE IT INTO SEARCHING BY LOGIN!
-            //var user = await _userService.GetUserByLogin(userLogin); //CHANGE IT INTO SEARCHING BY LOGIN!
-            //var model = new UserViewModel
-            //{
-            //    Email = user.Email,
-            //    Id = user.Id,
-            //    Login = user.Login,
-            //    ImagePath = user.ImagePath
-            //};
+            var userClaim =
+                HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals(ClaimsIdentity.DefaultNameClaimType));
+            var userLogin = userClaim?.Value; //CHANGE IT INTO SEARCHING BY LOGIN!
+            var user = await _userService.GetUserByLogin(userLogin); //CHANGE IT INTO SEARCHING BY LOGIN!
             var model = new UserViewModel
             {
-                Email = "test@gmail.com",
-                Id = Guid.NewGuid(),
-                ImagePath = @"D:\ImageStorage\square_320_c09ebae17387b7d6eeb9fa0d42afe5ee210556543.jpg",
-                Login = "Mabel"
+                Email = user.Email,
+                Id = user.Id,
+                Login = user.Login,
+                ImagePath = await _userService.GetUserImage(user.ImagePath)
             };
+
+
+            //var model = new UserViewModel
+            //{
+            //    Email = "test@gmail.com",
+            //    Id = Guid.NewGuid(),
+            //    ImagePath = @"D:\ImageStorage\square_320_c09ebae17387b7d6eeb9fa0d42afe5ee210556543.jpg",
+            //    Login = "Mabel"
+            //};
+
+            return View(model);
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> UserPage(UserViewModel modelAfterChanging) //? Clear trash at home 
+        {
+            var model = new UserViewModel();
+            if (modelAfterChanging == null)
+            {
+                var userClaim = HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals(ClaimsIdentity.DefaultNameClaimType));
+                var userLogin = userClaim?.Value; //CHANGE IT INTO SEARCHING BY LOGIN!
+                var user = await _userService.GetUserByLogin(userLogin); //CHANGE IT INTO SEARCHING BY LOGIN!
+                model = new UserViewModel
+                {
+                    Email = user.Email,
+                    Id = user.Id,
+                    Login = user.Login,
+                    ImagePath = await _userService.GetUserImage(user.ImagePath)
+                };
+            }
+            else
+            {
+                model = modelAfterChanging;
+            }
+
+            //var model = new UserViewModel
+            //{
+            //    Email = "test@gmail.com",
+            //    Id = Guid.NewGuid(),
+            //    ImagePath = @"D:\ImageStorage\square_320_c09ebae17387b7d6eeb9fa0d42afe5ee210556543.jpg",
+            //    Login = "Mabel"
+            //};
 
             return View(model);
         }
@@ -202,24 +237,14 @@ namespace NewsAggregator.Controllers
         {
             return View();
         }
-
         [HttpPost]
         public async Task<IActionResult> TestImageCreate(UserViewModel model)
         {
-            if (ModelState.IsValid)
-            {
-                await _userService.SaveUserImage(new ImageDto
-                {
-                    ImageFile = model.ImageFile,
-                    ImagePath = model.ImagePath
-                });
-                
-            }
-
             return View();
         }
 
-        public async Task<IActionResult> GetFile(UserViewModel model)
+        [HttpGet]
+        public async Task<IActionResult> SaveLocalUserImage(UserViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -227,11 +252,10 @@ namespace NewsAggregator.Controllers
                 {
                     ImageFile = model.ImageFile,
                     ImagePath = model.ImagePath
-                });
-
+                }, model.Id);
             }
-
-            return Ok();
+            return RedirectToAction("UserPage","Account", model);
+            //TODO Create "Change photo button", create new page with form(image) and after save return new user page
         }
     }
 
