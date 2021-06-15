@@ -154,70 +154,28 @@ namespace NewsAggregator.Controllers
         [HttpGet]
         public async Task<IActionResult> UserPage() //? Clear trash at home 
         {
-            var userClaim =
-                HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals(ClaimsIdentity.DefaultNameClaimType));
-            var userLogin = userClaim?.Value; //CHANGE IT INTO SEARCHING BY LOGIN!
-            var user = await _userService.GetUserByLogin(userLogin); //CHANGE IT INTO SEARCHING BY LOGIN!
+            //var userClaim =
+            //    HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals(ClaimsIdentity.DefaultNameClaimType));
+            //var userLogin = userClaim?.Value; //CHANGE IT INTO SEARCHING BY LOGIN!
+            //var user = await _userService.GetUserByLogin(userLogin); //CHANGE IT INTO SEARCHING BY LOGIN!
+            //var model = new UserViewModel
+            //{
+            //    Email = user.Email,
+            //    Id = user.Id,
+            //    Login = user.Login,
+            //    ImagePath = await _userService.GetUserImage(user.ImagePath)
+            //};
+            var path2 = @"D:\ImageStorage\square_320_c09ebae17387b7d6eeb9fa0d42afe5ee.jpg";
+            var path = @"D:\ImageStorage\square_320_c09ebae17387b7d6eeb9fa0d42afe5ee210556543.jpg";
             var model = new UserViewModel
             {
-                Email = user.Email,
-                Id = user.Id,
-                Login = user.Login,
-                ImagePath = await _userService.GetUserImage(user.ImagePath)
+                Email = "test@gmail.com",
+                Id = Guid.NewGuid(),
+                ImagePath = await _userService.GetUserImage(path2),
+                Login = "Mabel"
             };
 
-
-            //var model = new UserViewModel
-            //{
-            //    Email = "test@gmail.com",
-            //    Id = Guid.NewGuid(),
-            //    ImagePath = @"D:\ImageStorage\square_320_c09ebae17387b7d6eeb9fa0d42afe5ee210556543.jpg",
-            //    Login = "Mabel"
-            //};
-
             return View(model);
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> UserPage(UserViewModel modelAfterChanging) //? Clear trash at home 
-        {
-            var model = new UserViewModel();
-            if (modelAfterChanging == null)
-            {
-                var userClaim = HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals(ClaimsIdentity.DefaultNameClaimType));
-                var userLogin = userClaim?.Value; //CHANGE IT INTO SEARCHING BY LOGIN!
-                var user = await _userService.GetUserByLogin(userLogin); //CHANGE IT INTO SEARCHING BY LOGIN!
-                model = new UserViewModel
-                {
-                    Email = user.Email,
-                    Id = user.Id,
-                    Login = user.Login,
-                    ImagePath = await _userService.GetUserImage(user.ImagePath)
-                };
-            }
-            else
-            {
-                model = modelAfterChanging;
-            }
-
-            //var model = new UserViewModel
-            //{
-            //    Email = "test@gmail.com",
-            //    Id = Guid.NewGuid(),
-            //    ImagePath = @"D:\ImageStorage\square_320_c09ebae17387b7d6eeb9fa0d42afe5ee210556543.jpg",
-            //    Login = "Mabel"
-            //};
-
-            return View(model);
-        }
-        [HttpGet]
-        public async Task<IActionResult> Get()
-        {
-            string path = @"D:\ImageStorage\square_320_c09ebae17387b7d6eeb9fa0d42afe5ee210556543.jpg";
-            FileStream fs = new FileStream(path, FileMode.Open);
-            fs.CopyToAsync(fs);
-            var x = fs;
-            return File(fs, "application / octet - stream", "square_320_c09ebae17387b7d6eeb9fa0d42afe5ee210556543.jpg");
         }
 
         public async Task<IActionResult> Confirmation(Guid id) //? Clear trash at home 
@@ -233,18 +191,16 @@ namespace NewsAggregator.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> TestImageCreate()
+        public async Task<IActionResult> CreateImage(Guid userId)
         {
-            return View();
+            var model = new ImageModel
+            {
+                UserId = userId
+            };
+            return View(model);
         }
         [HttpPost]
-        public async Task<IActionResult> TestImageCreate(UserViewModel model)
-        {
-            return View();
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> SaveLocalUserImage(UserViewModel model)
+        public async Task<IActionResult> CreateImage(ImageModel model)
         {
             if (ModelState.IsValid)
             {
@@ -252,10 +208,9 @@ namespace NewsAggregator.Controllers
                 {
                     ImageFile = model.ImageFile,
                     ImagePath = model.ImagePath
-                }, model.Id);
+                }, model.UserId);
             }
-            return RedirectToAction("UserPage","Account", model);
-            //TODO Create "Change photo button", create new page with form(image) and after save return new user page
+            return RedirectToAction("UserPage", "Account");
         }
     }
 

@@ -127,7 +127,7 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
                 await image.ImageFile.CopyToAsync(fileStream);
             }
 
-            var user = await _unitOfWork.User.GetById(userId);
+            var user = await _unitOfWork.User.GetById(userId); //Reform to update method 
             if (user != null)
             {
                 user.ImagePath = path;
@@ -142,14 +142,15 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
             {
                 using (var fileStream = File.OpenRead(path))
                 {
+                    var fileType = @"data:image/" + path.Substring(path.LastIndexOf(".") + 1) + @";base64,";
                     var image = new byte[fileStream.Length];
                     fileStream.Read(image, 0, image.Length);
-                    return Convert.ToBase64String(image);
+                    return fileType + Convert.ToBase64String(image);
                 }
             }
             else
             {
-                var defaultImage = "";
+                var defaultImage = ""; //Add Default Image
                 return defaultImage;
             }
             

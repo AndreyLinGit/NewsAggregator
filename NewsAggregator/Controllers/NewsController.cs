@@ -33,8 +33,8 @@ namespace NewsAggregator.Controllers
 
         public async Task<IActionResult> Index()
         {
-            //var newsList = await _rssSourceService.GetNewsFromSource(isCostil); // (It's for work from work!)
-            var newsList = await _newsService.GetAllNews(); //Think about "Get()" (It's for work from home!)
+            var newsList = await _rssSourceService.GetNewsFromSource(isCostil); // (It's for work from work!)
+            //var newsList = await _newsService.GetAllNews(); //Think about "Get()" (It's for work from home!)
             var modelsList = new List<NewsViewModel>();
             foreach (var news in newsList)
             {

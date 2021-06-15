@@ -6,8 +6,9 @@ using Microsoft.AspNetCore.Http;
 
 namespace NewsAggregator.Models.Account
 {
-    public class TestImageModel
+    public class ImageModel
     {
+        public Guid UserId { get; set; }
         public string ImagePath { get; set; }
         public IFormFile ImageFile { get; set; }
     }

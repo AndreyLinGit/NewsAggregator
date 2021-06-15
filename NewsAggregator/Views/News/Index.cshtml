@@ -4,12 +4,15 @@
 <br/>
 @foreach (var item in Model)
 {
-    <div class="card col-lg-12">
+    <div>
+        @Html.Raw(item.Body)
+    </div>
+    <!--<div class="card col-lg-12">
         <div class="card-body">
-            <h5 class="card-title">@item.Article</h5>
+            <h5 class="card-title">@item.Article</h5>-->
             @*<h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>*@
-            <p class="card-text">@item.Body</p>
+            <!--<p class="card-text">@item.Body</p>
             <a class="card-link" asp-action="Detail" asp-route-id="@item.Id">Read Full</a>
         </div>
-    </div>
+    </div>-->
 }
