@@ -31,7 +31,7 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
             var childNodes = node.ChildNodes;
             foreach (var childNode in childNodes)
             {
-                if (node.ChildNodes.IndexOf(childNode) >= deleteIndex)
+                if (node.ChildNodes.IndexOf(childNode) < deleteIndex)
                 {
                     node.ChildNodes.Remove(childNode);
                     //htmlText += childNode.InnerHtml;
