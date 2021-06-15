@@ -20,26 +20,24 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
             var hrIndex1 = node.ChildNodes.IndexOf(node.SelectSingleNode("//hr"));
             var integrationIndex1 = node.ChildNodes.IndexOf(node.SelectSingleNode("//p[@style]"));
 
-            var hrIndex = node.ChildNodes.IndexOf(node.ChildNodes.LastOrDefault(n => n.InnerHtml.Contains(@"<hr>")));
-            var integrationIndex = node.ChildNodes.IndexOf(node.ChildNodes.LastOrDefault(n => n.InnerHtml.Contains(@"<p style=""text - align: right; "">")));
-
             var deleteIndex = hrIndex1 > integrationIndex1 ? hrIndex1 : integrationIndex1;
             var node1 = new HtmlNode(HtmlNodeType.Element, new HtmlDocument(), 0);
 
-            var htmlText = @"<div class=""news-text"">";
+            var x = node.ChildNodes;
+            node.RemoveChild(node.SelectSingleNode("//hr"), true);
+            //foreach (var childNode in x)
+            //{
+            //    var childNodeIndex = node.ChildNodes.IndexOf(childNode);
+            //    if (childNodeIndex >= deleteIndex)
+            //    {
+            //        childNode.ParentNode.ChildNodes.Remove(childNodeIndex);
+            //        //htmlText += childNode.InnerHtml;
+            //    }
+            //}
 
-            var childNodes = node.ChildNodes;
-            foreach (var childNode in childNodes)
-            {
-                if (node.ChildNodes.IndexOf(childNode) < deleteIndex)
-                {
-                    node.ChildNodes.Remove(childNode);
-                    //htmlText += childNode.InnerHtml;
-                }
-            }
 
+            var a = string.Empty;
 
-            var x = node1;
             return node != null ? node.InnerHtml : string.Empty;
             //return htmlText + @"</div>";
         }
