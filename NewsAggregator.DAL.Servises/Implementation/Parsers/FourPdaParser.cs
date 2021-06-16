@@ -19,5 +19,15 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
             var node = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='content']");
             return node != null ? node.InnerText : string.Empty;
         }
+
+        public async Task<string> CleanParse(string url)
+        {
+            HtmlWeb web = new HtmlWeb();
+            var htmlDoc = web.Load(url);
+
+
+            var node = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='content']");
+            return node != null ? node.InnerText : string.Empty;
+        }
     }
 }

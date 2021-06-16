@@ -5,6 +5,7 @@ using System.Diagnostics;
 using System.Linq;
 using System.ServiceModel.Syndication;
 using System.Text;
+using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Xml;
 using Microsoft.EntityFrameworkCore;
@@ -197,9 +198,11 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
                             var news = new NewsDto()
                             {
                                 Article = syndicationItem.Title.Text,
+                                Summary = CleanSummary(syndicationItem),
                                 Body = await ParserSwitcher(source.Name, syndicationItem.Id),
+                                CleanedBody = await CleanParserSwitcher(source.Name, syndicationItem.Id),
                                 Id = Guid.NewGuid(),
-                                PublishTime = DateTime.Now,
+                                PublishTime = syndicationItem.PublishDate.DateTime,
                                 Rating = 0,
                                 RssSourceId = source.Id,
                                 Url = syndicationItem.Id
@@ -233,11 +236,29 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
             return await _unitOfWork.RssSourse.Get().ToListAsync();
         }
 
+
         public async Task<RssSource> GetSourceById(Guid id)
         {
             return await _unitOfWork.RssSourse.GetById(id);
         }
 
+        private string CleanSummary(SyndicationItem item)
+        {
+            Regex regex = new Regex(@"<[^>]*>");
+            
+            if (item.Summary != null)
+            {
+                return regex.Replace(item.Summary.Text, string.Empty)
+                    .Replace(@"&nbsp;", " ")
+                    .Replace("&mdash;", " ")
+                    .Replace("&laquo;", " ")
+                    .Replace("&raquo;", " ")
+                    .Replace("&hellip;", " ")
+                    .Replace("&thinsp;", "");
+            }
+
+            return string.Empty;
+        }
         private async Task<string> ParserSwitcher(string nameOfSource, string newsUrl)
         {
             switch (nameOfSource)
@@ -252,6 +273,25 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
                     return await _wylsaParser.Parse(newsUrl);
                 case "Igromanija":
                     return await _igromanijaParser.Parse(newsUrl);
+                default:
+                    return string.Empty;
+            }
+        }
+
+        private async Task<string> CleanParserSwitcher(string nameOfSource, string newsUrl)
+        {
+            switch (nameOfSource)
+            {
+                case "Onliner":
+                    return await _onlinerParser.CleanParse(newsUrl);
+                case "Shazoo":
+                    return await _shazooParser.CleanParse(newsUrl);
+                case "4pda":
+                    return await _4pdaParser.CleanParse(newsUrl);
+                case "Wylsa":
+                    return await _wylsaParser.CleanParse(newsUrl);
+                case "Igromanija":
+                    return await _igromanijaParser.CleanParse(newsUrl);
                 default:
                     return string.Empty;
             }

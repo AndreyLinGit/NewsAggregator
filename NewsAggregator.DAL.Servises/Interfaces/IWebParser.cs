@@ -10,5 +10,6 @@ namespace NewsAggregator.DAL.Serviсes.Interfaces
     public interface IWebParser
     {
         Task<string> Parse(string url);
+        Task<string> CleanParse(string url);
     }
 }

@@ -21,7 +21,34 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
 
         public async Task<IEnumerable<News>> GetAllNews()
         {
-            return await _unitOfWork.News.Get().ToListAsync();
+            return await _unitOfWork.News.Get().OrderBy(news => news.PublishTime).ToListAsync();
+        }
+
+        public async Task<IEnumerable<NewsWithRssSourceNameDto>> GetPartOfNews(int count, DateTime lastGottenPublishTime)
+        {
+            var news = await _unitOfWork.News.FindBy(
+                news => news.PublishTime.CompareTo(lastGottenPublishTime) < 0,
+                rssSourceName => rssSourceName.RssSource)
+                .Take(count)
+                .ToListAsync();
+
+            var newsWithRssSourceName = new List<NewsWithRssSourceNameDto>();
+            foreach (var singleNews in news)
+            {
+                newsWithRssSourceName.Add(new NewsWithRssSourceNameDto
+                {
+                    Article = singleNews.Article,
+                    Body = singleNews.Body,
+                    Id = singleNews.Id,
+                    PublishTime = singleNews.PublishTime,
+                    Rating = singleNews.Rating,
+                    RssSourceName = singleNews.RssSource.Name,
+                    Summary = singleNews.Summary,
+                    Url = singleNews.Url
+                });
+            }
+
+            return newsWithRssSourceName;
         }
 
         public async Task AddRangeOfNews(IEnumerable<NewsDto> rangeOfNewsDtos)
@@ -33,7 +60,9 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
                 {
                     Id = newsDto.Id,
                     Article = newsDto.Article,
+                    Summary = newsDto.Summary,
                     Body = newsDto.Body,
+                    CleanedBody = newsDto.CleanedBody,
                     PublishTime = newsDto.PublishTime,
                     RssSourceId = newsDto.RssSourceId,
                     Url = newsDto.Url
@@ -50,7 +79,9 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
             return new NewsDto
             {
                 Article = news.Article,
+                Summary = news.Summary,
                 Body = news.Body,
+                CleanedBody = news.CleanedBody,
                 Id = news.Id,
                 PublishTime = news.PublishTime,
                 Rating = news.Rating,

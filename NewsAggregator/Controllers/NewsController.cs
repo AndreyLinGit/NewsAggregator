@@ -33,8 +33,24 @@ namespace NewsAggregator.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var newsList = await _rssSourceService.GetNewsFromSource(isCostil); // (It's for work from work!)
-            //var newsList = await _newsService.GetAllNews(); //Think about "Get()" (It's for work from home!)
+            //var newsList = await _rssSourceService.GetNewsFromSource(isCostil); // (It's for work from work!)
+            //var newsList = await _newsService.GetAllNews(); //Think about "Get()" (It's for work from home!) CREATE PAGINATION AND CHANGE IT!
+            //var modelsList = new List<NewsViewModel>();
+            //foreach (var news in newsList)
+            //{
+            //    var model = new NewsViewModel
+            //    {
+            //        Id = news.Id,
+            //        Article = news.Article,
+            //        Summary = news.Summary,
+            //        Body = news.Body,
+            //        PublishTime = news.PublishTime,
+            //        Rating = news.Rating
+            //    };
+            //    modelsList.Add(model);
+            //}
+
+            var newsList = await _newsService.GetPartOfNews(30, DateTime.Now);
             var modelsList = new List<NewsViewModel>();
             foreach (var news in newsList)
             {
@@ -42,9 +58,11 @@ namespace NewsAggregator.Controllers
                 {
                     Id = news.Id,
                     Article = news.Article,
+                    Summary = news.Summary,
                     Body = news.Body,
                     PublishTime = news.PublishTime,
-                    Rating = news.Rating
+                    Rating = news.Rating,
+                    SourceName = news.RssSourceName
                 };
                 modelsList.Add(model);
             }

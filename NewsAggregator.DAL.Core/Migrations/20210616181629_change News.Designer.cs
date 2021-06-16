@@ -3,15 +3,17 @@ using System;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore.Infrastructure;
 using Microsoft.EntityFrameworkCore.Metadata;
+using Microsoft.EntityFrameworkCore.Migrations;
 using Microsoft.EntityFrameworkCore.Storage.ValueConversion;
 using NewsAggregator.DAL.Core;
 
 namespace NewsAggregator.DAL.Core.Migrations
 {
     [DbContext(typeof(NewsAggregatorContext))]
-    partial class NewsAggregatorContextModelSnapshot : ModelSnapshot
+    [Migration("20210616181629_change News")]
+    partial class changeNews
     {
-        protected override void BuildModel(ModelBuilder modelBuilder)
+        protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
 #pragma warning disable 612, 618
             modelBuilder

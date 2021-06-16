@@ -1,24 +1,24 @@
 ﻿@model NewsAggregator.Models.NewsDetailModel
-<div class="card col-lg-12">
-    <div class="card-body">
-        <h5 class="card-title">@Model.Article</h5>
-        @*<h6 class="card-subtitle mb-2 text-muted">Card subtitle</h6>*@
-        <p class="card-text">@Model.Body</p>
-        <a class="card-link" asp-action="Index" asp-route-id="@Model.Id">Back to full news list</a>
-    </div>
+
+<div>
+    <p>
+        <h1>@Model.Article</h1>
+    </p>
+    @Html.Raw(Model.Body)
 </div>
 
+<p></p>
 <div class="row ">
     <button id="comments-display-switcher" class="btn btn-primary col-sm-12" onclick="toggleComments('@Model.Id')">Display comments</button>
     <div class="container">
         <div id="comments-container" class="row">
-            
+
         </div>
         <div id="comments-create-area" class="row">
-            
+
         </div>
     </div>
-    
+
 </div>
 
 @section Scripts

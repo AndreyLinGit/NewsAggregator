@@ -11,6 +11,7 @@ namespace NewsAggregator.DAL.Servises.Interfaces
     public interface INewsService
     {
         Task<IEnumerable<News>> GetAllNews();
+        Task<IEnumerable<NewsWithRssSourceNameDto>> GetPartOfNews(int count, DateTime lastGottenPublishTime);
         Task AddRangeOfNews(IEnumerable<NewsDto> rangeOfNews);
         Task<NewsDto> GetNewsById(Guid id);
     }
