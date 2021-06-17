@@ -1,18 +1,16 @@
 ﻿@model IEnumerable<NewsAggregator.Models.NewsViewModel>
 
-<h1 class="display-4">The best news!</h1>
-<br />
 @foreach (var item in Model)
 {
     @*<div>
-        @Html.Raw(item.Body)
-    </div>*@
+            @Html.Raw(item.Body)
+        </div>*@
     <div class="card col-lg-12">
     </div>
     <div class="card col-lg-12">
         <div class="card-body">
             <h5 class="card-title">@item.Article</h5>
-            <p class="card-text">@item.Body</p>
+            <p class="card-text">@item.Summary</p>
             <a class="card-link" asp-action="Detail" asp-route-id="@item.Id">Read Full</a>
             <h6 class="card- mb-2 text-muted">Источник: @item.SourceName | @item.PublishTime</h6>
         </div>

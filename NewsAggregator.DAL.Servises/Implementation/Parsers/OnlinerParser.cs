@@ -18,8 +18,12 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
             HtmlWeb web = new HtmlWeb();
             var fullPage = web.Load(url);
 
-            var nodeText = fullPage.DocumentNode.SelectSingleNode("//div[@class='news-text']");
+            var nodeText = fullPage.DocumentNode.SelectSingleNode("/html/body/div[1]/div/div/div/div/div/div[3]/div[1]/div[1]/div/div[2]/div/div[1]/div[2]");
             var htmlDocumentText = new HtmlDocument();
+            if (nodeText == null)
+            {
+                return string.Empty;
+            }
             htmlDocumentText.LoadHtml(nodeText.InnerHtml); //Don't have enough time!
             htmlDocumentText.DocumentNode.Descendants()
                 .Where(n => n.Name == "script")
@@ -33,8 +37,6 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
                 foreach (var eachNode in h2Catalog)
                 {
                     var bannedLink = @"https://catalog.onliner.by/";
-                    //var regex = new Regex(@"\<a href([^=]*)\=");
-                    //var r = regex.Match(eachNode.OuterHtml).Groups[1].Value != string.Empty;
                     if (eachNode.OuterHtml.Contains(bannedLink))
                     {
                         html = html.Replace(eachNode.OuterHtml, string.Empty);
@@ -48,14 +50,9 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
                 foreach (var eachNode in h3Catalog)
                 {
                     var bannedLink = @"https://catalog.onliner.by/";
-                    //var regex = new Regex(@"\<a href([^=]*)\=");
-                    //var r = regex.Match(eachNode.OuterHtml).Groups[1].Value != string.Empty;
                     if (eachNode.OuterHtml.Contains(bannedLink))
                     {
-                        var htmlBefore = html;
-                        var itPartWillBeDeleted = eachNode.OuterHtml;
                         html = html.Replace(eachNode.OuterHtml, string.Empty);
-                        var htmlAfter = html;
                     }
                 }
                 //foreach (var eachNode in h3Catalog)
@@ -98,7 +95,7 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
             if (nodeHeaderImage != null)
             {
                 var regex = new Regex(@"\(([^)]*)\)");
-                var link = regex.Match(nodeHeaderImage.OuterHtml).Groups[1];
+                var link = regex.Match(nodeHeaderImage.OuterHtml).Groups[1].Value;
                 var test = @"<div><img src=" + link + "></div>";
                 html = html.Insert(0, test);
             }
@@ -159,6 +156,16 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
             if (votes != null)
             {
                 foreach (var eachNode in votes)
+                {
+                    html = html.Replace(eachNode.OuterHtml, string.Empty);
+                }
+            }
+
+            var emptyFhotos = htmlDocumentText.DocumentNode.SelectNodes(
+                "//div[@class ='news-media news-media_extended-condensed news-media_3by2 news-media_centering']");
+            if (emptyFhotos != null)
+            {
+                foreach (var eachNode in emptyFhotos)
                 {
                     html = html.Replace(eachNode.OuterHtml, string.Empty);
                 }

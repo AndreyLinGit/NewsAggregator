@@ -98,6 +98,7 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
                                 Rating = 0,
                                 Url = syndicationItem.Id
                             };
+
                             result.Add(news);
                         });
                     }
@@ -189,27 +190,38 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
                 var result = new ConcurrentBag<NewsDto>();
                 Parallel.ForEach(sources, (source) =>
                 {
-                    using (var reader = XmlReader.Create(source.Url))
+                    try
                     {
-                        SyndicationFeed feed = SyndicationFeed.Load(reader);
-                        reader.Close();
-                        Parallel.ForEach(feed.Items, async (syndicationItem) =>
+                        using (var reader = XmlReader.Create(source.Url))
                         {
-                            var news = new NewsDto()
+                            SyndicationFeed feed = SyndicationFeed.Load(reader);
+                            reader.Close();
+                            Parallel.ForEach(feed.Items, async (syndicationItem) =>
                             {
-                                Article = syndicationItem.Title.Text,
-                                Summary = CleanSummary(syndicationItem),
-                                Body = await ParserSwitcher(source.Name, syndicationItem.Id),
-                                CleanedBody = await CleanParserSwitcher(source.Name, syndicationItem.Id),
-                                Id = Guid.NewGuid(),
-                                PublishTime = syndicationItem.PublishDate.DateTime,
-                                Rating = 0,
-                                RssSourceId = source.Id,
-                                Url = syndicationItem.Id
-                            };
-                            result.Add(news);
-                        });
+                                var news = new NewsDto()
+                                {
+                                    Article = syndicationItem.Title.Text,
+                                    Summary = CleanSummary(syndicationItem),
+                                    Body = await ParserSwitcher(source.Name, syndicationItem.Id),
+                                    CleanedBody = await CleanParserSwitcher(source.Name, syndicationItem.Id),
+                                    Id = Guid.NewGuid(),
+                                    PublishTime = syndicationItem.PublishDate.DateTime,
+                                    Rating = 0,
+                                    RssSourceId = source.Id,
+                                    Url = syndicationItem.Id
+                                };
+                                if (news.Body != string.Empty)
+                                {
+                                    result.Add(news);
+                                }
+                            });
+                        }
                     }
+                    catch (Exception e)
+                    {
+                        //logs
+                    }
+                    
 
                 });
                 await _newsService.AddRangeOfNews(result);
