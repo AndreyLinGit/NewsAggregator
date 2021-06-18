@@ -136,13 +136,12 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
             var banners = htmlDocumentText.DocumentNode.SelectNodes("//div[@class ='news-media news-media_condensed']");
             if (banners != null)
             {
-                var strngeBanner = @"https://content.onliner.by/news/1100x5616/6b32576e87d7e1a6bdd110117671ada3.jpeg";  //Ask about!!!
+                var stringBanner = @"https://content.onliner.by/news/1100x5616/6b32576e87d7e1a6bdd110117671ada3.jpeg";  //Ask about!!!
                 foreach (var eachNode in banners)
                 {
-                    if (eachNode.OuterHtml.Contains(strngeBanner))
+                    if (eachNode.OuterHtml.Contains(stringBanner))
                     {
                         html = html.Replace(eachNode.OuterHtml, string.Empty);
-                        string x = eachNode.InnerHtml;
                     }
                     var testtest = eachNode.InnerHtml;
                     if (eachNode.OuterHtml.Contains(@"<a href="))

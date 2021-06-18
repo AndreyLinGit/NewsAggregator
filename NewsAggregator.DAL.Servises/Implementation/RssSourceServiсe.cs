@@ -50,15 +50,13 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
             var sources = new List<string>();
             sources.Add("https://www.onliner.by/feed");
             sources.Add("https://shazoo.ru/feed/rss");
-            sources.Add("https://4pda.to/feed/");
-            sources.Add("https://wylsa.com/feed/");
-            sources.Add("https://www.igromania.ru/rss/all.rss");
+            //sources.Add("https://www.igromania.ru/rss/all.rss");
 
             var stopwatch = new Stopwatch();
             stopwatch.Start();
-            var result = new List<NewsDto>();
+            var result = new ConcurrentBag<NewsDto>();
 
-            Task[] tasks1 = new Task[5]
+            Task[] tasks1 = new Task[2]
             {
                 new Task(() =>
                 {
@@ -71,9 +69,11 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
                             var news = new NewsDto()
                             {
                                 Article = syndicationItem.Title.Text,
+                                Summary = CleanSummary(syndicationItem),
                                 Body = await _onlinerParser.Parse(syndicationItem.Id),
+                                CleanedBody = await _onlinerParser.CleanParse(syndicationItem.Id),
                                 Id = Guid.NewGuid(),
-                                PublishTime = DateTime.Now,
+                                PublishTime = syndicationItem.PublishDate.DateTime,
                                 Rating = 0,
                                 Url = syndicationItem.Id
                             };
@@ -92,9 +92,11 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
                             var news = new NewsDto()
                             {
                                 Article = syndicationItem.Title.Text,
+                                Summary = CleanSummary(syndicationItem),
                                 Body = await _shazooParser.Parse(syndicationItem.Id),
+                                CleanedBody = await _shazooParser.CleanParse(syndicationItem.Id),
                                 Id = Guid.NewGuid(),
-                                PublishTime = DateTime.Now,
+                                PublishTime = syndicationItem.PublishDate.DateTime,
                                 Rating = 0,
                                 Url = syndicationItem.Id
                             };
@@ -103,69 +105,29 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
                         });
                     }
                 }),
-                new Task(() =>
-                {
-                    using (var reader = XmlReader.Create("https://4pda.to/feed/"))
-                    {
-                        SyndicationFeed feed = SyndicationFeed.Load(reader);
-                        reader.Close();
-                        Parallel.ForEach(feed.Items, async (syndicationItem) =>
-                        {
-                            var news = new NewsDto()
-                            {
-                                Article = syndicationItem.Title.Text,
-                                Body = await _4pdaParser.Parse(syndicationItem.Id),
-                                Id = Guid.NewGuid(),
-                                PublishTime = DateTime.Now,
-                                Rating = 0,
-                                Url = syndicationItem.Id
-                            };
-                            result.Add(news);
-                        });
-                    }
-                }),
-                new Task(() =>
-                {
-                    using (var reader = XmlReader.Create("https://wylsa.com/feed/"))
-                    {
-                        SyndicationFeed feed = SyndicationFeed.Load(reader);
-                        reader.Close();
-                        Parallel.ForEach(feed.Items, async (syndicationItem) =>
-                        {
-                            var news = new NewsDto()
-                            {
-                                Article = syndicationItem.Title.Text,
-                                Body = await _wylsaParser.Parse(syndicationItem.Id),
-                                Id = Guid.NewGuid(),
-                                PublishTime = DateTime.Now,
-                                Rating = 0,
-                                Url = syndicationItem.Id
-                            };
-                            result.Add(news);
-                        });
-                    }
-                }),
-                new Task(() =>
-                {
-                    using (var reader = XmlReader.Create("https://www.igromania.ru/rss/all.rss"))
-                    {
-                        SyndicationFeed feed = SyndicationFeed.Load(reader);
-                        reader.Close();
-                        Parallel.ForEach(feed.Items, async (syndicationItem) =>
-                        {
-                            var news = new NewsDto()
-                            {
-                                Article = syndicationItem.Title.Text,
-                                Body = await _igromanijaParser.Parse(syndicationItem.Id),
-                                Id = Guid.NewGuid(),
-                                PublishTime = DateTime.Now,
-                                Rating = 0,
-                                Url = syndicationItem.Id
-                            };
-                            result.Add(news);
-                        });
-                    }
-                })
+                //new Task(() =>
+                //{
+                //    using (var reader = XmlReader.Create("https://www.igromania.ru/rss/all.rss"))
+                //    {
+                //        SyndicationFeed feed = SyndicationFeed.Load(reader);
+                //        reader.Close();
+                //        Parallel.ForEach(feed.Items, async (syndicationItem) =>
+                //        {
+                //            var news = new NewsDto()
+                //            {
+                //                Article = syndicationItem.Title.Text,
+                //                Summary = CleanSummary(syndicationItem),
+                //                Body = await _igromanijaParser.Parse(syndicationItem.Id),
+                //                CleanedBody = await _igromanijaParser.CleanParse(syndicationItem.Id),
+                //                Id = Guid.NewGuid(),
+                //                PublishTime = syndicationItem.PublishDate.DateTime,
+                //                Rating = 0,
+                //                Url = syndicationItem.Id
+                //            };
+                //            result.Add(news);
+                //        });
+                //    }
+                //})
             };
             foreach (var t in tasks1)
                 t.Start();
@@ -174,7 +136,7 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
             stopwatch.Stop();
             var time = stopwatch.Elapsed.Seconds;
             //
-            return result;
+            return result.ToList();
         }
         #endregion
 
