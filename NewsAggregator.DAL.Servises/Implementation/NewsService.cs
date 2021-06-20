@@ -24,16 +24,20 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
             return await _unitOfWork.News.Get().OrderBy(news => news.PublishTime).ToListAsync();
         }
 
-        public async Task<IEnumerable<NewsWithRssSourceNameDto>> GetPartOfNews(int count, DateTime lastGottenPublishTime)
+        public async Task<IEnumerable<NewsWithRssSourceNameDto>> GetPartOfNews(int count, string lastGottenPublishTime)
         {
-            var news = await _unitOfWork.News.FindBy(
-                news => news.PublishTime.CompareTo(lastGottenPublishTime) < 0,
+            DateTime time = new DateTime();
+            time = DateTime.Parse(lastGottenPublishTime);
+            var newsCollection = await _unitOfWork.News.FindBy(
+                news => news.PublishTime.CompareTo(time) < 0,
                 rssSourceName => rssSourceName.RssSource)
-                .Take(count)
+                .OrderByDescending(n => n.PublishTime)
                 .ToListAsync();
+            
+            var newsPartCollection = newsCollection.Take(count);
 
             var newsWithRssSourceName = new List<NewsWithRssSourceNameDto>();
-            foreach (var singleNews in news)
+            foreach (var singleNews in newsPartCollection)
             {
                 newsWithRssSourceName.Add(new NewsWithRssSourceNameDto
                 {

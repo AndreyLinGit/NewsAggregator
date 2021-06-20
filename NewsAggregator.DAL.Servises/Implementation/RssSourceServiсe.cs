@@ -149,7 +149,7 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
             var sources = _unitOfWork.RssSourse.Get().ToList();
             if (sources.Any())
             {
-                var result = new ConcurrentBag<NewsDto>();
+                var newsCollection = new ConcurrentBag<NewsDto>();
                 Parallel.ForEach(sources, (source) =>
                 {
                     try
@@ -174,7 +174,7 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
                                 };
                                 if (news.Body != string.Empty)
                                 {
-                                    result.Add(news);
+                                    newsCollection.Add(news);
                                 }
                             });
                         }
@@ -186,7 +186,7 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
                     
 
                 });
-                await _newsService.AddRangeOfNews(result);
+                await _newsService.AddRangeOfNews(newsCollection);
                 var time = stopwatch.Elapsed.Seconds;
             }
             else

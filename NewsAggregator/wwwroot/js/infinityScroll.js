@@ -1,21 +1,11 @@
 ﻿let container = document.getElementById('infinity-scroll');
 let pageCounter = 1;
 
-window.addEventListener("scroll", function () {
-
-    let contentHeight = container.offsetHeight;                         // 1) высота блока контента вместе с границами
-    let placeToLoading = contentHeight - contentHeight / 4;
-    let yOffset = window.pageYOffset;                                   // 2) текущее положение скролбара
-
-    // если пользователь достиг конца
-    if (yOffset >= placeToLoading) {
-        gerMoreNews(container);
-    }
-});
+window.addEventListener("scroll", listenScrolling);
 
 
 function gerMoreNews(container) {
-
+    
     let lastDate = searchLastGottenDate();
     let requestGetNews = new XMLHttpRequest();
     //create request
@@ -31,6 +21,7 @@ function gerMoreNews(container) {
     }
     //send request
     requestGetNews.send();
+    window.addEventListener("scroll", listenScrolling);
 }
 
 function searchLastGottenDate() {
@@ -41,4 +32,15 @@ function searchLastGottenDate() {
     let lastGottenDate = lastDateNode.innerText;
 
     return lastGottenDate;
+}
+
+function listenScrolling() {
+
+    let contentHeight = container.offsetHeight;                         
+    let placeToLoading = contentHeight - contentHeight / 4;
+    let yOffset = window.pageYOffset;                                   
+
+    if (yOffset >= placeToLoading) {
+        gerMoreNews(container);
+    }
 }
