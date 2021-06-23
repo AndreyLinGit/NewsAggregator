@@ -50,13 +50,13 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
             var sources = new List<string>();
             sources.Add("https://www.onliner.by/feed");
             sources.Add("https://shazoo.ru/feed/rss");
-            //sources.Add("https://www.igromania.ru/rss/all.rss");
+            sources.Add("https://4pda.to/feed/");
 
             var stopwatch = new Stopwatch();
             stopwatch.Start();
             var result = new ConcurrentBag<NewsDto>();
 
-            Task[] tasks1 = new Task[2]
+            Task[] tasks1 = new Task[3]
             {
                 new Task(() =>
                 {
@@ -105,29 +105,29 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
                         });
                     }
                 }),
-                //new Task(() =>
-                //{
-                //    using (var reader = XmlReader.Create("https://www.igromania.ru/rss/all.rss"))
-                //    {
-                //        SyndicationFeed feed = SyndicationFeed.Load(reader);
-                //        reader.Close();
-                //        Parallel.ForEach(feed.Items, async (syndicationItem) =>
-                //        {
-                //            var news = new NewsDto()
-                //            {
-                //                Article = syndicationItem.Title.Text,
-                //                Summary = CleanSummary(syndicationItem),
-                //                Body = await _igromanijaParser.Parse(syndicationItem.Id),
-                //                CleanedBody = await _igromanijaParser.CleanParse(syndicationItem.Id),
-                //                Id = Guid.NewGuid(),
-                //                PublishTime = syndicationItem.PublishDate.DateTime,
-                //                Rating = 0,
-                //                Url = syndicationItem.Id
-                //            };
-                //            result.Add(news);
-                //        });
-                //    }
-                //})
+                new Task(() =>
+                {
+                    using (var reader = XmlReader.Create("https://4pda.to/feed/"))
+                    {
+                        SyndicationFeed feed = SyndicationFeed.Load(reader);
+                        reader.Close();
+                        Parallel.ForEach(feed.Items, async (syndicationItem) =>
+                        {
+                            var news = new NewsDto()
+                            {
+                                Article = syndicationItem.Title.Text,
+                                Summary = CleanSummary(syndicationItem),
+                                Body = await _4pdaParser.Parse(syndicationItem.Id),
+                                CleanedBody = await _4pdaParser.CleanParse(syndicationItem.Id),
+                                Id = Guid.NewGuid(),
+                                PublishTime = syndicationItem.PublishDate.DateTime,
+                                Rating = 0,
+                                Url = syndicationItem.Id
+                            };
+                            result.Add(news);
+                        });
+                    }
+                })
             };
             foreach (var t in tasks1)
                 t.Start();
@@ -243,10 +243,10 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
                     return await _shazooParser.Parse(newsUrl);
                 case "4pda":
                     return await _4pdaParser.Parse(newsUrl);
-                case "Wylsa":
-                    return await _wylsaParser.Parse(newsUrl);
-                case "Igromanija":
-                    return await _igromanijaParser.Parse(newsUrl);
+                //case "Wylsa":
+                //    return await _wylsaParser.Parse(newsUrl);
+                //case "Igromanija":
+                //    return await _igromanijaParser.Parse(newsUrl);
                 default:
                     return string.Empty;
             }
@@ -262,10 +262,10 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
                     return await _shazooParser.CleanParse(newsUrl);
                 case "4pda":
                     return await _4pdaParser.CleanParse(newsUrl);
-                case "Wylsa":
-                    return await _wylsaParser.CleanParse(newsUrl);
-                case "Igromanija":
-                    return await _igromanijaParser.CleanParse(newsUrl);
+                //case "Wylsa":
+                //    return await _wylsaParser.CleanParse(newsUrl);
+                //case "Igromanija":
+                //    return await _igromanijaParser.CleanParse(newsUrl);
                 default:
                     return string.Empty;
             }
