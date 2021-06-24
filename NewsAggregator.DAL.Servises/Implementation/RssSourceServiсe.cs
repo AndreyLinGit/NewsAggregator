@@ -12,7 +12,6 @@ using Microsoft.EntityFrameworkCore;
 using NewsAggregator.DAL.Core.DTOs;
 using NewsAggregator.DAL.Core.Entities;
 using NewsAggregator.DAL.Repositories.Interfaces;
-using NewsAggregator.DAL.Servises.Interfaces;
 using NewsAggregator.DAL.Serviсes.Interfaces;
 
 namespace NewsAggregator.DAL.Serviсes.Implementation
@@ -33,118 +32,6 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
             _shazooParser = servserviceAccessor("Shazoo");
             _4pdaParser = servserviceAccessor("4pda");
         }
-
-        //public async Task<List<NewsDto>> GetNewsFromSource(bool costil)
-        //{
-        //    return null;
-        //}
-
-        #region MyRegion
-        public async Task<List<NewsDto>> GetNewsFromSource(bool costil)
-        {
-            Encoding.RegisterProvider(CodePagesEncodingProvider.Instance);
-            var sources = new List<string>();
-            sources.Add("https://www.onliner.by/feed");
-            sources.Add("https://shazoo.ru/feed/rss");
-            sources.Add("https://4pda.to/feed/");
-
-            var stopwatch = new Stopwatch();
-            stopwatch.Start();
-            var result = new ConcurrentBag<NewsDto>();
-
-            Task[] tasks1 = new Task[3]
-            {
-                new Task(() =>
-                {
-                    using (var reader = XmlReader.Create("https://www.onliner.by/feed"))
-                    {
-                        SyndicationFeed feed = SyndicationFeed.Load(reader);
-                        reader.Close();
-                        Parallel.ForEach(feed.Items, async (syndicationItem) =>
-                        {
-                            var news = new NewsDto()
-                            {
-                                Article = syndicationItem.Title.Text,
-                                Summary = await _onlinerParser.CleanSummary(syndicationItem),
-                                Body = await _onlinerParser.Parse(syndicationItem.Id),
-                                CleanedBody = await _onlinerParser.CleanParse(syndicationItem.Id),
-                                Id = Guid.NewGuid(),
-                                PublishTime = syndicationItem.PublishDate.DateTime,
-                                Rating = 0,
-                                Url = syndicationItem.Id
-                            };
-                            if (result.Count(addedNews => addedNews.Article.Contains(news.Article)) != 0)
-                            {
-                                result.Add(news);
-                            }
-                        });
-                    }
-                }),
-                new Task(() =>
-                {
-                    using (var reader = XmlReader.Create("https://shazoo.ru/feed/rss"))
-                    {
-                        SyndicationFeed feed = SyndicationFeed.Load(reader);
-                        reader.Close();
-                        Parallel.ForEach(feed.Items, async (syndicationItem) =>
-                        {
-                            var news = new NewsDto()
-                            {
-                                Article = syndicationItem.Title.Text,
-                                Summary = await _shazooParser.CleanSummary(syndicationItem),
-                                Body = await _shazooParser.Parse(syndicationItem.Id),
-                                CleanedBody = await _shazooParser.CleanParse(syndicationItem.Id),
-                                Id = Guid.NewGuid(),
-                                PublishTime = syndicationItem.PublishDate.DateTime,
-                                Rating = 0,
-                                Url = syndicationItem.Id
-                            };
-                            if (result.Count(addedNews => addedNews.Article.Contains(news.Article)) != 0)
-                            {
-                                result.Add(news);
-                            }
-                        });
-                    }
-                }),
-                new Task(() =>
-                {
-                    using (var reader = XmlReader.Create("https://4pda.to/feed/"))
-                    {
-                        SyndicationFeed feed = SyndicationFeed.Load(reader);
-                        reader.Close();
-                        Parallel.ForEach(feed.Items, async (syndicationItem) =>
-                        {
-                            var news = new NewsDto()
-                            {
-                                Article = syndicationItem.Title.Text,
-                                Summary = await _4pdaParser.CleanSummary(syndicationItem),
-                                Body = await _4pdaParser.Parse(syndicationItem.Id),
-                                CleanedBody = await _4pdaParser.CleanParse(syndicationItem.Id),
-                                Id = Guid.NewGuid(),
-                                PublishTime = syndicationItem.PublishDate.DateTime,
-                                Rating = 0,
-                                Url = syndicationItem.Id
-                            };
-                            if (result.Count(addedNews => addedNews.Article.Contains(news.Article)) == 0)
-                            {
-                                result.Add(news);
-                            }
-                            
-                        });
-                    }
-                })
-            };
-            foreach (var t in tasks1)
-                t.Start();
-            Task.WaitAll(tasks1);
-
-            stopwatch.Stop();
-            var time = stopwatch.Elapsed.Seconds;
-            //
-            return result.ToList();
-        }
-        #endregion
-
 
         public async Task GetNewsFromSources()
         {

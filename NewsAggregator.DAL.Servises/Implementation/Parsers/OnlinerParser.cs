@@ -1,16 +1,11 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
+﻿using System.Linq;
 using System.ServiceModel.Syndication;
-using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using HtmlAgilityPack;
-using Microsoft.VisualStudio.Shell.Interop;
 using NewsAggregator.DAL.Serviсes.Interfaces;
-using Vereyon.Web;
 
-namespace NewsAggregator.DAL.Serviсes.Implementation
+namespace NewsAggregator.DAL.Serviсes.Implementation.Parsers
 {
     public class OnlinerParser : IWebParser
     {
@@ -26,7 +21,7 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
             HtmlWeb web = new HtmlWeb();
             var fullPage = web.Load(url);
 
-            var nodeText = fullPage.DocumentNode.SelectSingleNode("/html/body/div[1]/div/div/div/div/div/div[3]/div[1]/div[1]/div/div[2]/div/div[1]/div[2]");
+            var nodeText = fullPage.DocumentNode.SelectSingleNode("/html/body/div[1]/div/div/div/div/div/div[3]/div[1]/div[1]/div/div[2]/div/div[1]/div[2]"); //??
             var htmlDocumentText = new HtmlDocument();
             if (nodeText == null)
             {
@@ -63,28 +58,6 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
                         html = html.Replace(eachNode.OuterHtml, string.Empty);
                     }
                 }
-                //foreach (var eachNode in h3Catalog)
-                //{
-                //    var linkNodes = eachNode.SelectNodes("//a");
-                //    if (linkNodes != null)
-                //    {
-                //        var bannedLink = @"https://catalog.onliner.by/";
-                //        foreach (var node in linkNodes)
-                //        {
-                //            if (node.OuterHtml.Contains(bannedLink))
-                //            {
-                //                //html = html.Replace(eachNode.OuterHtml, string.Empty);
-                //            }
-                //            else
-                //            {
-                //                //var regex = new Regex(@"\<a href([^=]*)\=);
-                //                //var text = regex.Match(node.OuterHtml).Groups[1].Value;
-                //                //var test = node.OuterHtml.Replace(node.OuterHtml, text);
-                //                //html = html.Replace(node.OuterHtml, test); //??
-                //            }
-                //        }
-                //    }
-                //}
             }
 
             var divsSocial = htmlDocumentText.DocumentNode.SelectSingleNode("//div[@class ='news-incut news-incut_extended news-incut_position_right news-incut_shift_top news-helpers_hide_tablet']");

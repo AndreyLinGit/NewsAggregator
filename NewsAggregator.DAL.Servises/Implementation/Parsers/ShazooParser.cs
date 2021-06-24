@@ -1,15 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.ServiceModel.Syndication;
-using System.Text;
+﻿using System.ServiceModel.Syndication;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
-using System.Xml;
 using HtmlAgilityPack;
 using NewsAggregator.DAL.Serviсes.Interfaces;
 
-namespace NewsAggregator.DAL.Serviсes.Implementation
+namespace NewsAggregator.DAL.Serviсes.Implementation.Parsers
 {
     public class ShazooParser : IWebParser
     {

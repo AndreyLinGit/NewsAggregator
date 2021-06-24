@@ -5,7 +5,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using NewsAggregator.DAL.Core.DTOs;
 using NewsAggregator.DAL.Core.Entities;
-using NewsAggregator.DAL.Servises.Interfaces;
 using NewsAggregator.DAL.Serviсes.Interfaces;
 
 namespace NewsAggregator.Controllers

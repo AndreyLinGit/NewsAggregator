@@ -9,7 +9,6 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using NewsAggregator.DAL.Core;
-using NewsAggregator.DAL.Servises.Interfaces;
 using Microsoft.EntityFrameworkCore;
 using NewsAggregator.DAL.Core.Entities;
 using NewsAggregator.DAL.Repositories.Implementation;
@@ -20,6 +19,7 @@ using NewsAggregator.DAL.Serviñes.Interfaces;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
 using NewsAggregator.DAL.Core.DTOs;
+using NewsAggregator.DAL.Serviñes.Implementation.Parsers;
 
 namespace NewsAggregator
 {

@@ -6,7 +6,6 @@ using System.Security.Claims;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using NewsAggregator.DAL.Core.DTOs;
-using NewsAggregator.DAL.Servises.Interfaces;
 using NewsAggregator.DAL.Serviсes.Interfaces;
 using NewsAggregator.Models.Comment;
 

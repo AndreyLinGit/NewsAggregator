@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using NewsAggregator.DAL.Core.DTOs;
 using NewsAggregator.DAL.Core.Entities;
 using NewsAggregator.DAL.Repositories.Interfaces;
-using NewsAggregator.DAL.Servises.Interfaces;
+using NewsAggregator.DAL.Serviсes.Interfaces;
 
 namespace NewsAggregator.DAL.Serviсes.Implementation
 {

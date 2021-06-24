@@ -12,8 +12,8 @@ using Microsoft.Extensions.Options;
 using NewsAggregator.DAL.Core.DTOs;
 using NewsAggregator.DAL.Core.Entities;
 using NewsAggregator.DAL.Repositories.Interfaces;
-using NewsAggregator.DAL.Servises.Interfaces;
 using System.Net.Mime;
+using NewsAggregator.DAL.Serviсes.Interfaces;
 
 
 namespace NewsAggregator.DAL.Serviсes.Implementation

@@ -1,14 +1,10 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.ServiceModel.Syndication;
-using System.Text;
+﻿using System.ServiceModel.Syndication;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using HtmlAgilityPack;
 using NewsAggregator.DAL.Serviсes.Interfaces;
 
-namespace NewsAggregator.DAL.Serviсes.Implementation
+namespace NewsAggregator.DAL.Serviсes.Implementation.Parsers
 {
     public class FourPdaParser : IWebParser
     {
@@ -52,12 +48,6 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
             {
                 html = html.Insert(0, nodeHeaderImage.OuterHtml);
             }
-
-
-            //if (html.Contains("galContainer"))
-            //{
-            //    html = html.Replace("::marker", string.Empty);
-            //}
 
             return html;
         }

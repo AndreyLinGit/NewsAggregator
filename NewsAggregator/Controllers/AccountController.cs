@@ -11,7 +11,6 @@ using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.Extensions.Options;
 using NewsAggregator.DAL.Core.DTOs;
-using NewsAggregator.DAL.Servises.Interfaces;
 using NewsAggregator.DAL.Serviсes.Interfaces;
 using NewsAggregator.Models;
 using NewsAggregator.Models.Account;
