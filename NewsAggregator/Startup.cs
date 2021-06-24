@@ -62,12 +62,11 @@ namespace NewsAggregator
             services.AddScoped<IRoleService, RoleService>();
             services.AddScoped<IMailService, MailService>();
             services.AddScoped<ICommentService, CommentService>();
+            services.AddScoped<ICleanService, CleanService>();
 
             services.AddTransient<OnlinerParser>();
             services.AddTransient<ShazooParser>();
             services.AddTransient<FourPdaParser>();
-            services.AddTransient<WylsaParser>();
-            services.AddTransient<IgromanijaParser>();
             services.AddTransient<WebParserResolver>(serviceProvider => key =>
             {
                 switch (key)
@@ -78,10 +77,6 @@ namespace NewsAggregator
                         return serviceProvider.GetService<ShazooParser>();
                     case "4pda":
                         return serviceProvider.GetService<FourPdaParser>();
-                    case "Wylsa":
-                        return serviceProvider.GetService<WylsaParser>();
-                    case "Igromanija":
-                        return serviceProvider.GetService<IgromanijaParser>();
                     default:
                         throw new KeyNotFoundException(); // or maybe return null, up to you
                 }

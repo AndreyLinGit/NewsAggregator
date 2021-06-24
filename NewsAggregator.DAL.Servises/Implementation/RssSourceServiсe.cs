@@ -24,8 +24,6 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
         private readonly IWebParser _onlinerParser;
         private readonly IWebParser _shazooParser;
         private readonly IWebParser _4pdaParser;
-        private readonly IWebParser _wylsaParser;
-        private readonly IWebParser _igromanijaParser;
 
         public RssSourceServiсe(IUnitOfWork unitOfWork, WebParserResolver servserviceAccessor, INewsService newsService)
         {
@@ -34,8 +32,6 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
             _onlinerParser = servserviceAccessor("Onliner");
             _shazooParser = servserviceAccessor("Shazoo");
             _4pdaParser = servserviceAccessor("4pda");
-            _wylsaParser = servserviceAccessor("Wylsa");
-            _igromanijaParser = servserviceAccessor("Igromanija");
         }
 
         //public async Task<List<NewsDto>> GetNewsFromSource(bool costil)
@@ -69,7 +65,7 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
                             var news = new NewsDto()
                             {
                                 Article = syndicationItem.Title.Text,
-                                Summary = CleanSummary(syndicationItem),
+                                Summary = await _onlinerParser.CleanSummary(syndicationItem),
                                 Body = await _onlinerParser.Parse(syndicationItem.Id),
                                 CleanedBody = await _onlinerParser.CleanParse(syndicationItem.Id),
                                 Id = Guid.NewGuid(),
@@ -77,7 +73,10 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
                                 Rating = 0,
                                 Url = syndicationItem.Id
                             };
-                            result.Add(news);
+                            if (result.Count(addedNews => addedNews.Article.Contains(news.Article)) != 0)
+                            {
+                                result.Add(news);
+                            }
                         });
                     }
                 }),
@@ -92,7 +91,7 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
                             var news = new NewsDto()
                             {
                                 Article = syndicationItem.Title.Text,
-                                Summary = CleanSummary(syndicationItem),
+                                Summary = await _shazooParser.CleanSummary(syndicationItem),
                                 Body = await _shazooParser.Parse(syndicationItem.Id),
                                 CleanedBody = await _shazooParser.CleanParse(syndicationItem.Id),
                                 Id = Guid.NewGuid(),
@@ -100,8 +99,10 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
                                 Rating = 0,
                                 Url = syndicationItem.Id
                             };
-
-                            result.Add(news);
+                            if (result.Count(addedNews => addedNews.Article.Contains(news.Article)) != 0)
+                            {
+                                result.Add(news);
+                            }
                         });
                     }
                 }),
@@ -116,7 +117,7 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
                             var news = new NewsDto()
                             {
                                 Article = syndicationItem.Title.Text,
-                                Summary = CleanSummary(syndicationItem),
+                                Summary = await _4pdaParser.CleanSummary(syndicationItem),
                                 Body = await _4pdaParser.Parse(syndicationItem.Id),
                                 CleanedBody = await _4pdaParser.CleanParse(syndicationItem.Id),
                                 Id = Guid.NewGuid(),
@@ -124,7 +125,11 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
                                 Rating = 0,
                                 Url = syndicationItem.Id
                             };
-                            result.Add(news);
+                            if (result.Count(addedNews => addedNews.Article.Contains(news.Article)) == 0)
+                            {
+                                result.Add(news);
+                            }
+                            
                         });
                     }
                 })
@@ -163,7 +168,7 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
                                 var news = new NewsDto()
                                 {
                                     Article = syndicationItem.Title.Text,
-                                    Summary = CleanSummary(syndicationItem),
+                                    Summary = await SummaryParserSwitcher(source.Name,syndicationItem),
                                     Body = await ParserSwitcher(source.Name, syndicationItem.Id),
                                     CleanedBody = await CleanParserSwitcher(source.Name, syndicationItem.Id),
                                     Id = Guid.NewGuid(),
@@ -216,23 +221,6 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
             return await _unitOfWork.RssSourse.GetById(id);
         }
 
-        private string CleanSummary(SyndicationItem item)
-        {
-            Regex regex = new Regex(@"<[^>]*>");
-            
-            if (item.Summary != null)
-            {
-                return regex.Replace(item.Summary.Text, string.Empty)
-                    .Replace(@"&nbsp;", " ")
-                    .Replace("&mdash;", " ")
-                    .Replace("&laquo;", " ")
-                    .Replace("&raquo;", " ")
-                    .Replace("&hellip;", " ")
-                    .Replace("&thinsp;", "");
-            }
-
-            return string.Empty;
-        }
         private async Task<string> ParserSwitcher(string nameOfSource, string newsUrl)
         {
             switch (nameOfSource)
@@ -243,10 +231,6 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
                     return await _shazooParser.Parse(newsUrl);
                 case "4pda":
                     return await _4pdaParser.Parse(newsUrl);
-                //case "Wylsa":
-                //    return await _wylsaParser.Parse(newsUrl);
-                //case "Igromanija":
-                //    return await _igromanijaParser.Parse(newsUrl);
                 default:
                     return string.Empty;
             }
@@ -262,10 +246,21 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
                     return await _shazooParser.CleanParse(newsUrl);
                 case "4pda":
                     return await _4pdaParser.CleanParse(newsUrl);
-                //case "Wylsa":
-                //    return await _wylsaParser.CleanParse(newsUrl);
-                //case "Igromanija":
-                //    return await _igromanijaParser.CleanParse(newsUrl);
+                default:
+                    return string.Empty;
+            }
+        }
+
+        private async Task<string> SummaryParserSwitcher(string nameOfSource, SyndicationItem item)
+        {
+            switch (nameOfSource)
+            {
+                case "Onliner":
+                    return await _onlinerParser.CleanSummary(item);
+                case "Shazoo":
+                    return await _shazooParser.CleanSummary(item);
+                case "4pda":
+                    return await _4pdaParser.CleanSummary(item);
                 default:
                     return string.Empty;
             }

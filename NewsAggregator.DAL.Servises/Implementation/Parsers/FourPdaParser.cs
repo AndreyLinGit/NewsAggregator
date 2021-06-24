@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.ServiceModel.Syndication;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -11,6 +12,13 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
 {
     public class FourPdaParser : IWebParser
     {
+        private readonly ICleanService _cleanService;
+
+        public FourPdaParser(ICleanService cleanService)
+        {
+            _cleanService = cleanService;
+        }
+
         public async Task<string> Parse(string url)
         {
             HtmlWeb web = new HtmlWeb();
@@ -61,7 +69,18 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
 
 
             var node = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='content']");
-            return node != null ? node.InnerText : string.Empty;
+            return node != null ? await _cleanService.Clean(node.InnerText) : string.Empty;
+        }
+
+        public async Task<string> CleanSummary(SyndicationItem item)
+        {
+            Regex regex = new Regex(@"<[^>]*>");
+
+            if (item.Summary != null)
+            {
+                return await _cleanService.Clean(item.Summary.Text);
+            }
+            return string.Empty;
         }
     }
 }

@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.ServiceModel.Syndication;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
@@ -13,6 +14,13 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
 {
     public class OnlinerParser : IWebParser
     {
+        private readonly ICleanService _cleanService;
+
+        public OnlinerParser(ICleanService cleanService)
+        {
+            _cleanService = cleanService;
+        }
+
         public async Task<string> Parse(string url) //Add header image!
         {
             HtmlWeb web = new HtmlWeb();
@@ -179,7 +187,20 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
             var htmlDoc = web.Load(url);
 
             var node = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='news-text']");
-            return node != null ? node.InnerText : string.Empty;
+            return node != null ? await _cleanService.Clean(node.InnerText) : string.Empty;
+        }
+
+        public async Task<string> CleanSummary(SyndicationItem item)
+        {
+            Regex regex = new Regex(@"<[^>]*>");
+
+            if (item.Summary != null)
+            {
+                var summary = await _cleanService.Clean(item.Summary.Text);
+                return summary.Replace("Читать далее…", " [...]");
+            }
+
+            return string.Empty;
         }
     }
 }

@@ -1,9 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.ServiceModel.Syndication;
 using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
+using System.Xml;
 using HtmlAgilityPack;
 using NewsAggregator.DAL.Serviсes.Interfaces;
 
@@ -11,6 +13,13 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
 {
     public class ShazooParser : IWebParser
     {
+        private ICleanService _cleanService;
+
+        public ShazooParser(ICleanService cleanService)
+        {
+            _cleanService = cleanService;
+        }
+
         public async Task<string> Parse(string url)
         {
             HtmlWeb web = new HtmlWeb();
@@ -54,7 +63,20 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
             var htmlDoc = web.Load(url);
 
             var node = htmlDoc.DocumentNode.SelectSingleNode("//div[@id='content']");
-            return node != null ? node.InnerText : string.Empty;
+            return node != null ? await _cleanService.Clean(node.InnerText) : string.Empty;
+        }
+
+        public async Task<string> CleanSummary(SyndicationItem item)
+        {
+            Regex regex = new Regex(@"<[^>]*>");
+
+            if (item.Content != null)
+            {
+                var summary = await _cleanService.Clean(((TextSyndicationContent) item.Content).Text);
+                return summary.Remove(summary.LastIndexOf("Больше")).Replace("...", " [...]");
+            }
+
+            return string.Empty;
         }
     }
 }

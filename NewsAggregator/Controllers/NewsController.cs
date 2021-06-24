@@ -37,36 +37,8 @@ namespace NewsAggregator.Controllers
 
         public async Task<IActionResult> Index()
         {
-            //var newsList = await _rssSourceService.GetNewsFromSource(isCostil); // (It's for work from work!)
-            ////var newsList = await _newsService.GetAllNews(); //Think about "Get()" (It's for work from home!) CREATE PAGINATION AND CHANGE IT!
-            //var modelsList = new List<NewsViewModel>();
-            //foreach (var news in newsList)
-            //{
-            //    var model = new NewsViewModel
-            //    {
-            //        Id = news.Id,
-            //        Article = news.Article,
-            //        Summary = news.Summary,
-            //        Body = news.Body,
-            //        PublishTime = news.PublishTime,
-            //        Rating = news.Rating
-            //    };
-            //    modelsList.Add(model);
-            //}
-
-            //result = modelsList.OrderBy(x => x.PublishTime).ToList();
-
-            //var resultModel = new List<NewsViewModel>();
-            //if (modelsList.Any())
-            //{
-            //    resultModel = (await GetPartOfNewsFromWork(30, DateTime.Now.ToString())).ToList();
-            //}
-
-            //return View(resultModel);
-
-            //THAT IS A REAL CODE!!!
-
-            var newsList = await _newsService.GetPartOfNews(30, DateTime.Now.ToString());
+            var newsList = await _rssSourceService.GetNewsFromSource(isCostil); // (It's for work from work!)
+            //var newsList = await _newsService.GetAllNews(); //Think about "Get()" (It's for work from home!) CREATE PAGINATION AND CHANGE IT!
             var modelsList = new List<NewsViewModel>();
             foreach (var news in newsList)
             {
@@ -77,11 +49,39 @@ namespace NewsAggregator.Controllers
                     Summary = news.Summary,
                     Body = news.Body,
                     PublishTime = news.PublishTime,
-                    Rating = news.Rating,
-                    SourceName = news.RssSourceName
+                    Rating = news.Rating
                 };
                 modelsList.Add(model);
             }
+
+            result = modelsList.OrderBy(x => x.PublishTime).ToList();
+
+            var resultModel = new List<NewsViewModel>();
+            if (modelsList.Any())
+            {
+                resultModel = (await GetPartOfNewsFromWork(80, DateTime.Now.ToString())).ToList();
+            }
+
+            return View(resultModel);
+
+            //THAT IS A REAL CODE!!!
+
+            //var newsList = await _newsService.GetPartOfNews(30, DateTime.Now.ToString());
+            //var modelsList = new List<NewsViewModel>();
+            //foreach (var news in newsList)
+            //{
+            //    var model = new NewsViewModel
+            //    {
+            //        Id = news.Id,
+            //        Article = news.Article,
+            //        Summary = news.Summary,
+            //        Body = news.Body,
+            //        PublishTime = news.PublishTime,
+            //        Rating = news.Rating,
+            //        SourceName = news.RssSourceName
+            //    };
+            //    modelsList.Add(model);
+            //}
             return View(modelsList);
         }
 
