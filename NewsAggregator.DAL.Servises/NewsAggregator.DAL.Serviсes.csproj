@@ -7,12 +7,14 @@
   <ItemGroup>
     <PackageReference Include="HtmlAgilityPack" Version="1.11.33" />
     <PackageReference Include="MailKit" Version="2.12.0" />
+    <PackageReference Include="MediatR" Version="9.0.0" />
+    <PackageReference Include="MediatR.Extensions.Microsoft.DependencyInjection" Version="9.0.0" />
     <PackageReference Include="System.ServiceModel.Syndication" Version="5.0.0" />
     <PackageReference Include="System.Text.RegularExpressions" Version="4.3.1" />
-    <PackageReference Include="Vereyon.Web.HtmlSanitizer" Version="1.6.0.1" />
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\NewsAggregator.DAL.CQRS\NewsAggregator.DAL.CQRS.csproj" />
     <ProjectReference Include="..\NewsAggregator.DAL.Repositories.Interfaces\NewsAggregator.DAL.Repositories.Interfaces.csproj" />
   </ItemGroup>
 

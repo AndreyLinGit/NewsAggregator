@@ -8,7 +8,7 @@ namespace NewsAggregator.DAL.Serviсes.Interfaces
     public interface IRssSourceService
     {
         Task AddSource(RssSourceDto source);
-        Task<IEnumerable<RssSource>> GetAllSources();
+        Task<IEnumerable<RssSourceDto>> GetAllSources();
         Task GetNewsFromSources();
     }
 }

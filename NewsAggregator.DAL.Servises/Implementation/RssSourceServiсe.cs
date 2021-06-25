@@ -97,9 +97,21 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
             await _unitOfWork.SaveChangeAsync();
         }
 
-        public async Task<IEnumerable<RssSource>> GetAllSources()
+        public async Task<IEnumerable<RssSourceDto>> GetAllSources()
         {
-            return await _unitOfWork.RssSourse.Get().ToListAsync();
+            var rssSources = await _unitOfWork.RssSourse.Get().ToListAsync();
+            var rssSourcesDto = new List<RssSourceDto>();
+            foreach (var source in rssSources)
+            {
+                var dto = new RssSourceDto
+                {
+                    Id = source.Id,
+                    Name = source.Name,
+                    Url = source.Url
+                };
+                rssSourcesDto.Add(dto);
+            }
+            return rssSourcesDto;
         }
 
 
