@@ -13,6 +13,6 @@ namespace NewsAggregator.Models
         public string Body { get; set; }
         public DateTime PublishTime { get; set; }
         public string SourceName { get; set; }
-        public float Rating { get; set; }
+        public int? Rating { get; set; }
     }
 }

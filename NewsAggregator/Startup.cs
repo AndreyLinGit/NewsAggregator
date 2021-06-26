@@ -8,6 +8,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
 using NewsAggregator.DAL.Core;
 using Microsoft.EntityFrameworkCore;
 using NewsAggregator.DAL.Core.Entities;
@@ -19,6 +20,7 @@ using NewsAggregator.DAL.Serviñes.Interfaces;
 using Microsoft.AspNetCore.Authentication.Cookies;
 using Microsoft.AspNetCore.Http;
 using NewsAggregator.DAL.Core.DTOs;
+using NewsAggregator.DAL.Core.Mapping;
 using NewsAggregator.DAL.Serviñes.Implementation.Parsers;
 
 namespace NewsAggregator
@@ -49,10 +51,8 @@ namespace NewsAggregator
 
             services.AddTransient<IRepository<News>, NewsRepository>();
             services.AddTransient<IRepository<Comment>, CommentRepository>();
-            services.AddTransient<IRepository<NewsWithTags>, NewsWithTagsRepository>();
             services.AddTransient<IRepository<Role>, RoleRepository>();
             services.AddTransient<IRepository<RssSource>, RssSourseRepository>();
-            services.AddTransient<IRepository<Tag>, TagRepository>();
             services.AddTransient<IRepository<User>, UserRepository>();
             
             services.AddScoped<IUnitOfWork, UnitOfWork>();
@@ -81,6 +81,14 @@ namespace NewsAggregator
                         throw new KeyNotFoundException(); // or maybe return null, up to you
                 }
             });
+
+            var mapperConfig = new MapperConfiguration(mc =>
+            {
+                mc.AddProfile(new AutoMapping());
+            });
+
+            var mapper = mapperConfig.CreateMapper();
+            services.AddSingleton(mapper);
 
             services.AddAuthentication(CookieAuthenticationDefaults.AuthenticationScheme)
                 .AddCookie(opt =>

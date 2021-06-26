@@ -14,29 +14,23 @@ namespace NewsAggregator.DAL.Repositories.Implementation
         private readonly NewsAggregatorContext Db;
         private readonly IRepository<News> _newsRepository;
         private readonly IRepository<Comment> _commentRepository;
-        private readonly IRepository<NewsWithTags> _newsWithTagsRepository;
         private readonly IRepository<Role> _roleRepository;
         private readonly IRepository<RssSource> _rssSourseRepository;
-        private readonly IRepository<Tag> _tagRepository;
         private readonly IRepository<User> _userRepository;
 
 
         public UnitOfWork(NewsAggregatorContext context,
             IRepository<News> newsRepository,
             IRepository<Comment> commentRepository,
-            IRepository<NewsWithTags> newsWithTagsRepository,
             IRepository<Role> roleRepository,
             IRepository<RssSource> rssSourseRepository,
-            IRepository<Tag> tagRepository,
             IRepository<User> userRepository)
         {
             Db = context;
             _newsRepository = newsRepository;
             _commentRepository = commentRepository;
-            _newsWithTagsRepository = newsWithTagsRepository;
             _roleRepository = roleRepository;
             _rssSourseRepository = rssSourseRepository;
-            _tagRepository = tagRepository;
             _userRepository = userRepository;
         }
 
@@ -44,13 +38,9 @@ namespace NewsAggregator.DAL.Repositories.Implementation
 
         public IRepository<News> News => _newsRepository;
 
-        public IRepository<NewsWithTags> NewsWithTags => _newsWithTagsRepository;
-
         public IRepository<Role> Role => _roleRepository;
 
         public IRepository<RssSource> RssSourse => _rssSourseRepository;
-
-        public IRepository<Tag> Tag => _tagRepository;
 
         public IRepository<User> User => _userRepository;
 

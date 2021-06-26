@@ -8,9 +8,9 @@ namespace NewsAggregator.DAL.Serviсes.Interfaces
 {
     public interface INewsService
     {
-        Task<IEnumerable<News>> GetAllNews();
         Task<IEnumerable<NewsWithRssSourceNameDto>> GetPartOfNews(int count, string lastGottenPublishTime);
         Task AddRangeOfNews(IEnumerable<NewsDto> rangeOfNews);
         Task<NewsDto> GetNewsById(Guid id);
+        Task<bool> CheckUrl(string url);
     }
 }

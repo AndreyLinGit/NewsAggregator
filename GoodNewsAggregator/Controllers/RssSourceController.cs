@@ -22,9 +22,10 @@ namespace GoodNewsAggregator.Controllers
 
         // GET: api/<RssSourceController>
         [HttpGet]
-        public IEnumerable<string> Get()
+        public async Task<IActionResult> Get()
         {
-            return new string[] { "value1", "value2" };
+            var sources = await _rssSourceService.GetAllSources();
+            return Ok(sources);
         }
 
         // GET api/<RssSourceController>/5

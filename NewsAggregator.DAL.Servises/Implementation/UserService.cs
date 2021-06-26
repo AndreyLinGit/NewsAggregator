@@ -13,6 +13,7 @@ using NewsAggregator.DAL.Core.DTOs;
 using NewsAggregator.DAL.Core.Entities;
 using NewsAggregator.DAL.Repositories.Interfaces;
 using System.Net.Mime;
+using AutoMapper;
 using NewsAggregator.DAL.Serviсes.Interfaces;
 
 
@@ -20,12 +21,14 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
 {
     public class UserService : IUserService
     {
+        private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
         private readonly ImageStorage _imageStorage;
 
-        public UserService(IUnitOfWork unitOfWork, IOptions<ImageStorage> imageStorage)
+        public UserService(IUnitOfWork unitOfWork, IOptions<ImageStorage> imageStorage, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
             _imageStorage = imageStorage.Value;
         }
 
@@ -42,13 +45,7 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
         {
             try
             {
-                await _unitOfWork.User.Add(new User()
-                {
-                    Id = model.Id,
-                    Email = model.Email,
-                    Login = model.Login,
-                    HashPass = model.HashPass
-                });
+                await _unitOfWork.User.Add(_mapper.Map<User>(model));
                 await _unitOfWork.SaveChangeAsync();
                 return true;
             }
@@ -59,56 +56,84 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
             }
         }
 
-        public async Task<UserDto> GetUserByEmail(string email)
+        public async Task<UserDto> GetUser(Guid? id, string email, string login)
         {
-            var user = await _unitOfWork.User.FindBy(user => user.Email.Equals(email)).FirstOrDefaultAsync();
-            if (user != null)
+            if (id != null)
             {
-                return new UserDto
-                {
-                    Id = user.Id,
-                    Email = user.Email,
-                    HashPass = user.HashPass,
-                    Login = user.Login,
-                    ImagePath = user.ImagePath
-                };
+                return _mapper.Map<UserDto>(await _unitOfWork.User.FindBy(user => user.Id.Equals(id))
+                    .FirstOrDefaultAsync());
             }
-
+            if (email != null)
+            {
+                var result = _mapper.Map<UserDto>(await _unitOfWork.User.FindBy(user => user.Email.Equals(email))
+                    .FirstOrDefaultAsync()); 
+                if (result != null)
+                {
+                    return result;
+                }
+            }
+            if (login != null)
+            {
+                var result = _mapper.Map<UserDto>(await _unitOfWork.User.FindBy(user => user.Login.Equals(login))
+                    .FirstOrDefaultAsync());
+                if (result != null)
+                {
+                    return result;
+                }
+            }
             return null;
         }
 
-        public async Task<UserDto> GetUserByLogin(string login)
-        {
-            var user = await _unitOfWork.User.FindBy(user => user.Login.Equals(login)).FirstOrDefaultAsync();
-            if (user != null)
-            {
-                return new UserDto
-                {
-                    Id = user.Id,
-                    Email = user.Email,
-                    HashPass = user.HashPass,
-                    Login = user.Login,
-                    RoleId = user.RoleId,
-                    ImagePath = user.ImagePath
-                };
-            }
+        //public async Task<UserDto> GetUserByEmail(string email)
+        //{
+        //    var user = await _unitOfWork.User.FindBy(user => user.Email.Equals(email)).FirstOrDefaultAsync();
+        //    if (user != null)
+        //    {
+        //        return new UserDto
+        //        {
+        //            Id = user.Id,
+        //            Email = user.Email,
+        //            HashPass = user.HashPass,
+        //            Login = user.Login,
+        //            ImagePath = user.ImagePath
+        //        };
+        //    }
 
-            return null;
-        }
+        //    return null;
+        //}
 
-        public async Task<UserDto> GetUserById(Guid userId)
-        {
-            var user = await _unitOfWork.User.GetById(userId);
-            return new UserDto
-            {
-                Email = user.Email,
-                HashPass = user.HashPass,
-                Id = user.Id,
-                Login = user.Login,
-                RoleId = user.RoleId,
-                ImagePath = user.ImagePath
-            };
-        }
+        //public async Task<UserDto> GetUserByLogin(string login)
+        //{
+        //    var user = await _unitOfWork.User.FindBy(user => user.Login.Equals(login)).FirstOrDefaultAsync();
+        //    if (user != null)
+        //    {
+        //        return new UserDto
+        //        {
+        //            Id = user.Id,
+        //            Email = user.Email,
+        //            HashPass = user.HashPass,
+        //            Login = user.Login,
+        //            RoleId = user.RoleId,
+        //            ImagePath = user.ImagePath
+        //        };
+        //    }
+
+        //    return null;
+        //}
+
+        //public async Task<UserDto> GetUserById(Guid userId)
+        //{
+        //    var user = await _unitOfWork.User.GetById(userId);
+        //    return new UserDto
+        //    {
+        //        Email = user.Email,
+        //        HashPass = user.HashPass,
+        //        Id = user.Id,
+        //        Login = user.Login,
+        //        RoleId = user.RoleId,
+        //        ImagePath = user.ImagePath
+        //    };
+        //}
 
         public async Task SaveUserImage(ImageDto image, Guid userId)
         {
@@ -131,7 +156,6 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
             if (user != null)
             {
                 user.ImagePath = path;
-                _unitOfWork.User.Update(user);
                 await _unitOfWork.SaveChangeAsync();
             }
         }
@@ -154,6 +178,11 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
                 return defaultImage;
             }
             
+        }
+
+        public Task<string> GetUserEmailByRefreshToken(string requestToken)
+        {
+            throw new NotImplementedException();
         }
     }
 }

@@ -47,7 +47,7 @@ namespace NewsAggregator.Controllers
         {
             var userClaim = HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals(ClaimsIdentity.DefaultNameClaimType));
             var userLogin = userClaim?.Value; //CHANGE IT INTO SEARCHING BY LOGIN!
-            var user = await _userService.GetUserByLogin(userLogin); //CHANGE IT INTO SEARCHING BY LOGIN!
+            var user = await _userService.GetUser(null, null ,userLogin); //CHANGE IT INTO SEARCHING BY LOGIN!
 
             var commentDto = new CommentDto()
             {

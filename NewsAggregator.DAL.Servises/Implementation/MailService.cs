@@ -28,7 +28,7 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
             var str = new StreamReader(filePath);
             var mailText = await str.ReadToEndAsync();
             str.Close();
-            mailText = mailText.Replace("[Email]", mailRequest.ToEmail).Replace("[ConfirmLink]", mailRequest.Link);
+            mailText = mailText.Replace("[Email]", mailRequest.ToEmail).Replace("[ConfirmLink]", mailRequest.Link + mailRequest.UserId);
             var email = new MimeMessage();
             email.From.Add(new MailboxAddress(_mailSettings.DisplayName, _mailSettings.Mail));
             email.To.Add(MailboxAddress.Parse(mailRequest.ToEmail));

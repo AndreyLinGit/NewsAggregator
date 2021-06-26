@@ -18,5 +18,6 @@ namespace NewsAggregator.DAL.Core.Entities
         public Guid? RoleId { get; set; } //Create FK
         public Role Role { get; set; }
         public virtual ICollection<Comment> Comments { get; set; }
+        public virtual ICollection<RefreshToken> RefreshTokens { get; set; }
     }
 }

@@ -4,6 +4,7 @@ using System.Data;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using NewsAggregator.DAL.Core.DTOs;
 using NewsAggregator.DAL.Core.Entities;
@@ -15,57 +16,28 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
     public class RoleService : IRoleService
     {
         private readonly IUnitOfWork _unitOfWork;
+        private readonly IMapper _mapper;
 
-        public RoleService(IUnitOfWork unitOfWork)
+        public RoleService(IUnitOfWork unitOfWork, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
+            _mapper = mapper;
         }
 
-        public async Task<RoleDto> GetUserRole(string userName)
+        public async Task<RoleDto> GetUserRole(Guid userId)
         {
-            var user = await _unitOfWork.User.FindBy(user => user.Email.Equals(userName), user => user.Role).FirstOrDefaultAsync();
-            var role = (await _unitOfWork.User.FindBy(user => user.Email.Equals(userName), user => user.Role).FirstOrDefaultAsync()).Role;
-            return new RoleDto
-            {
-                Id = role.Id,
-                Name = role.Name
-            };
+            var role = (await _unitOfWork.User.FindBy(user => user.Id.Equals(userId), user => user.Role).FirstOrDefaultAsync()).Role;
+            return _mapper.Map<RoleDto>(role);
         }
 
-        public async Task<UserDto> AddRoleToUser(Guid id) // ADD MIGRATION!
+        public async Task AddRoleToUser(Guid id) // ADD MIGRATION!
         {
             var user = await _unitOfWork.User.GetById(id);
             if (user != null)
             {
-                user.RoleId = _unitOfWork.Role.FindBy(role => role.Name.Equals("User")).FirstOrDefault().Id;
-                _unitOfWork.User.Update(user);
+                user.RoleId = (await _unitOfWork.Role.FindBy(role => role.Name.Equals("User")).FirstOrDefaultAsync()).Id;
                 await _unitOfWork.SaveChangeAsync();
             }
-            
-            return  new UserDto
-            {
-                Email = user.Email,
-                HashPass = user.HashPass,
-                Id = user.Id,
-                Login = user.Login,
-                RoleId = user.Id
-            };
-        }
-
-        public async Task<IEnumerable<RoleDto>> GetRoles()
-        {
-            var roles = await _unitOfWork.Role.Get().ToListAsync();
-            var rolesDto = new List<RoleDto>();
-            foreach (var role in roles)
-            {
-                rolesDto.Add(new RoleDto
-                {
-                    Id = role.Id,
-                    Name = role.Name
-                });
-            }
-
-            return rolesDto;
         }
 
     }

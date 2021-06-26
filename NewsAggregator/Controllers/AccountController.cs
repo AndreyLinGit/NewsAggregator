@@ -41,7 +41,7 @@ namespace NewsAggregator.Controllers
         [ValidateAntiForgeryToken]
         public async Task<IActionResult> Register(RegisterViewModel model) //???? About mail's
         {
-            if (await _userService.GetUserByEmail(model.Email) != null)
+            if (await _userService.GetUser(null, model.Email,null) != null)
             {
                 ModelState.AddModelError("Email", "User with that email is already exist");
             }
@@ -61,7 +61,8 @@ namespace NewsAggregator.Controllers
                 {
                     var request = new MailRequest
                     {
-                        Link = @"https://localhost:44393/Account/Confirmation/" + newUserId,
+                        UserId = newUserId.ToString(),
+                        Link = @"https://localhost:44393/Account/Confirmation/",
                         Subject = "Administration from NewsAggregator",
                         ToEmail = model.Email
                     };
@@ -86,9 +87,7 @@ namespace NewsAggregator.Controllers
             if (ModelState.IsValid)
             {
                 var passwordHash = _userService.GetPasswordHash(model.Password);
-                var user = await _userService.GetUserByEmail(model.EmailOrLogin) != null
-                    ? await _userService.GetUserByEmail(model.EmailOrLogin)
-                    : await _userService.GetUserByLogin(model.EmailOrLogin);
+                var user = await _userService.GetUser(null, model.EmailOrLogin, model.EmailOrLogin);
 
                 if (user != null)
                 {
@@ -118,7 +117,7 @@ namespace NewsAggregator.Controllers
                 var claims = new List<Claim>
                 {
                     new Claim(ClaimsIdentity.DefaultNameClaimType, dto.Login),
-                    new Claim(ClaimsIdentity.DefaultRoleClaimType, (await _roleService.GetUserRole(dto.Email)).Name)
+                    new Claim(ClaimsIdentity.DefaultRoleClaimType, (await _roleService.GetUserRole(dto.Id)).Name) //??
                 };
 
                 var identity = new ClaimsIdentity(claims,
@@ -153,25 +152,16 @@ namespace NewsAggregator.Controllers
         [HttpGet]
         public async Task<IActionResult> UserPage() //? Clear trash at home 
         {
-            //var userClaim =
-            //    HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals(ClaimsIdentity.DefaultNameClaimType));
-            //var userLogin = userClaim?.Value; //CHANGE IT INTO SEARCHING BY LOGIN!
-            //var user = await _userService.GetUserByLogin(userLogin); //CHANGE IT INTO SEARCHING BY LOGIN!
-            //var model = new UserViewModel
-            //{
-            //    Email = user.Email,
-            //    Id = user.Id,
-            //    Login = user.Login,
-            //    ImagePath = await _userService.GetUserImage(user.ImagePath)
-            //};
-            var path2 = @"D:\ImageStorage\square_320_c09ebae17387b7d6eeb9fa0d42afe5ee.jpg";
-            var path = @"D:\ImageStorage\square_320_c09ebae17387b7d6eeb9fa0d42afe5ee210556543.jpg";
+            var userClaim =
+                HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals(ClaimsIdentity.DefaultNameClaimType));
+            var userLogin = userClaim?.Value; //CHANGE IT INTO SEARCHING BY LOGIN!
+            var user = await _userService.GetUser(null, userLogin, userLogin); //CHANGE IT INTO SEARCHING BY LOGIN!
             var model = new UserViewModel
             {
-                Email = "test@gmail.com",
-                Id = Guid.NewGuid(),
-                ImagePath = await _userService.GetUserImage(path2),
-                Login = "Mabel"
+                Email = user.Email,
+                Id = user.Id,
+                Login = user.Login,
+                ImagePath = await _userService.GetUserImage(user.ImagePath)
             };
 
             return View(model);
@@ -179,7 +169,8 @@ namespace NewsAggregator.Controllers
 
         public async Task<IActionResult> Confirmation(Guid id) //? Clear trash at home 
         {
-            var user = await _roleService.AddRoleToUser(id);
+            await _roleService.AddRoleToUser(id);
+            var user = await _userService.GetUser(id, null, null);
             await Authenticate(user);
             var model = new ConfirmationViewModel
             {

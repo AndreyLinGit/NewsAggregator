@@ -8,6 +8,7 @@ using System.Text;
 using System.Text.RegularExpressions;
 using System.Threading.Tasks;
 using System.Xml;
+using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using NewsAggregator.DAL.Core.DTOs;
 using NewsAggregator.DAL.Core.Entities;
@@ -18,26 +19,25 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
 {
     public class RssSourceServiсe : IRssSourceService
     {
+        private readonly IMapper _mapper;
         private readonly INewsService _newsService;
         private readonly IUnitOfWork _unitOfWork;
         private readonly IWebParser _onlinerParser;
         private readonly IWebParser _shazooParser;
         private readonly IWebParser _4pdaParser;
 
-        public RssSourceServiсe(IUnitOfWork unitOfWork, WebParserResolver servserviceAccessor, INewsService newsService)
+        public RssSourceServiсe(IUnitOfWork unitOfWork, WebParserResolver serviceAccessor, INewsService newsService, IMapper mapper)
         {
             _unitOfWork = unitOfWork;
             _newsService = newsService;
-            _onlinerParser = servserviceAccessor("Onliner");
-            _shazooParser = servserviceAccessor("Shazoo");
-            _4pdaParser = servserviceAccessor("4pda");
+            _mapper = mapper;
+            _onlinerParser = serviceAccessor("Onliner");
+            _shazooParser = serviceAccessor("Shazoo");
+            _4pdaParser = serviceAccessor("4pda");
         }
 
         public async Task GetNewsFromSources()
         {
-            var stopwatch = new Stopwatch();
-            stopwatch.Start();
-
             var sources = _unitOfWork.RssSourse.Get().ToList();
             if (sources.Any())
             {
@@ -60,13 +60,15 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
                                     CleanedBody = await CleanParserSwitcher(source.Name, syndicationItem.Id),
                                     Id = Guid.NewGuid(),
                                     PublishTime = syndicationItem.PublishDate.DateTime,
-                                    Rating = 0,
                                     RssSourceId = source.Id,
                                     Url = syndicationItem.Id
                                 };
                                 if (news.Body != string.Empty)
                                 {
-                                    newsCollection.Add(news);
+                                    if (await _newsService.CheckUrl(news.Url))
+                                    {
+                                        newsCollection.Add(news);
+                                    }
                                 }
                             });
                         }
@@ -76,48 +78,26 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
                         //logs
                     }
                     
-
                 });
                 await _newsService.AddRangeOfNews(newsCollection);
-                var time = stopwatch.Elapsed.Seconds;
             }
             else
             {
                 //Write into log "hasn't available sources"
             }
         }
+
+
         public async Task AddSource(RssSourceDto source)
         {
-            await _unitOfWork.RssSourse.Add(new RssSource
-            {
-                Id = source.Id,
-                Name = source.Name,
-                Url = source.Url
-            });
+            await _unitOfWork.RssSourse.Add(_mapper.Map<RssSource>(source));
             await _unitOfWork.SaveChangeAsync();
         }
 
         public async Task<IEnumerable<RssSourceDto>> GetAllSources()
         {
             var rssSources = await _unitOfWork.RssSourse.Get().ToListAsync();
-            var rssSourcesDto = new List<RssSourceDto>();
-            foreach (var source in rssSources)
-            {
-                var dto = new RssSourceDto
-                {
-                    Id = source.Id,
-                    Name = source.Name,
-                    Url = source.Url
-                };
-                rssSourcesDto.Add(dto);
-            }
-            return rssSourcesDto;
-        }
-
-
-        public async Task<RssSource> GetSourceById(Guid id)
-        {
-            return await _unitOfWork.RssSourse.GetById(id);
+            return rssSources.Select(source => _mapper.Map<RssSourceDto>(source));
         }
 
         private async Task<string> ParserSwitcher(string nameOfSource, string newsUrl)

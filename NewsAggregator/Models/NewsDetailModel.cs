@@ -12,7 +12,7 @@ namespace NewsAggregator.Models
         public string Article { get; set; }
         public string Body { get; set; }
         public DateTime PublishTime { get; set; }
-        public float Rating { get; set; }
+        public int? Rating { get; set; }
         public IEnumerable<CommentDto> Comments { get; set; }
     }
 }
