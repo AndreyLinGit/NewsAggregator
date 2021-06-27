@@ -9,6 +9,8 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using AutoMapper;
+using Hangfire;
+using Hangfire.SqlServer;
 using NewsAggregator.DAL.Core;
 using Microsoft.EntityFrameworkCore;
 using NewsAggregator.DAL.Core.Entities;
@@ -82,6 +84,21 @@ namespace NewsAggregator
                 }
             });
 
+            services.AddHangfire(conf => conf
+                .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
+                .UseSimpleAssemblyNameTypeSerializer()
+                .UseRecommendedSerializerSettings()
+                .UseSqlServerStorage(Configuration.GetConnectionString("DefaultConnection"), new SqlServerStorageOptions
+                {
+                    CommandBatchMaxTimeout = TimeSpan.FromMinutes(30),
+                    SlidingInvisibilityTimeout = TimeSpan.FromMinutes(30),
+                    QueuePollInterval = TimeSpan.Zero,
+                    UseRecommendedIsolationLevel = true,
+                    DisableGlobalLocks = true
+                }));
+
+            services.AddHangfireServer();
+
             var mapperConfig = new MapperConfiguration(mc =>
             {
                 mc.AddProfile(new AutoMapping());
@@ -101,7 +118,7 @@ namespace NewsAggregator
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider serviceProvider)
         {
             if (env.IsDevelopment())
             {
@@ -113,6 +130,12 @@ namespace NewsAggregator
                 // The default HSTS value is 30 days. You may want to change this for production scenarios, see https://aka.ms/aspnetcore-hsts.
                 app.UseHsts();
             }
+            app.UseHangfireDashboard();
+            var rssSourceService = serviceProvider.GetService(typeof(IRssSourceService)) as IRssSourceService;
+            var newService = serviceProvider.GetService(typeof(INewsService)) as INewsService;
+            RecurringJob.AddOrUpdate(() => newService.RateNews(), "0-45/2 * 1/1 * ?");
+            RecurringJob.AddOrUpdate(() => rssSourceService.GetNewsFromSources(), "50 * 1/1 * ?");
+
             app.UseHttpsRedirection();
             app.UseStaticFiles();
 

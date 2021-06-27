@@ -1,14 +1,23 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Net;
+using System.Net.Http;
+using System.Net.Http.Headers;
+using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.OLE.Interop;
 using NewsAggregator.DAL.Core.DTOs;
 using NewsAggregator.DAL.Core.Entities;
+using NewsAggregator.DAL.Core.LemmatizationClasses;
+using NewsAggregator.DAL.CQRS.Commands.NewsCommand;
+using NewsAggregator.DAL.CQRS.Queries.NewsQueries;
 using NewsAggregator.DAL.Repositories.Interfaces;
 using NewsAggregator.DAL.Serviсes.Interfaces;
+using Newtonsoft.Json;
 
 namespace NewsAggregator.DAL.Serviсes.Implementation
 {
@@ -29,8 +38,8 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
             DateTime time = new DateTime();
             time = DateTime.Parse(lastGottenPublishTime);
             var newsCollection = await _unitOfWork.News.FindBy(
-                news => news.PublishTime.CompareTo(time) < 0,
-                rssSourceName => rssSourceName.RssSource)
+                    news => news.PublishTime.CompareTo(time) < 0,
+                    rssSourceName => rssSourceName.RssSource)
                 .OrderByDescending(n => n.PublishTime)
                 .Take(count)
                 .ToListAsync();
@@ -53,7 +62,7 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
         public async Task<IEnumerable<string>> GetCheckUrlCollection(int checkCount)
         {
             return await _unitOfWork.News.FindBy(
-                news => news.PublishTime.CompareTo(DateTime.Now) < 0)
+                    news => news.PublishTime.CompareTo(DateTime.Now) < 0)
                 .OrderByDescending(news => news.PublishTime)
                 .Take(checkCount)
                 .AsNoTracking()
@@ -61,9 +70,81 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
                 .ToListAsync();
         }
 
-        public Task RateNews()
+        public async Task RateNews()
         {
-            throw new NotImplementedException();
+            var ratingUdateDictionary = new Dictionary<Guid, int>();
+            var responseAfterLemmatization = string.Empty;
+            var model = new JsonFromLemmatization();
+            var newsForRateCollection = await _unitOfWork.News.FindBy(news => news.Rating == null)
+                .OrderByDescending(n => n.Rating)
+                .Take(30)
+                .Select(news => _mapper.Map<NewsDto>(news))
+                .ToListAsync();
+
+            if (newsForRateCollection.Any())
+            {
+                double rate = 0;
+                int wordRate = 0;
+                int countOFWords = 1;
+
+                var path = Environment.CurrentDirectory + @"\AFINN-ru — Encoding UTF-8.txt";
+                var jsonString = File.ReadAllText(path, Encoding.UTF8);
+                var rateDictionary = JsonConvert.DeserializeObject<Dictionary<string, int>>(jsonString);
+
+                foreach (var news in newsForRateCollection)
+                {
+                    using (var httpClient = new HttpClient())
+                    {
+                        httpClient.DefaultRequestHeaders
+                            .Accept
+                            .Add(new MediaTypeWithQualityHeaderValue("application/json"));
+
+                        HttpRequestMessage request = new HttpRequestMessage(HttpMethod.Post,
+                            "http://api.ispras.ru/texterra/v1/nlp?targetType=lemma&apikey=e6b0b7ae0df3f9a1966fd1e079af182371800b36")
+                        {
+                            Content = new StringContent("[{\"text\":\"" + news.CleanedBody + "\"}]", Encoding.UTF8,
+                                "application/json")
+                        };
+                        var response = httpClient.Send(request);
+                        if (response.StatusCode != HttpStatusCode.InternalServerError)
+                        {
+                            responseAfterLemmatization = await response.Content.ReadAsStringAsync();
+                        }
+                        else
+                        {
+                            ratingUdateDictionary.Add(news.Id, 0);
+                        }
+                    }
+
+                    if (!string.IsNullOrEmpty(responseAfterLemmatization))
+                    {
+                        model = JsonConvert
+                            .DeserializeObject<IEnumerable<JsonFromLemmatization>>(responseAfterLemmatization)
+                            .FirstOrDefault();
+                        foreach (var lemma in model.Annotations.Lemma)
+                        {
+                            if (rateDictionary.TryGetValue(lemma.Value, out wordRate))
+                            {
+                                rate += wordRate;
+                                countOFWords++;
+                            }
+                        }
+
+                        var newsWithRating =
+                            newsForRateCollection.FirstOrDefault(news => news.CleanedBody.Equals(model.Text));
+                        if (newsWithRating != null)
+                        {
+                            if (!ratingUdateDictionary.Keys.Contains(newsWithRating.Id))
+                            {
+                                ratingUdateDictionary.Add(newsWithRating.Id,
+                                    Convert.ToInt32(Math.Round(rate / countOFWords * 100)));
+                            }
+                        }
+                    }
+                }
+
+                var count = await _unitOfWork.SaveChangeAsync();
+            }
         }
     }
 }
