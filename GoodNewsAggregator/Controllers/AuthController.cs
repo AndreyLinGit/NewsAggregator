@@ -80,21 +80,17 @@ namespace GoodNewsAggregator.Controllers
         {
             try
             {
-                if (await _userService.GetUser(null, request.EmailOrLogin, request.EmailOrLogin) != null)
+                var user = await _userService.GetUser(null, request.EmailOrLogin, request.EmailOrLogin);
+                if (user == null)
                 {
                     return BadRequest("No user");
                 }
 
                 var passwordHash = _userService.GetPasswordHash(request.Password);
-                var user = await _userService.GetUser(null, request.EmailOrLogin, request.EmailOrLogin);
-
-                if (user != null)
+                if (passwordHash.Equals(user.HashPass))
                 {
-                    if (passwordHash.Equals(user.HashPass))
-                    {
-                        var jwtAuthResult = GetJwt(user.Email);
-                        return Ok(jwtAuthResult);
-                    }
+                    var jwtAuthResult = await GetJwt(user.Email);
+                    return Ok(jwtAuthResult);
                 }
 
                 return BadRequest("Unsuccessful registration");
@@ -151,7 +147,7 @@ namespace GoodNewsAggregator.Controllers
             var claims = new[]
             {
                 new Claim(ClaimTypes.Name, user.Login),
-                new Claim(ClaimTypes.Role, (await _roleService.GetUserRole(user.Id)).Name)
+                new Claim(ClaimTypes.Role, (await _roleService.GetUserRole(user.RoleId.Value)).Name)
             };
 
             jwtResult = await _jwtAuthManager.GenerateTokens(user.Email, claims);

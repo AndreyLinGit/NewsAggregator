@@ -36,6 +36,7 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
             if (user != null)
             {
                 user.RoleId = (await _unitOfWork.Role.FindBy(role => role.Name.Equals("User")).FirstOrDefaultAsync()).Id;
+                _unitOfWork.User.Update(user);
                 await _unitOfWork.SaveChangeAsync();
             }
         }

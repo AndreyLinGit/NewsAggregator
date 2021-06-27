@@ -14,6 +14,7 @@ using NewsAggregator.DAL.Core.Entities;
 using NewsAggregator.DAL.Repositories.Interfaces;
 using System.Net.Mime;
 using AutoMapper;
+using Microsoft.Extensions.Configuration;
 using NewsAggregator.DAL.Serviсes.Interfaces;
 
 
@@ -21,22 +22,24 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
 {
     public class UserService : IUserService
     {
+        private readonly IConfiguration _configuration;
         private readonly IMapper _mapper;
         private readonly IUnitOfWork _unitOfWork;
         private readonly ImageStorage _imageStorage;
 
-        public UserService(IUnitOfWork unitOfWork, IOptions<ImageStorage> imageStorage, IMapper mapper)
+        public UserService(IUnitOfWork unitOfWork, IOptions<ImageStorage> imageStorage, IMapper mapper, IConfiguration configuration)
         {
             _unitOfWork = unitOfWork;
             _mapper = mapper;
+            _configuration = configuration;
             _imageStorage = imageStorage.Value;
         }
 
         public string GetPasswordHash(string modelPassword)
         {
-            const string specialValue = "123123123132";
+            string specialValue = _configuration["Password:SecuritySymmetricKey"];
             var sha256 = new SHA256CryptoServiceProvider();
-            var sha256data = sha256.ComputeHash(Encoding.UTF8.GetBytes(modelPassword));
+            var sha256data = sha256.ComputeHash(Encoding.UTF8.GetBytes(modelPassword + specialValue));
             var hashedPassword = Encoding.UTF8.GetString(sha256data);
             return hashedPassword;
         }

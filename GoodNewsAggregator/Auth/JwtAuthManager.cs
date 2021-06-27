@@ -37,13 +37,8 @@ namespace GoodNewsAggregator.Auth
             var accessToken = new JwtSecurityTokenHandler().WriteToken(jwtToken);
 
             var userId = (await _userService.GetUser(null,email,null)).Id;
+
             var refreshToken = await _refreshTokenService.GenerateRefreshToken(userId);
-
-            //var refreshToken = new RefreshToken()
-            //{
-            //    Token = Guid.NewGuid().ToString("D")
-            //};
-
 
             return new JwtAuthResult()
             {

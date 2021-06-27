@@ -143,7 +143,13 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
                     }
                 }
 
-                var count = await _unitOfWork.SaveChangeAsync();
+                foreach (var pair in ratingUdateDictionary)
+                {
+                    var news = await _unitOfWork.News.GetById(pair.Key);
+                    news.Rating = pair.Value;
+                }
+
+                var count = _unitOfWork.SaveChangeAsync();
             }
         }
     }
