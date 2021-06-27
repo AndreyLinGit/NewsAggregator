@@ -15,6 +15,8 @@ using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
 using GoodNewsAggregator.Auth;
+using Hangfire;
+using Hangfire.SqlServer;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.IdentityModel.Tokens;
@@ -46,7 +48,7 @@ namespace GoodNewsAggregator
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<NewsAggregatorContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("DefoultConnection")));
+            services.AddDbContext<NewsAggregatorContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.Configure<MailSettings>(Configuration.GetSection("MailSettings"));
             services.Configure<ImageStorage>(Configuration.GetSection("ImageStorage"));
@@ -87,6 +89,21 @@ namespace GoodNewsAggregator
                 }
             });
 
+            services.AddHangfire(conf => conf
+                .SetDataCompatibilityLevel(CompatibilityLevel.Version_170)
+                .UseSimpleAssemblyNameTypeSerializer()
+                .UseRecommendedSerializerSettings()
+                .UseSqlServerStorage(Configuration.GetConnectionString("DefaultConnection"), new SqlServerStorageOptions
+                {
+                    CommandBatchMaxTimeout = TimeSpan.FromMinutes(30),
+                    SlidingInvisibilityTimeout = TimeSpan.FromMinutes(30),
+                    QueuePollInterval = TimeSpan.Zero,
+                    UseRecommendedIsolationLevel = true,
+                    DisableGlobalLocks = true
+                }));
+
+            services.AddHangfireServer();
+
             var mapperConfig = new MapperConfiguration(mc =>
             {
                 mc.AddProfile(new AutoMapping());
@@ -120,14 +137,10 @@ namespace GoodNewsAggregator
 
             services.AddCors(options =>
             {
-                options.AddPolicy("Default",
-                    builder => 
-                    {
-                        builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod(); 
-
-                    });
-
-
+                options.AddPolicy("Default", builder => 
+                {
+                    builder.AllowAnyOrigin().AllowAnyHeader().AllowAnyMethod();
+                });
             });
 
             services.AddControllers();
@@ -138,14 +151,21 @@ namespace GoodNewsAggregator
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.
-        public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
+        public void Configure(IApplicationBuilder app, IWebHostEnvironment env, IServiceProvider serviceProvider)
         {
             if (env.IsDevelopment())
             {
                 app.UseDeveloperExceptionPage();
-                app.UseSwagger();
-                app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "GoodNewsAggregator v1"));
             }
+
+            app.UseSwagger();
+            app.UseSwaggerUI(c => c.SwaggerEndpoint("/swagger/v1/swagger.json", "GoodNewsAggregator v1"));
+
+            app.UseHangfireDashboard();
+            var rssSourceService = serviceProvider.GetService(typeof(IRssSourceService)) as IRssSourceService;
+            var newService = serviceProvider.GetService(typeof(INewsService)) as INewsService;
+            RecurringJob.AddOrUpdate(() => newService.RateNews() , "0-45/2 * 1/1 * ?");
+            RecurringJob.AddOrUpdate(() => rssSourceService.GetNewsFromSources(), "50 * 1/1 * ?");
 
             app.UseHttpsRedirection();
 
@@ -156,6 +176,7 @@ namespace GoodNewsAggregator
             app.UseEndpoints(endpoints =>
             {
                 endpoints.MapControllers();
+                endpoints.MapHangfireDashboard();
             });
         }
     }

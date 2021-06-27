@@ -14,12 +14,12 @@ using NewsAggregator.DAL.CQRS.Queries.NewsQueries;
 
 namespace NewsAggregator.DAL.CQRS.QueryHandlers.NewsHandlers
 {
-    public class GetPartOfNewsQueryHandle : IRequestHandler<GetPartOfNewsQuery, IEnumerable<NewsWithRssSourceNameDto>>
+    public class GetPartOfNewsQueryHandler : IRequestHandler<GetPartOfNewsQuery, IEnumerable<NewsWithRssSourceNameDto>>
     {
         private readonly IMapper _mapper;
         private readonly NewsAggregatorContext _dbContext;
 
-        public GetPartOfNewsQueryHandle(NewsAggregatorContext dbContext, IMapper autoMapper)
+        public GetPartOfNewsQueryHandler(NewsAggregatorContext dbContext, IMapper autoMapper)
         {
             _dbContext = dbContext;
             _mapper = autoMapper;
@@ -29,14 +29,13 @@ namespace NewsAggregator.DAL.CQRS.QueryHandlers.NewsHandlers
             var time = new DateTime();
             time = DateTime.Parse(request.DateTime);
 
-            var newsCollection = _dbContext.News.Where(
+            return await _dbContext.News.Where(
                     news => news.PublishTime.CompareTo(time) < 0)
                 .Include(rssSourceName => rssSourceName.RssSource)
-                .OrderByDescending(n => n.PublishTime);
-            
-            var newsPartCollection = await newsCollection.Take(request.Count).Select(news => _mapper.Map<NewsWithRssSourceNameDto>(news)).ToListAsync(cancellationToken);
-
-            return newsPartCollection;
+                .OrderByDescending(n => n.PublishTime)
+                .Take(request.Count)
+                .Select(news => _mapper.Map<NewsWithRssSourceNameDto>(news))
+                .ToListAsync(cancellationToken);
         }
     }
 }

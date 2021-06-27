@@ -11,6 +11,7 @@ namespace NewsAggregator.DAL.Serviсes.Interfaces
         Task<IEnumerable<NewsWithRssSourceNameDto>> GetPartOfNews(int count, string lastGottenPublishTime);
         Task AddRangeOfNews(IEnumerable<NewsDto> rangeOfNews);
         Task<NewsDto> GetNewsById(Guid id);
-        Task<bool> CheckUrl(string url);
+        Task<IEnumerable<string>> GetCheckUrlCollection(int checkCount);
+        Task RateNews();
     }
 }

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using NewsAggregator.DAL.Core.DTOs;
 using NewsAggregator.DAL.Core.Entities;
 using NewsAggregator.DAL.Serviсes.Interfaces;
+using NewsAggregator.Models.RssSource;
 
 namespace NewsAggregator.Controllers
 {
@@ -20,7 +21,18 @@ namespace NewsAggregator.Controllers
 
         public async Task<IActionResult> Index()
         {
-            var model = await _rssSourceService.GetAllSources();
+            var rssSources = await _rssSourceService.GetAllSources();
+            var model = new List<RssSourceViewModel>();
+            foreach (var rssSource in rssSources)
+            {
+                var rssModel = new RssSourceViewModel
+                {
+                    Id = rssSource.Id,
+                    Name = rssSource.Name,
+                    Url = rssSource.Url
+                };
+                model.Add(rssModel);
+            }
             return View(model);
         }
 

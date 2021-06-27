@@ -47,6 +47,7 @@ namespace NewsAggregator.DAL.Serviсes.Implementation.Cqrs
             var sources = await GetAllSources();
             if (sources.Any())
             {
+                var urlCollection = await _newsService.GetCheckUrlCollection(500);
                 var newsCollection = new ConcurrentBag<NewsDto>();
                 Parallel.ForEach(sources, (source) =>
                 {
@@ -56,7 +57,7 @@ namespace NewsAggregator.DAL.Serviсes.Implementation.Cqrs
                         {
                             SyndicationFeed feed = SyndicationFeed.Load(reader);
                             reader.Close();
-                            Parallel.ForEach(feed.Items, async (syndicationItem) =>
+                            Parallel.ForEach(feed.Items.Where(item => !urlCollection.Any(url => url.Equals(item.Id))), async (syndicationItem) =>
                             {
                                 var news = new NewsDto()
                                 {
@@ -69,12 +70,10 @@ namespace NewsAggregator.DAL.Serviсes.Implementation.Cqrs
                                     RssSourceId = source.Id,
                                     Url = syndicationItem.Id
                                 };
+
                                 if (news.Body != string.Empty)
                                 {
-                                    if (await _newsService.CheckUrl(news.Url))
-                                    {
-                                        newsCollection.Add(news);
-                                    }
+                                    newsCollection.Add(news);
                                 }
                             });
                         }

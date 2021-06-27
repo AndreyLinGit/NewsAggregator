@@ -7,13 +7,13 @@ using MediatR;
 
 namespace NewsAggregator.DAL.CQRS.Queries.NewsQueries
 {
-    public class CheckUrlQuery : IRequest<bool>
+    public class GetCheckUrlCollectionQuery : IRequest<IEnumerable<string>>
     {
-        public string NewsUrl { get; set; }
+        public int CheckCount { get; set; }
 
-        public CheckUrlQuery(string newsUrl)
+        public GetCheckUrlCollectionQuery(int checkCount)
         {
-            NewsUrl = newsUrl;
+            CheckCount = checkCount;
         }
     }
 }

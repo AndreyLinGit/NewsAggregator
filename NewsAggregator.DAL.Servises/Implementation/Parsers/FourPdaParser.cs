@@ -59,7 +59,7 @@ namespace NewsAggregator.DAL.Serviсes.Implementation.Parsers
 
 
             var node = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='content']");
-            return node != null ? await _cleanService.Clean(node.InnerText) : string.Empty;
+            return node != null ? await _cleanService.CleanBody(node.InnerText) : string.Empty;
         }
 
         public async Task<string> CleanSummary(SyndicationItem item)
@@ -68,7 +68,7 @@ namespace NewsAggregator.DAL.Serviсes.Implementation.Parsers
 
             if (item.Summary != null)
             {
-                return await _cleanService.Clean(item.Summary.Text);
+                return await _cleanService.CleanSummary(item.Summary.Text);
             }
             return string.Empty;
         }

@@ -58,7 +58,7 @@ namespace NewsAggregator.DAL.Serviсes.Implementation.Parsers
             var htmlDoc = web.Load(url);
 
             var node = htmlDoc.DocumentNode.SelectSingleNode("//div[@id='content']");
-            return node != null ? await _cleanService.Clean(node.InnerText) : string.Empty;
+            return node != null ? await _cleanService.CleanBody(node.InnerText) : string.Empty;
         }
 
         public async Task<string> CleanSummary(SyndicationItem item)
@@ -67,7 +67,7 @@ namespace NewsAggregator.DAL.Serviсes.Implementation.Parsers
 
             if (item.Content != null)
             {
-                var summary = await _cleanService.Clean(((TextSyndicationContent) item.Content).Text);
+                var summary = await _cleanService.CleanSummary(((TextSyndicationContent) item.Content).Text);
                 return summary.Remove(summary.LastIndexOf("Больше")).Replace("...", " [...]");
             }
 

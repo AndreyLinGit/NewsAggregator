@@ -50,10 +50,20 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
             return _mapper.Map<NewsDto>(news);
         }
 
-        public async Task<bool> CheckUrl(string url)
+        public async Task<IEnumerable<string>> GetCheckUrlCollection(int checkCount)
         {
-            return !_unitOfWork.News.FindBy(news => news.Url.Equals(url)).OrderBy(news => news.PublishTime).Take(500)
-                .Any();
+            return await _unitOfWork.News.FindBy(
+                news => news.PublishTime.CompareTo(DateTime.Now) < 0)
+                .OrderByDescending(news => news.PublishTime)
+                .Take(checkCount)
+                .AsNoTracking()
+                .Select(news => news.Url)
+                .ToListAsync();
+        }
+
+        public Task RateNews()
+        {
+            throw new NotImplementedException();
         }
     }
 }

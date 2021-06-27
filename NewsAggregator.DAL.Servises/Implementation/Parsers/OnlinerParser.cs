@@ -160,7 +160,7 @@ namespace NewsAggregator.DAL.Serviсes.Implementation.Parsers
             var htmlDoc = web.Load(url);
 
             var node = htmlDoc.DocumentNode.SelectSingleNode("//div[@class='news-text']");
-            return node != null ? await _cleanService.Clean(node.InnerText) : string.Empty;
+            return node != null ? await _cleanService.CleanBody(node.InnerText) : string.Empty;
         }
 
         public async Task<string> CleanSummary(SyndicationItem item)
@@ -169,7 +169,7 @@ namespace NewsAggregator.DAL.Serviсes.Implementation.Parsers
 
             if (item.Summary != null)
             {
-                var summary = await _cleanService.Clean(item.Summary.Text);
+                var summary = await _cleanService.CleanSummary(item.Summary.Text);
                 return summary.Replace("Читать далее…", " [...]");
             }
 

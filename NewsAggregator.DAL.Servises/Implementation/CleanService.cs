@@ -11,12 +11,39 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
 {
     public class CleanService : ICleanService
     {
-        public async Task<string> Clean(string text)
+        public async Task<string> CleanBody(string text)
         {
-            Regex regex = new Regex(@"<[^>]*>");
-
             if (text != null)
             {
+                Regex regex = new Regex(@"<[^>]*>");
+                var almostClean = regex.Replace(text, string.Empty)
+                    .Replace(@"&nbsp;", " ")
+                    .Replace("&mdash;", " ")
+                    .Replace("&laquo;", " ")
+                    .Replace("&raquo;", " ")
+                    .Replace("&hellip;", " ")
+                    .Replace("&quot;", "")
+                    .Replace("&amp;mda", "")
+                    .Replace("&amp;", "")
+                    .Replace("&thinsp;", "")
+                    .Replace("\n", "")
+                    .Trim();
+
+                char[] ch = { '.', '!', '?', '"', '\r' };
+                var splitText = almostClean.Split(ch, StringSplitOptions.RemoveEmptyEntries);
+                var aggregateText = splitText.Aggregate("", (current, n) => current + " " + $"{n.Trim()}");
+
+                return aggregateText;
+            }
+
+            return string.Empty;
+        }
+
+        public async Task<string> CleanSummary(string text)
+        {
+            if (text != null)
+            {
+                Regex regex = new Regex(@"<[^>]*>");
                 return regex.Replace(text, string.Empty)
                     .Replace(@"&nbsp;", " ")
                     .Replace("&mdash;", " ")
@@ -25,6 +52,7 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
                     .Replace("&hellip;", " ")
                     .Replace("&quot;", "")
                     .Replace("&amp;mda", "")
+                    .Replace("&amp;", "")
                     .Replace("&thinsp;", "")
                     .Replace("\n", "")
                     .Trim();

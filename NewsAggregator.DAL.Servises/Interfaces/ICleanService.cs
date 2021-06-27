@@ -8,6 +8,7 @@ namespace NewsAggregator.DAL.Serviсes.Interfaces
 {
     public interface ICleanService
     {
-        Task<string> Clean(string text);
+        Task<string> CleanSummary(string text);
+        Task<string> CleanBody(string text);
     }
 }

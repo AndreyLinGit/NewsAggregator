@@ -38,7 +38,7 @@ namespace NewsAggregator
         // This method gets called by the runtime. Use this method to add services to the container.
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddDbContext<NewsAggregatorContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("DefoultConnection")));
+            services.AddDbContext<NewsAggregatorContext>(opt => opt.UseSqlServer(Configuration.GetConnectionString("DefaultConnection")));
 
             services.Configure<MailSettings>(Configuration.GetSection("MailSettings"));
             services.Configure<ImageStorage>(Configuration.GetSection("ImageStorage"));

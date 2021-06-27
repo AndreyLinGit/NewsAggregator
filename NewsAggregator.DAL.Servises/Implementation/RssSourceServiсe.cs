@@ -41,6 +41,7 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
             var sources = _unitOfWork.RssSourse.Get().ToList();
             if (sources.Any())
             {
+                var urlCollection = await _newsService.GetCheckUrlCollection(500);
                 var newsCollection = new ConcurrentBag<NewsDto>();
                 Parallel.ForEach(sources, (source) =>
                 {
@@ -50,12 +51,12 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
                         {
                             SyndicationFeed feed = SyndicationFeed.Load(reader);
                             reader.Close();
-                            Parallel.ForEach(feed.Items, async (syndicationItem) =>
+                            Parallel.ForEach(feed.Items.Where(item => !urlCollection.Any(url => url.Equals(item.Id))), async (syndicationItem) =>
                             {
                                 var news = new NewsDto()
                                 {
                                     Article = syndicationItem.Title.Text,
-                                    Summary = await SummaryParserSwitcher(source.Name,syndicationItem),
+                                    Summary = await SummaryParserSwitcher(source.Name, syndicationItem),
                                     Body = await ParserSwitcher(source.Name, syndicationItem.Id),
                                     CleanedBody = await CleanParserSwitcher(source.Name, syndicationItem.Id),
                                     Id = Guid.NewGuid(),
@@ -63,12 +64,10 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
                                     RssSourceId = source.Id,
                                     Url = syndicationItem.Id
                                 };
-                                if (news.Body != string.Empty)
+
+                                if (news.Body != string.Empty) 
                                 {
-                                    if (await _newsService.CheckUrl(news.Url))
-                                    {
-                                        newsCollection.Add(news);
-                                    }
+                                    newsCollection.Add(news);
                                 }
                             });
                         }
