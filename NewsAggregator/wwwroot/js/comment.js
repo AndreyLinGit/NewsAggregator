@@ -15,6 +15,7 @@ function toggleComments(newsId) {
         if (isCommentsDisplayed == true) {
             commentsDisplaySwitcherElement.innerHTML = 'Display comments';
             document.getElementById('comments-container').innerHTML = '';
+            document.getElementById('comments-create-area').innerHTML = '';
 
         } else {
             commentsDisplaySwitcherElement.innerHTML = 'Hide comments';

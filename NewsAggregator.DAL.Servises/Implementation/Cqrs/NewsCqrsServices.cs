@@ -21,6 +21,7 @@ using NewsAggregator.DAL.Serviсes.Interfaces;
 using Newtonsoft.Json;
 using Newtonsoft.Json.Linq;
 using Org.BouncyCastle.Math.EC.Rfc7748;
+using Serilog;
 
 namespace NewsAggregator.DAL.Serviсes.Implementation.Cqrs
 {
@@ -90,6 +91,7 @@ namespace NewsAggregator.DAL.Serviсes.Implementation.Cqrs
                         }
                         else
                         {
+                            Log.Warning(string.Format("Lemmatization of news (id {0}) has failed. Can't rate it correctly. StatusCode -- {1}", news.Id, response.StatusCode));
                             ratingUdateDictionary.Add(news.Id, 0);
                         }
                     }

@@ -16,6 +16,7 @@ using System.Net.Mime;
 using AutoMapper;
 using Microsoft.Extensions.Configuration;
 using NewsAggregator.DAL.Serviсes.Interfaces;
+using Serilog;
 
 
 namespace NewsAggregator.DAL.Serviсes.Implementation
@@ -54,7 +55,7 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
             }
             catch (Exception e)
             {
-                //add log
+                Log.Warning("Register was failed", e.StackTrace);
                 return false;
             }
         }
@@ -87,57 +88,6 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
             return null;
         }
 
-        //public async Task<UserDto> GetUserByEmail(string email)
-        //{
-        //    var user = await _unitOfWork.User.FindBy(user => user.Email.Equals(email)).FirstOrDefaultAsync();
-        //    if (user != null)
-        //    {
-        //        return new UserDto
-        //        {
-        //            Id = user.Id,
-        //            Email = user.Email,
-        //            HashPass = user.HashPass,
-        //            Login = user.Login,
-        //            ImagePath = user.ImagePath
-        //        };
-        //    }
-
-        //    return null;
-        //}
-
-        //public async Task<UserDto> GetUserByLogin(string login)
-        //{
-        //    var user = await _unitOfWork.User.FindBy(user => user.Login.Equals(login)).FirstOrDefaultAsync();
-        //    if (user != null)
-        //    {
-        //        return new UserDto
-        //        {
-        //            Id = user.Id,
-        //            Email = user.Email,
-        //            HashPass = user.HashPass,
-        //            Login = user.Login,
-        //            RoleId = user.RoleId,
-        //            ImagePath = user.ImagePath
-        //        };
-        //    }
-
-        //    return null;
-        //}
-
-        //public async Task<UserDto> GetUserById(Guid userId)
-        //{
-        //    var user = await _unitOfWork.User.GetById(userId);
-        //    return new UserDto
-        //    {
-        //        Email = user.Email,
-        //        HashPass = user.HashPass,
-        //        Id = user.Id,
-        //        Login = user.Login,
-        //        RoleId = user.RoleId,
-        //        ImagePath = user.ImagePath
-        //    };
-        //}
-
         public async Task SaveUserImage(ImageDto image, Guid userId)
         {
             if (!Directory.Exists(_imageStorage.Path))
@@ -155,7 +105,7 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
                 await image.ImageFile.CopyToAsync(fileStream);
             }
 
-            var user = await _unitOfWork.User.GetById(userId); //Reform to update method 
+            var user = await _unitOfWork.User.GetById(userId);
             if (user != null)
             {
                 user.ImagePath = path;
@@ -177,10 +127,14 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
             }
             else
             {
-                var defaultImage = ""; //Add Default Image
-                return defaultImage;
+                using (var fileStream = File.OpenRead(_configuration["ImageStorage:DefaultPath"]))
+                {
+                    var fileType = @"data:image/" + path.Substring(path.LastIndexOf(".") + 1) + @";base64,";
+                    var image = new byte[fileStream.Length];
+                    fileStream.Read(image, 0, image.Length);
+                    return fileType + Convert.ToBase64String(image);
+                }
             }
-            
         }
 
         public Task<string> GetUserEmailByRefreshToken(string requestToken)

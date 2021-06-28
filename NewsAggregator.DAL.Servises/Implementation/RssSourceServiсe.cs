@@ -14,6 +14,7 @@ using NewsAggregator.DAL.Core.DTOs;
 using NewsAggregator.DAL.Core.Entities;
 using NewsAggregator.DAL.Repositories.Interfaces;
 using NewsAggregator.DAL.Serviсes.Interfaces;
+using Serilog;
 
 namespace NewsAggregator.DAL.Serviсes.Implementation
 {
@@ -74,7 +75,7 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
                     }
                     catch (Exception e)
                     {
-                        //logs
+                        Log.Error("Aggregate was failed",e.StackTrace);
                     }
                     
                 });
@@ -82,7 +83,7 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
             }
             else
             {
-                //Write into log "hasn't available sources"
+                Log.Error("hasn't available sources at the database");
             }
         }
 

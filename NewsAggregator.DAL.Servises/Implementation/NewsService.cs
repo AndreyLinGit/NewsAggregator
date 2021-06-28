@@ -8,6 +8,8 @@ using System.Net.Http.Headers;
 using System.Text;
 using System.Threading.Tasks;
 using AutoMapper;
+using Serilog;
+using Serilog.AspNetCore;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.VisualStudio.OLE.Interop;
 using NewsAggregator.DAL.Core.DTOs;
@@ -112,6 +114,7 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
                         }
                         else
                         {
+                            Log.Warning(string.Format("Lemmatization of news (id {0}) has failed. Can't rate it correctly. StatusCode -- {1}", news.Id, response.StatusCode));
                             ratingUdateDictionary.Add(news.Id, 0);
                         }
                     }

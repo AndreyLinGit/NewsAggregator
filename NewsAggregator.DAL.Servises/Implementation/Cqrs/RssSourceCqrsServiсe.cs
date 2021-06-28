@@ -12,6 +12,7 @@ using NewsAggregator.DAL.Core.Entities;
 using NewsAggregator.DAL.CQRS.Commands.RssSourceCommand;
 using NewsAggregator.DAL.CQRS.Queries.RssSourceQueries;
 using NewsAggregator.DAL.Serviсes.Interfaces;
+using Serilog;
 
 namespace NewsAggregator.DAL.Serviсes.Implementation.Cqrs
 {
@@ -80,7 +81,7 @@ namespace NewsAggregator.DAL.Serviсes.Implementation.Cqrs
                     }
                     catch (Exception e)
                     {
-                        //logs
+                        Log.Error("Aggregate was failed", e.StackTrace);
                     }
 
                 });
@@ -88,7 +89,7 @@ namespace NewsAggregator.DAL.Serviсes.Implementation.Cqrs
             }
             else
             {
-                //Write into log "hasn't available sources"
+                Log.Error("hasn't available sources at the database");
             }
         }
 

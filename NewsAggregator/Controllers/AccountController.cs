@@ -167,11 +167,11 @@ namespace NewsAggregator.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> CreateImage(Guid userId)
+        public async Task<IActionResult> CreateImage(Guid id)
         {
             var model = new ImageModel
             {
-                UserId = userId
+                UserId = id
             };
             return View(model);
         }

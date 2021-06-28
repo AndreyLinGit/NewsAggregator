@@ -14,6 +14,7 @@ using NewsAggregator.DAL.Core.Entities;
 using NewsAggregator.DAL.CQRS.Commands.UserCommand;
 using NewsAggregator.DAL.CQRS.Queries.UserQueries;
 using NewsAggregator.DAL.Serviсes.Interfaces;
+using Serilog;
 
 namespace NewsAggregator.DAL.Serviсes.Implementation.Cqrs
 {
@@ -51,7 +52,7 @@ namespace NewsAggregator.DAL.Serviсes.Implementation.Cqrs
             }
             catch (Exception e)
             {
-                //add log
+                Log.Warning("Register was failed", e.StackTrace);
                 return false;
             }
         }
