@@ -52,14 +52,7 @@ namespace GoodNewsAggregator
 
             services.Configure<MailSettings>(Configuration.GetSection("MailSettings"));
             services.Configure<ImageStorage>(Configuration.GetSection("ImageStorage"));
-
-            //services.AddTransient<IRepository<News>, NewsRepository>();
-            //services.AddTransient<IRepository<Comment>, CommentRepository>();
-            //services.AddTransient<IRepository<Role>, RoleRepository>();
-            //services.AddTransient<IRepository<RssSource>, RssSourseRepository>();
-            //services.AddTransient<IRepository<User>, UserRepository>();
-
-            //services.AddScoped<IUnitOfWork, UnitOfWork>();
+            
             services.AddScoped<INewsService, NewsCqrsServices>();
             services.AddScoped<IRssSourceService, RssSourceCqrsServiñe>();
             services.AddScoped<IUserService, UserCqrsService>();
@@ -85,7 +78,7 @@ namespace GoodNewsAggregator
                     case "4pda":
                         return serviceProvider.GetService<FourPdaParser>();
                     default:
-                        throw new KeyNotFoundException(); // or maybe return null, up to you
+                        throw new KeyNotFoundException();
                 }
             });
 

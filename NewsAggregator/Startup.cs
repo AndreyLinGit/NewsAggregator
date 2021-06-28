@@ -44,12 +44,6 @@ namespace NewsAggregator
 
             services.Configure<MailSettings>(Configuration.GetSection("MailSettings"));
             services.Configure<ImageStorage>(Configuration.GetSection("ImageStorage"));
-            //TODO mapping and check working with database, rework Dtos
-            //TODO roles, letters and other pages about accounting 
-            //TODO pagination
-            //TODO logging 
-            //TODO FluentValidation
-            //TODO Checking authorization in comments 
 
             services.AddTransient<IRepository<News>, NewsRepository>();
             services.AddTransient<IRepository<Comment>, CommentRepository>();
@@ -80,7 +74,7 @@ namespace NewsAggregator
                     case "4pda":
                         return serviceProvider.GetService<FourPdaParser>();
                     default:
-                        throw new KeyNotFoundException(); // or maybe return null, up to you
+                        throw new KeyNotFoundException();
                 }
             });
 
@@ -114,7 +108,7 @@ namespace NewsAggregator
                     opt.AccessDeniedPath = new PathString("/Account/Login");
                 });
 
-            services.AddControllersWithViews();  //Add filters
+            services.AddControllersWithViews();
         }
 
         // This method gets called by the runtime. Use this method to configure the HTTP request pipeline.

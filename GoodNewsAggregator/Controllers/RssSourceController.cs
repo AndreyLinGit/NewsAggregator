@@ -4,6 +4,7 @@ using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using NewsAggregator.DAL.Serviсes.Interfaces;
+using NewsAggregator.DAL.Core.DTOs;
 
 // For more information on enabling Web API for empty projects, visit https://go.microsoft.com/fwlink/?LinkID=397860
 
@@ -20,37 +21,23 @@ namespace GoodNewsAggregator.Controllers
             _rssSourceService = rssSourceService;
         }
 
-        // GET: api/<RssSourceController>
         [HttpGet]
         public async Task<IActionResult> Get()
         {
-            var sources = await _rssSourceService.GetAllSources();
-            return Ok(sources);
+            return Ok(await _rssSourceService.GetAllSources());
         }
 
-        // GET api/<RssSourceController>/5
-        [HttpGet("{id}")]
-        public string Get(int id)
-        {
-            return "value";
-        }
-
-        // POST api/<RssSourceController>
         [HttpPost]
-        public void Post([FromBody] string value)
+        public async Task<IActionResult> Post([FromBody] string name, string url)
         {
-        }
-
-        // PUT api/<RssSourceController>/5
-        [HttpPut("{id}")]
-        public void Put(int id, [FromBody] string value)
-        {
-        }
-
-        // DELETE api/<RssSourceController>/5
-        [HttpDelete("{id}")]
-        public void Delete(int id)
-        {
+            var dto = new RssSourceDto
+            {
+                Id = Guid.NewGuid(),
+                Name = name,
+                Url = url
+            };
+            await _rssSourceService.AddSource(dto);
+            return Ok();
         }
     }
 }

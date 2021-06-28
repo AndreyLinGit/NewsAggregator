@@ -133,8 +133,6 @@ namespace NewsAggregator.Controllers
                 Console.WriteLine(e);
                 throw;
             }
-            //Claim & ClaimsIdentity & ClaimsPrinciple
-
         }
 
         [HttpGet]

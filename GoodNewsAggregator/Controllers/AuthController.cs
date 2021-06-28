@@ -18,17 +18,19 @@ namespace GoodNewsAggregator.Controllers
     [ApiController]
     public class AuthController : ControllerBase
     {
+        private readonly IMailService _mailService;
         private readonly IJwtAuthManager _jwtAuthManager;
         private readonly IUserService _userService;
         private readonly IRoleService _roleService;
         private readonly IRefreshTokenService _refreshTokenService;
 
-        public AuthController(IJwtAuthManager jwtAuthManager, IUserService userService, IRoleService roleService, IRefreshTokenService refreshTokenService)
+        public AuthController(IJwtAuthManager jwtAuthManager, IUserService userService, IRoleService roleService, IRefreshTokenService refreshTokenService, IMailService mailService)
         {
             _jwtAuthManager = jwtAuthManager;
             _userService = userService;
             _roleService = roleService;
             _refreshTokenService = refreshTokenService;
+            _mailService = mailService;
         }
         [AllowAnonymous]
         [HttpPost]
@@ -57,9 +59,11 @@ namespace GoodNewsAggregator.Controllers
                     var mailRequest = new MailRequest
                     {
                         UserId = newUserId.ToString(),
+                        Link = @"https://localhost:44354/api/Auth/Confirmation/", 
                         Subject = "Administration from NewsAggregator",
                         ToEmail = request.Email
                     };
+                    await _mailService.SendEmailAsync(mailRequest);
 
                     return Ok(mailRequest);
                 }

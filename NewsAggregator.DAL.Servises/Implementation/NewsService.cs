@@ -149,7 +149,7 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
                     news.Rating = pair.Value;
                 }
 
-                var count = _unitOfWork.SaveChangeAsync();
+                await _unitOfWork.SaveChangeAsync();
             }
         }
     }

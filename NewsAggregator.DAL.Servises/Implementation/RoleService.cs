@@ -30,7 +30,7 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
             return _mapper.Map<RoleDto>(role);
         }
 
-        public async Task AddRoleToUser(Guid id) // ADD MIGRATION!
+        public async Task AddRoleToUser(Guid id)
         {
             var user = await _unitOfWork.User.GetById(id);
             if (user != null)
