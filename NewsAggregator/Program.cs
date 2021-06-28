@@ -19,7 +19,7 @@ namespace NewsAggregator
                 .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
                 .Enrich.FromLogContext()
                 .WriteTo.Console(LogEventLevel.Debug)
-                .WriteTo.File(@"C:\Users\AlexiMinor\Desktop\New folder\LogFile.log", LogEventLevel.Information)
+                .WriteTo.File(@"D:\LogFile.log", LogEventLevel.Information)
                 .CreateLogger();
 
             CreateHostBuilder(args).Build().Run();

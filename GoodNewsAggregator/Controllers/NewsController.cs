@@ -4,6 +4,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore.Design;
 using NewsAggregator.DAL.Serviсes.Interfaces;
 
 namespace GoodNewsAggregator.Controllers
@@ -22,13 +23,23 @@ namespace GoodNewsAggregator.Controllers
         [HttpGet("{id}")]
         public async Task<IActionResult> Get([FromHeader] Guid id)
         {
-            return Ok(await _newsService.GetNewsById(id));
+            if (id != Guid.Empty)
+            {
+                return Ok(await _newsService.GetNewsById(id));
+            }
+
+            return BadRequest();
+
         }
 
         [HttpGet]
         public async Task<IActionResult> Get([FromHeader] int count, string lastGottenDate)
         {
-            return Ok(await _newsService.GetPartOfNews(count, lastGottenDate));
+            if (count != 0 && lastGottenDate != null)
+            {
+                return Ok(await _newsService.GetPartOfNews(count, lastGottenDate));
+            }
+            return BadRequest();
         }
     }
 }

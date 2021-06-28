@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Authorization;
 using NewsAggregator.DAL.Core.DTOs;
 using NewsAggregator.DAL.Core.Entities;
 using NewsAggregator.DAL.Serviсes.Interfaces;
@@ -18,7 +19,7 @@ namespace NewsAggregator.Controllers
         {
             _rssSourceService = rssSourceService;
         }
-
+        [Authorize(Roles = "Admin")]
         public async Task<IActionResult> Index()
         {
             var rssSources = await _rssSourceService.GetAllSources();

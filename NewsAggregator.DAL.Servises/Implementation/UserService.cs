@@ -109,7 +109,7 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
             if (user != null)
             {
                 user.ImagePath = path;
-                await _unitOfWork.SaveChangeAsync();
+                var test = await _unitOfWork.SaveChangeAsync();
             }
         }
 
@@ -125,16 +125,21 @@ namespace NewsAggregator.DAL.Serviсes.Implementation
                     return fileType + Convert.ToBase64String(image);
                 }
             }
-            else
+
+            var defaultImagePath = _configuration["ImageStorage:DefaultPath"];
+            if (File.Exists(defaultImagePath))
             {
-                using (var fileStream = File.OpenRead(_configuration["ImageStorage:DefaultPath"]))
+                using (var fileStream = File.OpenRead(defaultImagePath))
                 {
-                    var fileType = @"data:image/" + path.Substring(path.LastIndexOf(".") + 1) + @";base64,";
+                    var test = _configuration["ImageStorage:DefaultPath"];
+                    var fileType = @"data:image/" + defaultImagePath.Substring(defaultImagePath.LastIndexOf(".") + 1) + @";base64,";
                     var image = new byte[fileStream.Length];
                     fileStream.Read(image, 0, image.Length);
                     return fileType + Convert.ToBase64String(image);
                 }
             }
+
+            return string.Empty;
         }
 
         public Task<string> GetUserEmailByRefreshToken(string requestToken)
