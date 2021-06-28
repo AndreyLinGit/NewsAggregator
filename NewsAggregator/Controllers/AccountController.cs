@@ -39,7 +39,7 @@ namespace NewsAggregator.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Register(RegisterViewModel model) //???? About mail's
+        public async Task<IActionResult> Register(RegisterViewModel model)
         {
             if (await _userService.GetUser(null, model.Email,null) != null)
             {
@@ -82,7 +82,7 @@ namespace NewsAggregator.Controllers
 
         [HttpPost]
         [ValidateAntiForgeryToken]
-        public async Task<IActionResult> Login(LoginViewModel model) // Think about 
+        public async Task<IActionResult> Login(LoginViewModel model)
         {
             if (ModelState.IsValid)
             {
@@ -117,7 +117,7 @@ namespace NewsAggregator.Controllers
                 var claims = new List<Claim>
                 {
                     new Claim(ClaimsIdentity.DefaultNameClaimType, dto.Login),
-                    new Claim(ClaimsIdentity.DefaultRoleClaimType, (await _roleService.GetUserRole(dto.Id)).Name) //??
+                    new Claim(ClaimsIdentity.DefaultRoleClaimType, (await _roleService.GetUserRole(dto.Id)).Name)
                 };
 
                 var identity = new ClaimsIdentity(claims,
@@ -136,24 +136,12 @@ namespace NewsAggregator.Controllers
         }
 
         [HttpGet]
-        public async Task<IActionResult> ForgotPass() //?
-        {
-            return View();
-        }
-
-        [HttpPost]
-        public async Task<IActionResult> ForgotPass(LoginViewModel model) //?
-        {
-            return View();
-        }
-
-        [HttpGet]
-        public async Task<IActionResult> UserPage() //? Clear trash at home 
+        public async Task<IActionResult> UserPage()
         {
             var userClaim =
                 HttpContext.User.Claims.FirstOrDefault(c => c.Type.Equals(ClaimsIdentity.DefaultNameClaimType));
-            var userLogin = userClaim?.Value; //CHANGE IT INTO SEARCHING BY LOGIN!
-            var user = await _userService.GetUser(null, userLogin, userLogin); //CHANGE IT INTO SEARCHING BY LOGIN!
+            var userLogin = userClaim?.Value;
+            var user = await _userService.GetUser(null, userLogin, userLogin);
             var model = new UserViewModel
             {
                 Email = user.Email,
@@ -165,7 +153,7 @@ namespace NewsAggregator.Controllers
             return View(model);
         }
 
-        public async Task<IActionResult> Confirmation(Guid id) //? Clear trash at home 
+        public async Task<IActionResult> Confirmation(Guid id)
         {
             await _roleService.AddRoleToUser(id);
             var user = await _userService.GetUser(id, null, null);

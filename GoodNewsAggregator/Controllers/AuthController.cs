@@ -11,6 +11,7 @@ using GoodNewsAggregator.Requests;
 using Microsoft.AspNetCore.Authorization;
 using NewsAggregator.DAL.Core.DTOs;
 using NewsAggregator.DAL.Serviсes.Interfaces;
+using Microsoft.AspNetCore.Authentication;
 
 namespace GoodNewsAggregator.Controllers
 {
